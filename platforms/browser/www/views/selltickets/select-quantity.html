@@ -1,0 +1,48 @@
+
+<div class="pages navbar-fixed">
+  <div data-page="sell-quantity" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Ticket Quantity</div>
+        <!--<div class="right"><a href="#" class="link save-ticket-quantity" event-id="{{event.id}}"></i><span>Continue</span></a></div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-ticket-quantity" event-id="{{event.id}}">
+      <i class="icon icon-next"></i>
+    </a>
+   <div class="page-content"><div class="content-block-title">Enter Quantity</div>
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <form  id="ticket-quantity-form">
+            <ul>
+
+              {{#each tickets}}
+              <li>
+
+                  <!--<a href="#" class="item-link item-content edit-ticket-link" ticket-id="{{id}}">-->
+                  <div class="item-content">
+                    <div class="item-inner row">
+                      <!--<div class="item-text">-->
+                      <div class="row">{{ticket.tickettype}} - ${{js "this.ticket.price.toFixed(2)"}}</div>
+                      <div class="row">Quantity Available: {{js "this.quantity - this.soldquantity"}}</div>
+                        <div class="item-title label">Quantity</div>
+                        <div class="item-input">
+                        <input type="number" name="quantity-{{id}}-{{@index}}" value="0" id="ticket-limit">
+                      </div>
+                      <!--</div>-->
+                    </div>
+                  </div>
+                  <!--</a>-->
+                </li>
+
+              {{/each}}
+            </ul>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

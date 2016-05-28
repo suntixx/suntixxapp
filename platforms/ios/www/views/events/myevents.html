@@ -1,0 +1,143 @@
+<div class="pages">
+  <div data-page="all-user-events" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="link icon-only home back-button"> <i class="icon icon-back"></i></a>
+          <a href="#" data-panel="left" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
+        </div>
+        <div class="center">My Events</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="accordion-item managed-events">
+        <div class="accordion-item-toggle button button-big">Managed Events</div>
+        <div class="accordion-item-content">
+          {{#js_compare "this.managedEventList.length == 0"}}
+          <p><i>No Events</i></p>
+          {{else}}
+          {{#each managedEventList}}
+          <div class="search-details">
+            <a href="#" class="item-content item-link event-link search-details" event-id="{{id}}">
+              <div class="row no-gutter header">
+                <span>{{name}}</span>
+              </div>
+              <div class="row no-gutter content">
+                  <div class="col-50 image">
+                    <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
+                  </div>
+                <div class="col-50 content-details">
+                  <span>{{ShortStartDate}}</span>
+                  <span>{{ShortStartTime}}</span>
+                  <span>{{venue}}</span>
+                </div>
+              </div>
+              <div class="row footer no-gutter">
+                <div class="col-50 category">
+                  <span>Sold: {{SoldTotal}}/{{Total}}</span>
+                </div>
+                <div class="col-50">
+                  <span>
+                    Scanned: {{Scanned}}/{{SoldTotal}}
+                  </span>
+                </div>
+              </div>
+            </a>
+          </div>
+          {{/each}}
+          {{/js_compare}}
+        </div>
+      </div>
+      <div class="accordion-item committee-events">
+        <div class="accordion-item-toggle button button-big">Committee Events</div>
+        <div class="accordion-item-content">
+        {{#js_compare "this.committeeEventList.length == 0"}}
+        <p><i>No Events</i></p>
+        {{else}}
+        {{#each committeeEventList}}
+        <div class="search-details">
+          <a href="#" class="item-content item-link committee-event-link search-details" event-id="{{id}}">
+            <div class="row no-gutter header">
+              <span>{{name}}</span>
+            </div>
+            <div class="row no-gutter content">
+                <div class="col-50 image">
+                  <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
+                </div>
+              <div class="col-50 content-details">
+                <span>{{ShortStartDate}}</span>
+                <span>{{ShortStartTime}}</span>
+                <span>{{venue}}</span>
+              </div>
+            </div>
+            <div class="row footer no-gutter">
+              <div class="col-50 category">
+                <span>Sold: {{UserTickets.SoldTotal}}/{{UserTickets.Total}}</span>
+              </div>
+              <div class="col-50">
+                <span>
+                  {{#js_compare "this.UserTickets.LowestPrice == this.UserTickets.HighestPrice"}}
+                    {{js "this.UserTickets.LowestPrice.toFixed(2)"}}{{currency}}
+                  {{else}}
+                    {{js "this.UserTickets.LowestPrice.toFixed(2)"}}&nbsp;{{currency}} - {{js "this.UserTickets.HighestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                  {{/js_compare}}
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        {{/each}}
+        {{/js_compare}}
+      </div>
+      </div>
+      <div class="accordion-item access-events">
+        <div class="accordion-item-toggle button button-big">Access Events</div>
+        <div class="accordion-item-content">
+          {{#js_compare "this.scanningEventList.length == 0"}}
+          <p><i>No Events</i></p>
+          {{else}}
+          {{#each scanningEventList}}
+          <div class="search-details">
+            <a href="#" class="item-content item-link scanning-event-link search-details" event-id="{{id}}">
+              <div class="row no-gutter header">
+                <span>{{name}}</span>
+              </div>
+              <div class="row no-gutter content">
+                  <div class="col-50 image">
+                    <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
+                  </div>
+                <div class="col-50 content-details">
+                  <span>{{ShortStartDate}}</span>
+                  <span>{{ShortStartTime}}</span>
+                  <span>{{venue}}</span>
+                </div>
+              </div>
+              <div class="row footer no-gutter">
+                <div class="col-50 category">
+                  <span>
+                    {{#if CanScan}}
+                      Scanning Available
+                    {{else}}
+                      Scanning Unavailable
+                    {{/if}}
+                  </span>
+                </div>
+                <div class="col-50">
+                  <span>
+                    {{#if Scanned}}
+                      Scanning Started
+                    {{else}}
+                      Scanning Not Started
+                    {{/if}}
+                  </span>
+                </div>
+              </div>
+            </a>
+          </div>
+          {{/each}}
+          {{/js_compare}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

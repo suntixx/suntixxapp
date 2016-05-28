@@ -1,0 +1,44 @@
+
+<div class="pages navbar-fixed">
+  <div data-page="committee-tickets-list" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">Committee Tickets</div>
+        <div class="right">
+          <!--<a href="#" class="link add-committee-tickets open-popup icon-only" data-popup=".form-popup"> <i class="icon icon-plus"></i></a>-->
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange add-committee-tickets open-popup" data-popup=".form-popup">
+      <i class="icon icon-new"></i>
+    </a>
+   <div class="page-content"><div class="content-block-title">Select Ticket</div>
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul>
+
+              {{#each tickets}}
+              {{#js_compare "this.permissions == 9"}}
+              <li>
+                <a href="#" class="item-link item-content edit-ticket-link" ticket-id="{{id}}">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}</div>
+                    </div>
+                    <div class="item-subtitle">Quantity: {{quantity}}</div>
+                    <div class="item-text"><span>Sold Quantity: {{soldquantity}}</span><br><span>Scanned Quantity: {{scannedquantity}}</span></div>
+                  </div>
+                </a>
+              </li>
+              {{/js_compare}}
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

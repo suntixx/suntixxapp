@@ -1,0 +1,54 @@
+
+<div class="pages navbar-fixed">
+  <div data-page="committee-settings" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-button back-committee link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Committee Settings</div>
+        <!--<div class="right"><a href="#" class="link assign-tickets"></i><span>Assign</span></a></div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange assign-tickets">
+      <i class="icon icon-assign"></i>
+    </a>
+   <div class="page-content"><div class="content-block-title">Assigned Ticket Types</div>
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list accordion-list">
+            <ul>
+
+              {{#each tickets}}
+              <li class="accordion-item swipeout">
+                <a href="#" class="item-link item-content swipeout-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{ticket.tickettype}} - ${{js "this.ticket.price.toFixed(2)"}}</div>
+                    </div>
+                    <div class="item-subtitle">Quantity: {{quantity}}</div>
+                    <div class="item-text"><span>Sold Quantity: {{soldquantity}}</span><br><span>Scanned Quantity: {{scannedquantity}}</span></div>
+                  </div>
+                </a>
+                <div class="swipeout-actions-right">
+                  {{#js_compare "this.soldquantity == 0"}}
+                  <a href="#" class="swipeout-delete bg-red" data-close-on-cancel="true" data-confirm="Are you sure want to delete this assignment?" data-confirm-title="Delete?" userTicketId="{{id}}">Delete</a>
+                  {{/js_compare}}
+                  <a href="#" class="disable bg-blue swipeout-close" status="{{enable}}" userTicketId="{{id}}">{{#js_compare "this.enable == 0"}}Enable{{else}}Disable{{/js_compare}}</a>
+                </div>
+                <div class="accordion-item-content row">
+                  <div class="item-title label col-60">New Quantity</div>
+                  <div class="item-input col-20">
+                    <input type="number" value="{{quantity}}" name="newquantity" id="newquantity-{{id}}"/>
+                  </div>
+                  <div class="col-20">
+                    <a href="#" class="button button-fill color-green save-quantity" userTicketId="{{id}}">Save</a>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

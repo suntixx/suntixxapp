@@ -1,0 +1,48 @@
+
+<div class="pages">
+  <div data-page="access-gate-list" class="page  navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">Scan Tickets</div>
+        <div class="right"><a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-submenu"></i></a></div>
+        <!--<div class="right"><a href="#" class="link start-scanning "> <span>Scan</span><i class="icon icon-next"></i></a></div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange start-scanning">
+      <i class="icon icon-start-scan"></i>
+    </a>
+   <div class="page-content">
+   {{#with this}}
+     {{> "eventPartial"}}
+   {{/with}}
+      <div class="card ticket-details" id="select-gates-form">
+        <div class="card-content">
+          {{#js_compare "this.tickets.length == 0"}}
+          This event doesn't have any tickets
+          {{else}}
+          <div class="content-block-title">Select Gates to Scan</div>
+          <div class="list-block media-list">
+            <ul>
+              {{#each tickets}}
+              <li>
+                <label class="label-checkbox item-content">
+                  <!-- Checked by default -->
+                  <input type="checkbox" name="commticket-{{id}}" value="{{id}}">
+                  <div class="item-media">
+                    <i class="icon icon-form-checkbox"></i>
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}</div>
+                  </div>
+                </label>
+              </li>
+              {{/each}}
+            </ul>
+          {{/js_compare}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

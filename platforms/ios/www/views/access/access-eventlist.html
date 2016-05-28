@@ -1,0 +1,36 @@
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="center sliding">Access View</div>
+  </div>
+</div>
+<div class="pages navbar-through toolbar-through">
+  <div data-page="events" class="page">
+    <div class="page-content"><div class="content-block-title">Select An Event To Scan</div>
+      <div class="card">
+        <!--<div class="card-header">{{name}}</div>-->
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul>
+              {{#each managedEventList}}
+              <li>
+                <a href="#" class="item-link item-content event-link" event-id="{{id}}">
+                  <div class="item-media">
+                    <img src="{{@global.server}}/thumbnails/events/{{id}}/thumbnail.png">
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{name}}</div>
+                    </div>
+                    <div class="item-subtitle">{{StartTime}}</div>
+                    <div class="item-text"><span>{{venue}}, {{city}} </span><br><span>{{country}}</span></div>
+                  </div>
+                </a>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

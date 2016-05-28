@@ -1,0 +1,59 @@
+
+<div class="pages ">
+  <div data-page="event-main" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="link back-events icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">Event</div>
+        <div class="right"><a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a></div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="card event-details">
+        <div class="header">
+          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
+        </div>
+
+        <!--<div style="background-image:url({{@global.server}}/thumbnails/events/{{id}}/landscape.png)" valign="bottom" class="card-header color-white no-border">{{name}}</div>-->
+        <div class="card-content">
+          <div class="card-content-inner">
+            <div class="event-name">{{name}}</div>
+            <div class="color-gray hosted-by"><span class="small">by</span>&nbsp;{{#if user.organization}}{{user.organization.name}}{{else}}{{hostedby}}{{/if}}</div>
+
+            <span class="color-black">Starts: {{StartTime}}</span><br><span class="color-black">Ends: {{EndTime}}</span><br>
+            <span class="color-gray">{{venue}}</span><br><span class="color-gray">{{city}}, {{country}}</span>
+            <div class="divider"></div>
+            <h4>Description</h4>
+          {{description}}
+          {{#js_compare "this.tickets.length > 0"}}
+          <div class="divider"></div>
+          <h4>Ticket Information</h4>
+          <div class="row">
+            <div class="col-50">Ticket Type</div>
+            <div class="col-50">Price</div>
+          </div>
+          {{#each tickets}}
+            <div class="row">
+              <div class="col-50">{{tickettype}}</div>
+              <div class="col-50">{{js "this.price.toFixed(2)"}} {{@root.currency}}</div>
+            </div>
+          {{/each}}
+
+          {{/js_compare}}
+          </div>
+        </div>
+        {{#js_compare "this.facebook != '' && this.twitter != ''"}}
+        <div class="card-footer">
+          {{#if facebook}}
+          <a href="{{facebook}}" class="link">Facebook</a>
+          {{/if}}
+          {{#if twitter}}
+          <a href="{{twitter}}" class="link">Twitter</a>
+          {{/if}}
+        </div>
+        {{/js_compare}}
+      </div>
+    </div>
+
+  </div>
+</div>

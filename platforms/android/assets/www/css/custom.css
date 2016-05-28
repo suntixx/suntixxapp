@@ -1,0 +1,492 @@
+.page {
+  background-color: #eee;
+}
+
+.card, .search-details {
+  background-color: #fff;
+}
+
+
+.event-details, .ticket-details {
+  width:100vw;
+  max-width: 100vw;
+  margin:0;
+  margin-bottom: 10px;
+  padding:0;
+}
+
+.event-details .divider {
+  position: absolute;
+  left:0;
+  width:100vw;
+  height:8px;
+  background-color: #eee;
+  box-shadow: 2px 2px 1px #ddd;
+  margin: 5px 0 5px 0;
+}
+
+.event-details .hosted-by {
+  text-transform: capitalize;
+}
+
+.event-details .category {
+  position:absolute;
+  top:0;
+  right:0;
+  opacity: 0.5;
+  font-style: italic;
+  padding:2px 4px 2px 4px;
+  background-color: #3f51b5;
+}
+.event-details .card-header {
+  width:100vw;
+  height:37vw;
+   background-size: cover;
+   background-position: center;
+   padding:0;
+   margin:0;
+ }
+
+ .event-details img, .ticket-details img {
+  width:100vw;
+  background-size: cover;
+  background-position: center;
+  padding:0;
+  margin:0;
+}
+
+.event-details .card-footer .prices{
+  width:70vw;
+}
+
+.ticket-details img {
+  height:37vw;
+}
+
+.toolbar  {
+  opacity: 0.8;
+}
+
+
+.event-details .event-name {
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.user-profile .card-content{
+  padding-left: 5px
+}
+
+.user-profile .user-image {
+  display: block;
+  width: 150px;
+  height:150px;
+  margin: 1em auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -webkit-border-radius: 99em;
+  -moz-border-radius: 99em;
+  border-radius: 99em;
+  border: 5px solid #eee;
+  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+}
+
+.user-avatar .user-image {
+  display: block;
+  width: 50px;
+  height:50px
+  margin: 1em auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -webkit-border-radius: 99em;
+  -moz-border-radius: 99em;
+  border-radius: 99em;
+  border: 5px solid #eee;
+  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+}
+
+img.new-user-image {
+  max-width:50vw;
+}
+
+
+div.instagram {
+  width:100vw
+  padding:0;
+  text-align: :center;
+}
+
+.instagram p{
+  padding:0px 5px 0px 5px;
+}
+
+.instagram .interaction div {
+  margin: 0px 0px 0px 5px;
+  display:inline;
+  color:blue;
+  padding:0px;
+}
+
+.instagram img {
+  height:60vh;
+  width:100vw;
+  background-size: : cover;
+  background-position: center;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+a.social-icon {
+  margin-left:7px;
+}
+
+i.icon.icon-home {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/buildings.svg");
+}
+
+i.icon.icon-money {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/money.svg");
+}
+
+i.icon.icon-people {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/people.svg");
+}
+
+i.icon.icon-info {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/icon.svg");
+}
+
+i.icon.icon-search {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/search.svg");
+}
+i.icon.icon-sell {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/sell.svg");
+}
+
+i.icon.icon-submenu {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/submenu.svg");
+}
+
+i.icon.icon-new {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/new.svg");
+}
+
+i.icon.icon-down {
+  margin:7px 0px 0px 0px;
+  width:15px;
+  height: 15px;
+  background-image: url("../img/down.svg");
+}
+
+
+i.icon.icon-required {
+  width:7px;
+  height: 7px;
+  background-image: url("../img/form-required.svg");
+  margin-right:5px;
+}
+
+i.icon.icon-checked-green {
+  width:10px;
+  height: 10px;
+  background-image: url("../img/checked-green.svg");
+  margin-left:7px;
+}
+
+i.icon.icon-wrong {
+  width:10px;
+  height: 10px;
+  background-image: url("../img/wrong-red.svg");
+  margin-left:7px;
+}
+
+i.icon.icon-suntixx {
+  width:100px;
+  height: 25px;
+  background-image: url("../img/suntixx.svg");
+}
+
+i.icon.icon-assign {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/assign.svg");
+}
+
+i.icon.icon-checkout {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/checkout.svg");
+}
+
+i.icon.icon-pay {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/payment.svg");
+}
+
+
+i.icon.icon-purchase {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/purchase.svg");
+}
+
+i.icon.icon-purchase-orange {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/purchase-orange.svg");
+}
+
+i.icon.icon-share-orange {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/share-orange.svg");
+}
+
+i.icon.icon-start-scan {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/start-scan.svg");
+}
+
+i.icon.icon-scan {
+  width:60px;
+  height: 60px;
+  background-image: url("../img/start-scan.svg");
+}
+
+i.icon.icon-save {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/save.svg");
+}
+
+i.icon.icon-facebook {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/facebook-logo.svg");
+}
+
+i.icon.icon-facebook-event {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/facebook.svg");
+}
+
+i.icon.icon-twitter-event {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/twitter.svg");
+}
+
+i.icon.icon-twitter {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/twitter-logo.svg");
+}
+i.icon.icon-instagram {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/instagram-logo.svg");
+}
+i.icon.icon-linkedin {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/linkedin-logo.svg");
+}
+i.icon.icon-googleplus {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/google-plus-logo.svg");
+}
+
+p.ticket-details {
+  font-size: 7;
+  padding-left: 5px;
+}
+
+
+div.search-details, .search-details a {
+  width: 100%;
+  color: #000;
+  /*background: #eee;
+  margin-bottom: 10px;*/
+}
+
+div.search-details {
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  box-shadow: 2px 2px 1px #ddd;
+}
+
+.search-details div {
+  padding:0px;
+}
+
+
+.search-details span{
+  display: block;
+  text-transform: capitalize;
+  padding:4px 0px 0px 6px;
+}
+
+.search-details img {
+  padding:0px;
+  margin: 0px;
+  width:100%;
+  float: left;
+}
+
+.search-count {
+  font-style: italic;
+}
+
+.search-details .content {
+  /*border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;*/
+}
+
+.search-details .header span {
+  text-transform: uppercase;
+  font-weight:500;
+}
+
+.search-details .content-details {
+  font-size: small;
+  vertical-align: middle;
+}
+.search-details .footer div {
+  font-size: small;
+}
+
+.search-details .footer .category {
+  background-color: #f9a11b;
+  text-align: center;
+}
+
+
+
+h3.ticket-details {
+  padding-left: 5px;
+}
+
+ul.no-indent {
+    list-style:none;
+    padding-left:0;
+}​
+
+div.shopping-cart {
+  font-size: 7px;
+}
+
+.shopping-cart-name {
+  width: 50%,
+}
+
+.popover {
+     width: 200px;
+}
+
+img.edit-thumbnail {
+  margin: 5vh auto 5vh auto;
+  width: 50vw;
+  height:27vw;
+}
+
+.cropper-container {
+  max-width: 100%;
+  height:100vh;
+  padding:0;
+  margin:0;
+}
+
+.cropper-buttons{
+  position:fixed;
+  bottom:0;
+  width:100vw;
+}
+
+.cropper-image-container {
+  max-width: 100%;
+  padding:0;
+  overlow:hidden;
+}
+
+div.image-preview {
+  width:100vw;
+  height:37vw;
+  overflow: hidden;
+}
+
+div.thumbnail-preview {
+  overflow: hidden;
+  width: 50vw;
+  height:27vw;
+}
+
+.instavideo {
+  width:100vw;
+}
+
+.manual-scan-button {
+
+}
+
+.button-round {
+    width: 150px;
+    height: 150px;
+    border: 5px solid white;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: url('../img/start-scan.svg') no-repeat 1px center;
+
+}
+
+
+.barcode-container {
+  max-height:60vh;
+  max-width:100vw;
+
+}
+
+.barcode-wrapper {
+  width:75vw;
+  max-height: 75vh;
+  padding:0
+}
+
+.barcode-container .barcode-active img{
+  margin: 0 auto;
+  padding:0;
+  width:60vw;
+  height:60vw;
+}
+
+#barcode-text {
+  text-align: center;
+  font-size: 20px
+}
+
+.small {
+  font-size: small;
+  text-transform: lowercase;
+}

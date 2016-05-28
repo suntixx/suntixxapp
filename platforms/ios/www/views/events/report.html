@@ -1,0 +1,50 @@
+
+<div class="pages navbar-through toolbar-through">
+  <div data-page="report" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left sliding"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Event Report</div>
+        <div class="right">
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="page-content  pull-to-refresh-content">
+    <div class="pull-to-refresh-layer">
+      <div class="preloader"></div>
+      <div class="pull-to-refresh-arrow"></div>
+    </div>
+    <div class="card event-report" event-id="{{id}}">
+      <div class="card-header">{{name}}</div>
+      <div class="card-content">
+        <div class="card-content-inner"><span>{{StartTime}}</span><br><span>{{venue}}</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <div class="row" id="ticket-report-header">
+          <div class="col-40">Ticket Type</div>
+          <div class="col-15">Price</div>
+          <div class="col-15">Sold</div>
+          <div class="col-15">Bal</div>
+          <div class="col-15">Scan</div>
+        </div>
+
+        <div id="ticket-report-details">
+          {{#each tickets}}
+          <div class="row">
+            <div class="col-40 ticket-details">{{tickettype}}</div>
+            <div class="col-15 ticket-details">${{js "this.price.toFixed(2)"}}</div>
+            <div class="col-15 ticket-details">{{soldquantity}}</div>
+            <div class="col-15 ticket-details">{{js "this.quantity - this.soldquantity"}}</div>
+            <div class="col-15 ticket-details">{{scannedquantity}}</div>
+          </div>
+          {{/each}}
+        </div>
+
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

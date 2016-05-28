@@ -1,0 +1,147 @@
+
+<!-- We don't need full layout here, because this page will be parsed with Ajax-->
+<!-- Top Navbar-->
+
+<div class="pages">
+  <!-- Page, data-page contains page name-->
+  <div data-page="update-details" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="home link icon-only back-button" > <i class="icon icon-back"></i>
+          <a href="#" data-panel="left" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
+        </div>
+        <div class="center">
+          Profile
+        </div>
+        <div class="right">
+          <!--<a href="#" class="link save-user"><span>Save</span></a>-->
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-user">
+      <i class="icon icon-save"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div class="progressbar-overlay"></div>
+      <div class="user-profile">
+        <img class="link user-image change-image" id="user-image-id" src="{{@global.config.server}}/thumbnails/users/{{@global.user.id}}/portrait.png">
+      </div>
+      <form class="list-block user-profile" id="update-details-form">
+        <ul>
+          <li class="item-divider">{{@global.user.email}}</li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Title</div>
+                <div class="item-subtitle color-red form-error name1"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Title" name="name1" id="title-field" required/>
+                  <input type="hidden" name="imagepath" id="user-imagePath"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Firstname</div>
+                <div class="item-subtitle color-red form-error name2"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="First Name" name="name2" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Middlename</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Middle Name" name="name3"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Lastname</div>
+                <div class="item-subtitle color-red form-error name4"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Last Name" name="name4" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Birth date</div>
+                <div class="item-subtitle color-red form-error birth"></div>
+                <div class="item-input">
+                  <input type="date" placeholder="Birth Date" name="birth" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Phone</div>
+                <div class="item-subtitle color-red form-error mobilephone"></div>
+                <div class="item-input">
+                  <input type="tel" placeholder="Mobile Phone" name="mobilephone" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Street</div>
+                <div class="item-subtitle color-red form-error addressstreet"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Street" name="addressstreet" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>City</div>
+                <div class="item-subtitle color-red form-error city"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="City" name="addresscity" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Country</div>
+                <div class="item-subtitle color-red form-error country"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Country" name="addresscountry" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Postal Code</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Postal Code" name="postcode"/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:">
+    <title>Sun Tixx</title>
+    <!-- Path to Framework7 Library CSS-->
+    <link rel="stylesheet" href="css/framework7.material.min.css">
+    <link rel="stylesheet" href="css/framework7.material.colors.min.css">
+    <link rel="stylesheet" href="css/cropper.min.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="css/custom.css">
+  </head>
+  <body class="theme-indigo">
+    <div class="login-screen">
+        <!-- Default view-page layout -->
+        <div class="view">
+          <div class="page no-navbar no-toolbar no-swipeback">
+            <!-- page-content has additional login-screen content -->
+            <div class="page-content login-screen-content">
+              <div class="login-screen-title">Sun Tixx</div>
+              <!-- Login form -->
+              <form id="loginForm">
+                <div class="list-block">
+                  <div class="list-block-label">Please Sign In To Continue!</div>
+                  <ul>
+                    <li class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label">Email</div>
+                        <div class="item-input">
+                          <input type="email" name="email" placeholder="Email" value="admin@suntixx.com">
+                        </div>
+                      </div>
+                    </li>
+                    <li class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label">Password</div>
+                        <div class="item-input">
+                          <input type="password" name="password" placeholder="Password" value="123123">
+                        </div>
+                      </div>
+                    </li>
+                    <li class="item-content">
+                      <div class="item-inner">
+                          <a href="#" class="button button-fill color-blue facebook-login link">Facebook</a>
+
+                      </div>
+                    </li>
+                    <li class="item-divider row">
+                      <a href="#" class="create-user col-50 item-link link close-login-screen">Create New User</a>
+                      <a href="#" class="forgot-password col-50 item-link link close-login-screen">Forgot Password?</a>
+                    </li>
+                    <li>
+                     <div class="item-content">
+                       <div class="item-inner">
+                         <div class="item-title label">Select Server</div>
+                         <div class="item-input">
+                           <select name="server">
+                            <option>Sandbox</option>
+                            <option>Live</option>
+                          </select>
+                         </div>
+                       </div>
+                     </div>
+                   </li>
+                  </ul>
+                </div>
+                <div class="list-block">
+                  <ul>
+
+                    <li class="row">
+                      <div class="col-50">
+                        <a href="#" class="button button-big button-fill color-red cancel-login">Cancel</a>
+                      </div>
+                      <div class="col-50">
+                        <a href="#" class="button button-big button-fill color-green login-submit">Sign In</a>
+                      </div>
+                    </li>
+                  </ul>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Status bar overlay for fullscreen mode-->
+    <div class="statusbar-overlay"></div>
+    <!-- Panels overlay-->
+    <div class="panel-overlay"></div>
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-left panel-cover">
+
+        <div class="page-content">
+          <div id="user-avatar"></div>
+          <div class="content-block-title">Main Menu</div>
+          <div class="list-block media-list">
+
+            <ul>
+                <li class="item-content row">
+                  <a href="#" class="main-menulink item-link col-100 user-menulink close-panel" menuitem="user">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">My Profile</div>
+                    </div>
+                    <div class="item-subtitle">Manage your user profile</div>
+                  </div>
+                  </a>
+                </li>
+                <li class="item-content row">
+                  <a href="#" class="main-menulink item-link col-100 tickets-menulink close-panel " menuitem="tickets">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">My Tickets</div>
+                    </div>
+                    <div class="item-subtitle">Manage your tickets</div>
+                  </div>
+                  </a>
+                </li>
+                <li class="item-content row">
+                  <a href="#" class="main-menulink item-link col-100 events-menulink  close-panel" menuitem="events">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">My Events</div>
+                    </div>
+                    <div class="item-subtitle">Manage your events</div>
+                  </div>
+                  </a>
+                </li>
+                <li class="item-content row">
+
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">Social Media</div>
+                    </div>
+                    <div class="item-media">
+                      <a href="#" class="icon-only link close-panel social-icon" social="facebook"><i class="icon icon-facebook"></i></a>
+                      <a href="#" class="icon-only link close-panel social-icon" social="twitter"><i class="icon icon-twitter"></i></a>
+                      <a href="#" class="icon-only link close-panel social-icon" social="instagram"><i class="icon icon-instagram"></i></a>
+                      <a href="#" class="icon-only link close-panel social-icon" social="linkedin"><i class="icon icon-linkedin"></i></a>
+                      <a href="#" class="icon-only link close-panel social-icon" social="google"><i class="icon icon-googleplus"></i></a>
+                    </div>
+                  </div>
+                </li>
+                <li class="item-content logout-menu row">
+                  <a href="#homepage-Tab" class="item-link close-panel item-content col-100 logout">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">Logout</div>
+                    </div>
+                  </div>
+                  </a>
+                </li>
+                <li class="item-content row">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">About</div>
+                    </div>
+                    <div class="item-subtitle">Sun Tixx v1.0.0</div>
+                  </div>
+                </li>
+              </ul>
+          </div>
+        </div>
+    </div>
+    <!-- Right panel with cover effect-->
+    <div class="panel panel-right panel-cover">
+      <div class="content-block"><div class="content-block-title">Menu</div>
+        <div id="right-panel-menu"></div>
+      </div>
+    </div>
+    <!-- Views-->
+    <div class="views tabs">
+      <div class="view view-main active tab" id="homepage-tab">
+        <div class="pages "> </div>
+      </div>
+      <div class="view tab view-form" id="formViewTab">
+        <div class="pages">
+          <div class="page navbar-fixed" data-page="purchases">
+          </div>
+        </div>
+      </div>
+    </div>
+      <!--Homepage Events template-->
+    <script type="text/template7" id="eventsTemplate">
+      {{#each this}}
+        <div class="card event-details">
+          <a href="#" class="link event-link" event-id="{{id}}">
+          <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+          <div class="header">
+            <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
+          </div>
+            <div class="card-content">
+
+
+            <div class="card-content-inner">
+              <div class="event-name">{{name}}</div>
+              <div class="color-gray hosted-by"><span class="small">by</span>
+
+                  {{#js_compare "this.hostedby == 0"}}
+                    {{user.fullname}}
+                  {{else}}
+                      {{#js_compare "this.hostedby == 1"}}
+                        {{user.organization.name}}
+                      {{else}}
+                        {{hostedby}}
+                      {{/js_compare}}
+                  {{/js_compare}}
+
+              </div>
+              <span class="color-black">{{EnglishTime}}</span><br>
+              <span class="color-gray">{{venue}}</span><br><span class="color-gray">{{city}}, {{country}}</span>
+            </div>
+          </div>
+          </a>
+          <div class="card-footer">
+            <div class="prices">
+              {{#js_compare "this.LowestPrice == this.HighestPrice"}}
+              {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}}
+              {{else}}
+                {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}} - {{js "this.HighestPrice.toFixed(2)"}}&nbsp;{{currency}}
+              {{/js_compare}}
+            </div>
+              <a href="#" class="share-event icon-only"><i class="icon icon-share-orange"></i></a>
+              {{#js_compare "this.tickets.length > 0"}}<a href="#" class="link purchase-tickets icon-only"  data-view=".view-form" event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/js_compare}}
+            <!--</div>-->
+          </div>
+        </div>
+      {{/each}}
+    </script>
+    <!--search Result List Template--->
+    <script type="text/template7" id="searchResultTemplate">
+      <div class="content-block-title">
+        Search Results - <span class="search-count">{{count}} Events Found</span>
+      </div>
+      {{#js_compare "this.length == 0"}}
+      <p><i>No Events Found</i></p>
+      {{else}}
+      {{#each this}}
+      <div class="search-details">
+        <a href="#" class="item-content item-link event-link search-details" event-id="{{id}}">
+          <div class="row no-gutter header">
+            <span>{{name}}</span>
+          </div>
+          <div class="row no-gutter content">
+              <div class="col-50 image">
+                <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
+              </div>
+            <div class="col-50 content-details">
+              <span>{{Month}} {{Day}}, {{Year}}</span>
+              <span>{{EnglishStartTime}}</span>
+              <span>{{venue}}</span>
+            </div>
+          </div>
+          <div class="row footer no-gutter">
+            <div class="col-50 category">
+              <span>{{category.name}}</span>
+            </div>
+            <div class="col-50">
+              <span>
+                {{#js_compare "this.lowestPrice == this.highestPrice"}}
+                  {{js "this.lowestPrice.toFixed(2)"}}{{currency}}
+                {{else}}
+                  {{js "this.lowestPrice.toFixed(2)"}}&nbsp;{{currency}} - {{js "this.highestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                {{/js_compare}}
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+      {{/each}}
+      {{/js_compare}}
+    </script>
+    <!--Instagram Feed Tempalte-->
+    <script type="text/template7" id="feedTemplate">
+      {{#each this}}
+      <div class="instagram">
+        {{#js_compare "this.type == 'video'"}}
+        <video class="instavideo" controls>
+          <source src="{{videos.low_resolution.url}}" type="video/mp4">
+          There was a problem displaying this video
+        </video>
+        {{else}}
+        <a href="{{link}}"><img  class="lazy" src="{{images.low_resolution.url}}" /></a>
+        {{/js_compare}}
+        <div class="interaction">
+          <div>&hearts; {{likes.count}} likes</div>
+        </div>
+        <p>{{caption.text}}</p>
+        <div class="accordion-item">
+          <div class="accordion-item-toggle">{{comments.count}} Comments</div>
+          <div class="accordion-item-content">
+          {{#each comments.data}}
+
+            <div class="item-content">
+              <div class="item-media"><img src="{{from.profile_picture}}"></div>
+              <div class="item-inner">
+                <div class="item-text">{{text}}</div>
+              </div>
+            </div>
+
+          {{/each}}
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </script>
+    <!--purchases template-->
+    <script type="text/template7" id="purchasesTemplate">
+      <div class="content-block-title">Select Purchase</div>
+      <div class="content-block">
+        {{#each this}}
+        <div class="search-details">
+          <a href="#" class="item-content item-link purchase-link search-details" purchase-id="{{PurchaseId}}" event-id="{{EventId}}">
+            <div class="row no-gutter header">
+              <span>{{EventName}}</span>
+            </div>
+            <div class="row no-gutter content">
+                <div class="col-50 image">
+                  <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{EventId}}/thumbnail.png"/>
+                </div>
+              <div class="col-50 content-details">
+                <span>{{EnglishStartDate}}</span>
+                <span>{{EnglishStartTime}}</span>
+                <span>{{Venue}}</span>
+              </div>
+            </div>
+            <div class="row footer no-gutter">
+              <div class="col-50 category">
+                <span>{{CategoryName}}</span>
+              </div>
+              <div class="col-50">
+                <span>
+                  {{SumQty}} {{#js_compare "this.SumQty > 1"}}Tickets{{else}}Ticket{{/js_compare}}</span>
+              </div>
+            </div>
+          </a>
+        </div>
+        {{/each}}
+      </div>
+    </script>
+    <!--Popups-->
+    <div class="popup barcodes">
+      <div class="tabs-swipeable-wrap">
+        <div class="tabs">
+          {{#each ticket}}
+          <div class="tab active" id="barcode"></div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+    <div class="popup enable-committee">
+      <div class="content-block">
+        <p>To use this feature you must agree to our terms and services</p>
+        <div class="list-block">
+          <ul>
+            <li class="row">
+              <div class="col-50">
+                <a href="#" class="button button-big button-fill color-red committee-terms-cancel">Cancel</a>
+              </div>
+              <div class="col-50">
+                <a href="#" class="button button-big button-fill color-green committee-terms-agree">Agree</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="popup add-purchaser">
+      <div class="content-block">
+        <p>Enter the purchaser's name and email to continue</p>
+        <div class="list-block" id="add-purchaser-form">
+          <ul>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-input">
+                    <input type="text" placeholder="First Name" name="name2">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-input">
+                    <input type="text" placeholder="Last Name" name="name4">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-input">
+                    <input type="email" placeholder="E-mail" name="email">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="row">
+              <div class="col-50">
+                <a href="#" class="button button-big button-fill color-red close-popup">Cancel</a>
+              </div>
+              <div class="col-50">
+                <a href="#" class="button button-big button-fill color-green add-new-purchaser close-popup">Continue</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="popup edit-purchaser">
+      <div class="content-block">
+        <p>Edit Purchaser Information</p>
+        <div class="list-block">
+          <ul>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-input">
+                    <input type="text" placeholder="First Name">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-input">
+                    <input type="text" placeholder="Last Name">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-input">
+                    <input type="email" placeholder="E-mail">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="row">
+              <div class="col-50">
+                <a href="#" class="button button-big button-fill color-red close-popup">Cancel</a>
+              </div>
+              <div class="col-50">
+                <a href="#" class="button button-big button-fill color-green edit-purchaser">Continue</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="popup form-popup">
+      <div class="view view-popup"></div>
+    </div>
+    <div class="popup image-popup">
+      <div class="cropper-container bg-black">
+        <div class="cropper-image-container">
+          <img id="imageCropper">
+        </div>
+        <div class="row cropper-buttons">
+          <div class="col-50">
+            <a href="#" data-popup=".image-popup" class="button button-big button-fill color-red close-popup crop-cancel">Cancel</a>
+          </div>
+          <div class="col-50">
+            <a href="#" class="button button-big button-fill color-green crop-image" id="image-save">Save</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Pop Overs-->
+    <div class="popover event-categories">
+      <div class="popover-angle"><i class="icon icon-back"></i></div>
+      <div class="popover-inner">
+        <div class="list-block">
+          <ul>
+            <li><a href="#" class="list-button item-link close-popover home">Home</a></li>
+            <li><a href="categories.html" class="list-button item-link categories close-popover">Categories</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="popover checkout-options">
+      <div class="popover-angle"><i class="icon icon-back"></i></div>
+      <div class="popover-inner">
+        <div class="list-block">
+          <ul>
+            <li><a href="#" class="list-button item-link close-popover payment-credit">Credit Card</a></li>
+            <li><a href="#" class="list-button item-link close-popover payment-paypal">Paypal</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/libs/moment.js"></script>
+    <script type="text/javascript" src="js/libs/searchjs.js"></script>
+    <script type="text/javascript" src="js/libs/instafeed.min.js"></script>
+    <script type="text/javascript" src="js/libs/cropper.min.js"></script>
+    <script type="text/javascript" src="js/libs/barcode-39.js"></script>
+    <script type="text/javascript" src="js/libs/qrcode.min.js"></script>
+    <script type="text/javascript" src="js/libs/lib.js"></script>
+
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <!-- Path to your app js-->
+
+
+
+    <script type="text/javascript" src="js/config.js"></script>
+
+    <script type="text/javascript" src="js/server.js"></script>
+    <script type="text/javascript" src="js/pickers.js"></script>
+    <script type="text/javascript" src="js/plugins.js"></script>
+    <script type="text/javascript" src="js/menus.js"></script>
+    <script type="text/javascript" src="js/util.js"></script>
+    <script type="text/javascript" src="js/eventsservice.js"></script>
+    <script type="text/javascript" src="js/userservice.js"></script>
+    <script type="text/javascript" src="js/cameraservice.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
+    <script type="text/javascript" src="js/accesscenter.js"></script>
+    <script type="text/javascript" src="js/ticketcenter.js"></script>
+    <script type="text/javascript" src="js/purchasecenter.js"></script>
+    <script type="text/javascript" src="js/eventcenter.js"></script>
+    <script type="text/javascript" src="js/usercenter.js"></script>
+  </body>
+</html>

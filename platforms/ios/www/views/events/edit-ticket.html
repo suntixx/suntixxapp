@@ -1,0 +1,66 @@
+<div class="pages" >
+  <div data-page="edit-ticket" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Edit Ticket</div>
+        <!--<div class="right"><a href="#" class="link update-ticket"><span>Save</span></a></div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange update-ticket">
+      <i class="icon icon-save"></i>
+    </a>
+   <div class="page-content">
+     <div class="ticket-details">
+       <img class="link edit-image" src="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png" valign="bottom" id="edit-ticket-image"/>
+     </div>
+     <div class=" list-block" id="edit-ticket-form">
+       <ul>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Ticket Type</div>
+               <div class="item-input">
+                 <input type="text" value="{{tickettype}}" name="tickettype" id="tickettype"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Price</div>
+               <div class="item-input">
+                 <input type="number" value="{{price}}" name="price" id="ticketprice"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Quantity</div>
+               <div class="item-input">
+                 <input type="number" value="{{quantity}}" name="quantity"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Limit</div>
+               <div class="item-input">
+                 <input type="text" value="{{limit}}" name="limit" id="ticket-limit"/>
+                 <input type="hidden" name="ticketimagepath" value=" " id="edit-ticket-image-path"/>
+                 <input type="hidden" name="id" value="{{id}}"/>
+               </div>
+             </div>
+           </div>
+         </li>
+       </ul>
+     </div>
+
+   </div>
+ </div>
+</div>

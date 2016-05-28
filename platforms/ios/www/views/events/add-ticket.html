@@ -1,0 +1,76 @@
+
+<div class="pages navbar-fixed">
+  <div data-page="add-tickets" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Ticket Details</div>
+        <!--<div class="right"><a href="#" class="link save-ticket close-popup" data-popup=".form-popup" event-id={{id}}></i><span>Save</span></a></div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-ticket close-popup"  data-popup=".form-popup" event-id={{id}} >
+      <i class="icon icon-save"></i>
+    </a>
+   <div class="page-content">
+     <div class="ticket-details">
+       <img class="link edit-image" src="{{@global.config.server}}/thumbnails/tickets/0/portrait.png" valign="bottom" id="add-ticket-image"/>
+     </div>
+     <div class="list-block" id="add-ticket-form">
+       <ul>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Category</div>
+               <div class="item-input">
+                 <input type="text" value="Paid" readonly name="category" id="ticket-category"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li class="align-top">
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Ticket Type</div>
+               <div class="item-input">
+                 <input type="text" placeholder="Ticket Type" name="tickettype" id="tickettype"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Price</div>
+               <div class="item-input">
+                 <input type="number" placeholder="0.00" name="price" id="ticketprice"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Quantity</div>
+               <div class="item-input">
+                 <input type="number" placeholder="0" name="quantity"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Limit</div>
+               <div class="item-input">
+                 <input type="number" value="1" readonly name="limit" id="ticket-limit"/>
+                 <input type="hidden" name="ticketimagepath" value=" " id="add-ticket-image-path"/>
+               </div>
+             </div>
+           </div>
+         </li>
+       </ul>
+     </div>
+
+   </div>
+ </div>
+</div>

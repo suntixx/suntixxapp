@@ -1,0 +1,82 @@
+
+
+<div class="pages">
+  <!-- Page, data-page contains page name-->
+  <div data-page="update-venue" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-user back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Venue</div>
+        <div class="right">
+          <!--<a href="#" class="link save-user"></i><span>Save</span></a>-->
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <a href="#" class="floating-button color-orange save-user">
+      <i class="icon icon-save"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <form class="list-block" id="update-venue-form">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Name</div>
+                <div class="item-subtitle color-red form-error name"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Name" name="name" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="align-top">
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Country</div>
+                <div class="item-subtitle color-red form-error country"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Country" name="country" required id="user-country"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>City</div>
+                <div class="item-subtitle color-red form-error city"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="City" name="city" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Address</div>
+                <div class="item-subtitle color-red form-error address"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Address" name="address" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Map Link</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Map Link" name="mapLink"/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

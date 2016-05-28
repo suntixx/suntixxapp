@@ -1,0 +1,57 @@
+
+<div class="pages ">
+  <div data-page="event-tickets" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Ticket Details</div>
+        <div class="right">
+          <!--<a href="#" class="link add-ticket" event-id="{{id}}"></i><span>Add</span></a>-->
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange add-ticket" event-id="{{id}}">
+      <i class="icon icon-new"></i>
+    </a>
+   <div class="page-content"><div class="content-block-title">{{name}}</div>
+
+    {{#each tickets}}
+
+      <div class="card ticket-details">
+        <div class="header">
+          <img src="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png" valign="bottom" class="ticket-image card-header color-white no-border">
+        </div>
+        <div class="card-content">
+          <div class="content-block-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}&nbsp;{{@root.currency}}</div>
+          <div class="content-block">
+            <div class="color-gray">
+              <i>Sold: {{soldquantity}}, Balance:  {{Balance}}</i><br>
+              <i>Scanned: {{scannedquantity}}, Pending: {{Pending}}</i>
+            </div>
+          </div>
+            <div class="card-content-inner row">
+              <div class="content-block col-auto">
+                <!--<div class="content-block-inner-inner">-->
+                  <div class="item-title">Quantity - {{quantity}}</div>
+                <!--</div>-->
+              </div>
+              <div class="content-block col-auto">
+                <!--<div class="item-inner">-->
+                  <div class="item-title">Limit - {{limit}}</div>
+                <!--</div>-->
+              </div>
+            </div>
+          </div>
+        <div class="card-footer">
+          <a href="#" class="link edit-ticket" ticket-id="{{id}}">Edit</a>
+            <a href="#" class="link disable-ticket" enabled="{{enable}}" ticket-id="{{id}}">{{#if enable}}Disable{{else}}Enable{{/if}}</a>
+            {{#js_compare "this.soldquantity == 0"}}<a href="#" class="link delete-ticket" ticket-id="{{id}}">Delete</a>{{/js_compare}}
+        </div>
+      </div>
+
+        {{/each}}
+
+    </div>
+  </div>
+</div>

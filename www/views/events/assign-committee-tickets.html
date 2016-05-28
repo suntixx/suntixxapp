@@ -1,0 +1,44 @@
+
+<div class="pages navbar-fixed">
+  <div data-page="committee-tickets-assignment" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">Committee Tickets</div>
+        <!--<div class="right"><a href="#" class="link save-committee-ticket-assignments"> <i class="icon"></i><span>Save</span></a></div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-committee-ticket-assignments">
+      <i class="icon icon-save"></i>
+    </a>
+   <div class="page-content"><div class="content-block-title">Select Ticket</div>
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <form id="ticket-assignment-form">
+            <ul>
+              {{#each this}}
+              {{#js_compare "this.permissions == 9"}}
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <input type="checkbox" value={{id}} ticket-id="{{id}}" name="tickets"/>
+                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}</div>
+                      </div>
+                      <div class="item-subtitle">Quantity: {{quantity}}</div>
+                      <div class="item-text"><span>Sold Quantity: {{soldquantity}}</span><br><span>Scanned Quantity: {{scannedquantity}}</span></div>
+                    </div>
+                  </label>
+                  </li>
+              {{/js_compare}}
+              {{/each}}
+            </ul>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

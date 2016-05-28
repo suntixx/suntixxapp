@@ -1,0 +1,52 @@
+
+<div class="pages ">
+  <div data-page="scanner-result" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left sliding"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Ticket Scanner</div>
+        <div class="right"><a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-submenu"></i></a></div>
+        <!--<div class="right"><a href="#" class="link "> <span>Scan</span><i class="icon icon-forward"></i></a></div>-->
+      </div>
+    </div>
+    <div id="page-content" class="page-content">
+    <div class="card">
+      <div class="card-content ">
+        <div class="list-block">
+          <ul>
+            <li>
+              <div class="row">
+                <div class="col-100">
+                  <div class="item-input">
+                    <input type="text" placeholder="Enter Barcode" class="barcode">
+                  </div>
+                </div>
+                <!--<div class="col-25">
+                  <a href="#" class="button button-fill manual-scan-button">Scan</a>
+                </div>-->
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <div class="card-content-inner"><div class="color-gray"><span>{{event.name}}</span><br><span>{{event.StartTime}}</span><br><span>Host: {{event.hostedby}}</span><br><span>{{event.venue}}</span></div>
+          <div id="scan-information">
+            <span class="code"></span><br>
+            <span class="name-on-ticket"></span><br>
+            <span class="purchase-date"></span><br>
+            <span class="ticket-id"></span><br>
+            <span class="previous-scan-date"></span><br>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span id="scan-result" class="scan-result big center"></span>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="button  button-round  color-deeporange manual-scan-button icon-only"> </a>
+  </div>
+</div>
+</div>

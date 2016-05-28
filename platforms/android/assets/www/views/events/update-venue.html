@@ -1,0 +1,91 @@
+
+<div class="pages navbar-fixed">
+  <!-- Page, data-page contains page name-->
+  <div data-page="update-venue-details" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Venue Details</div>
+        <div class="right">
+          <!--<a href="#" class="link save-event" event-id="{{id}}"></i><span>Save</span></a>-->
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-event">
+      <i class="icon icon-save"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div class="content-block-title">Update Venue Details</div>
+      <form class="list-block" id="update-venue-details-form">
+        <ul>
+          <li>
+            <a href="#" class="item-link smart-select" data-searchbar="true" data-searchbar-placeholder="Search Venues" data-back-on-select="true">
+              <select name="venue-select" id="venue-select">
+                {{#each venues.Venue_Names}}
+                  <option value={{value}}>{{label}}</option>
+                {{/each}}
+              </select>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">Venues</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Address</div>
+                <div class="item-input">
+                  <input type="text" name="venue" id="venue-address" value="{{venue}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">City</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Headline" name="city" id="venue-city" value="{{city}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Country</div>
+                <div class="item-input">
+                  <input type="text" name="country" id="venue-country" value="{{country}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Venue Type</div>
+                <div class="item-input">
+                  <input type="text" name="venuetype" id="venue-type" value="{{VenueTypeName}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Map Link</div>
+                <div class="item-input">
+                  <input type="text" name="maplink" id="venue-maplink" value="{{mapLink}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>
