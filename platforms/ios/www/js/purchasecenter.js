@@ -1,10 +1,16 @@
 app.onPageInit('purchase-quantity', function(page) {
   var thisEvent = page.context;
-
-  $$('.ticket-limit').on('focus', function () {
+  var ticketLimitPicker = null;
+  $$('.ticket-limit').on('click', function () {
     var id = $$(this).attr('id');
     var ticketLimit = $$(this).attr('ticketLimit');
-    var ticketLimitPicker = appPickers.limitPicker(id, ticketLimit);
+    var available = $$(this).attr('quantity');
+    if (available < ticketLimit) {
+      ticketLimit = available;
+    }
+    if (!ticketLimitPicker) {
+      ticketLimitPicker = appPickers.limitPicker(id, ticketLimit);
+    }
     ticketLimitPicker.open();
   });
 
@@ -43,7 +49,7 @@ app.onPageInit('purchase-quantity', function(page) {
       return;
     }
 
-    formView.router.load ({
+    mainView.router.load ({
       url: 'views/purchase/purchase-ticket-names.html',
       context: {
         cart: ticketList,
@@ -88,7 +94,7 @@ app.onPageInit('purchase-ticket-names', function(page) {
     cartInfo = util.getCartSummary(cartInfo);
     if (cartInfo.length == 0) {
       app.alert("Your Cart is Empty.");
-      formView.router.back();
+      mainView.router.back();
       return;
     }
     var checkoutCart =[];
@@ -124,11 +130,16 @@ app.onPageInit('purchase-ticket-names', function(page) {
       }
       //alert(JSON.stringify(checkoutCart));
     }
-    formView.router.load({
+    //alert(JSON.stringify(context.thisEvent));
+    var exchngRate = Server.getExchangeRate(context.thisEvent.currency)
+    var totalUSD = Number(context.total) / Number(exchngRate);
+    mainView.router.load({
       url: 'views/purchase/checkout.html',
       context: {
-        thisEvent: context.thisEvent,
+        event: context.thisEvent,
         total: context.total,
+        totalUSD: totalUSD,
+        exchangeRate: exchngRate,
         cart: checkoutCart,
         ticketQuantity: ticketQuantity,
       },
@@ -136,9 +147,80 @@ app.onPageInit('purchase-ticket-names', function(page) {
   });
 });
 
-app.onPageInit('purchase-checkout', function (page) {
+app.onPageAfterAnimation('purchase-checkout', function (page) {
+
+  var cartTotal = page.context.total;
+  var cartTotalUSD = page.context.totalUSD;
+  var ticketQuantity = page.context.ticketQuantity;
+  var thisEvent = page.context.event;
+  var cart = page.context;
+  var tickets = page.context.cart;
+
+  var onSuccessfulPayment = function(payment) {
+     //alert("payment success: " + JSON.stringify(payment, null, 4));
+     var request = {
+        paypalResponse: payment,
+        user_id: user.id,
+        email: user.email,
+        event_id: thisEvent.id,
+        paypal_id: payment.response.id,
+        paypal_create_item: payment.response.create_time,
+        cardtype: "PayPal-Mobile",
+        cardno: payment.response.id,
+        nameoncard: user.fullname,
+        streetaddress: user.addressstreet,
+        city: user.addresscity,
+        state: user.addressstate,
+        country: user.addresscountry,
+        zip: user.postcode,
+        currency: thisEvent.currency,
+        rate: cart.exchngRate,
+        ticketsquantity: ticketQuantity,
+        totalprice: cartTotal,
+        totalUSD: cartTotalUSD,
+        tickets: tickets,
+     };
+     var result = JSON.parse(Server.mobilePayment(request));
+     if (result) {
+       mainView.router.load({
+         url: 'views/tickets/tickets.html',
+         context: {
+           tickets: result,
+           event: thisEvent,
+         }
+       });
+     } else {
+       app.alert("Oops! Something went wrong");
+     }
+     //alert(JSON.stringify(result));
+   };
+
+   var onUserPaymentCancelled = function (result) {
+     alert(result);
+   };
+
+   var onPayPalMobileInit = function () {
+     var options = {
+       merchantName: config.owner,
+       merchantPrivacyPolicyURL: config.server + "/static/privacypolicy",
+       merchantUserAgreementURL: config.server + "/static/acceptableusepolicy",
+     };
+     var paypalConfig =  new PayPalConfiguration(options);
+     PayPalMobile.prepareToRender("PayPalEnvironmentSandbox", paypalConfig, function() {
+       var buyNowBtn = document.getElementById("paypal-pay-button");
+       buyNowBtn.onclick = function (e) {
+         var paymentDetails = new PayPalPaymentDetails(cartTotalUSD, "0.00", "0.00");
+         var payment = new PayPalPayment(cartTotalUSD, "USD", thisEvent.name + "-" + ticketQuantity + "Tickets", "Sale", paymentDetails);
+         PayPalMobile.renderSinglePaymentUI(payment, onSuccessfulPayment, onUserPaymentCancelled);
+       }
+     });
+   };
+
+  PayPalMobile.init(config.paypalIds, onPayPalMobileInit);
+
+
   $$('.payment-credit').on('click', function() {
-    formView.router.load({
+    mainView.router.load({
       url: 'views/purchase/card-info.html',
       context: page.context,
     });
@@ -146,14 +228,13 @@ app.onPageInit('purchase-checkout', function (page) {
 });
 
 app.onPageInit('card-form', function(page) {
-  $$('#card-country').on('focus', function() {
-
-    var countries = appPickers.countries('card-country');
+  var countries = appPickers.countries('card-country');
+  $$('#card-country').on('click', function() {
     countries.open();
   });
 
-  $$('#card-type').on('focus', function() {
-    var cartTypes = appPickers.cardTypes('card-type');
+  var cartTypes = appPickers.cardTypes('card-type');
+  $$('#card-type').on('click', function() {
     cardTypes.open();
   });
 

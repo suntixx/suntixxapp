@@ -26,6 +26,45 @@ app.onPageAfterAnimation('access-gate-list', function(page) {
   });
 });
 
+app.onPageAfterAnimation('assigned-access-gate-list', function(page) {
+  $$('#right-panel-menu').html(Menus.scan);
+
+  $$('.start-scanning').on('click', function () {
+    var selectedGates = app.formToJSON('#select-gates-form');
+    var selected = 0;
+    for (var i in selectedGates) {
+      if (selectedGates[i].length > 0) {
+        selected++;
+      }
+    }
+    if (selected == 0) {
+      app.alert("Plese select ticket(s)");
+      return;
+    }
+    //alert(JSON.stringify(selectedGates));
+    //allEvents = JSON.parse(Server.getEvents(user.id));
+    mainView.router.load ({
+      url: 'views/access/scan.html',
+      context: {
+        event:selectedEventLocal,
+        tickets: selectedGates,
+      },
+      ignoreCache: true,
+    });
+  });
+
+  $$('.back-events').on('click', function () {
+    //alert('back');
+  //  allEvents = JSON.parse(Server.getEvents(user.id));
+    mainView.router.back ({
+      url: 'views/events/myevents.html',
+      context: allUserEvents,
+      force: true,
+      ignoreCache: true,
+    });
+  });
+});
+
 
 app.onPageInit('scanner-result', function (page) {
   var selectedTickets = page.context.tickets;
@@ -46,25 +85,35 @@ app.onPageInit('scanner-result', function (page) {
     $$('.barcode').val('');
   });
 
-  $$('.auto-scan').prop('checked', config.autoScan);
+  $$('.auto-scan').prop('checked', storage.getItem('autoscan'));
+  if ($$('.auto-scan').prop('checked') == true) {
+    //  autoScan();      //alert("auto scan");
+   }
 
   $$('.auto-scan').on('change', function () {
-    if ($$('.auto-scan').prop('checked') ) {
-      config.autoScan = true;
-      $('.auto-scan-config').prop('checked', true);
-       autoScan();
+    //alert($$(this).prop('checked'));
+    if ($$(this).prop('checked') == true) {
+
+      config.settings.autoScan = true;
+      storage.setItem('autoscan', true);
+      //alert(config.settings.autoScan);
+    //  $('.auto-scan-config').prop('checked', true);
+       //autoScan();
     } else {
-      config.autoScan = false;
-      $('.auto-scan-config').prop('checked', false);
+      //alert($$(this).val());
+      config.settings.autoScan = false;
+      storage.setItem('autoscan', false);
+      //alert(config.settings.autoScan);
+    //  $('.auto-scan-config').prop('checked', false);
     }
 
   });
 
   //turn on auto scanner if automatic scan checkbox is checked
-  if ($$('.auto-scan').attr('checked') == 'checked') {
-      autoScan();
+  //if ($$('.auto-scan').attr('checked') == 'checked') {
+  //    autoScan();
       //alert("auto scan");
-   }
+  // }
 
 });
 
@@ -80,7 +129,7 @@ function autoScan() {
       var code = result.text;
       var ticketList = util.serializeTicketTypes();
       var scannedTime = new Date().toISOString();
-      var scanResult = JSON.parse(Server.verifyScan(code, selectedEvent.id, user.id, ticketList , scannedTime));
+      var scanResult = JSON.parse(Server.verifyScan(code, selectedEventLocal.id, user.id, ticketList , scannedTime));
       updateScannerResultPage(code, scanResult);
     //  return result.text;
     },

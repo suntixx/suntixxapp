@@ -6,6 +6,8 @@ var appPickers = {
       values.push(i);
     }
     var picker = app.picker({
+      scrollToInput: true,
+      closeByOutsideClick: true,
       input: '#'+input,
       cols: [
         {
@@ -18,36 +20,59 @@ var appPickers = {
   },
 
   hostedBy: function() {
-    var picker = app.picker({
-      input: '#event-host',
-      //closeByOutsideClick: true,
-      cols: [
-         {
-           textAlign: 'center',
-           displayValues: ['personal','organization'],
-           values: [user.fullname, user.organization.name],
-         },
-       ]
-   });
+    var picker;
+    if (user.organization) {
+      picker = app.picker({
+        scrollToInput: true,
+        closeByOutsideClick: true,
+        input: '#event-host',
+        //closeByOutsideClick: true,
+        cols: [
+           {
+             textAlign: 'center',
+             displayValues: ['personal','organization'],
+             values: [user.name2+" "+user.name4, user.organization.name],
+           },
+         ]
+     });
+   } else {
+     picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
+       input: '#event-host',
+       //closeByOutsideClick: true,
+       cols: [
+          {
+            textAlign: 'center',
+            displayValues: ['personal'],
+            values: [user.fullname],
+          },
+        ]
+    });
+   }
    return picker;
   },
 
   userTitle: function() {
       var picker = app.picker({
-      input: '#title-field',
-      //closeByOutsideClick: true,
-      cols: [
-         {
-           textAlign: 'center',
-           values: ['Mr.', 'Mrs.', 'Miss'],
-         },
-       ]
+        scrollToInput: true,
+        closeByOutsideClick: true,
+        input: '#title-field',
+        //closeByOutsideClick: true,
+        cols: [
+           {
+             textAlign: 'center',
+             values: ['Mr.', 'Mrs.', 'Miss'],
+           },
+         ]
      });
      return picker;
    },
 
    ticketCategory: function () {
     var picker = app.picker({
+      scrollToInput: true,
+      closeByOutsideClick: true,
       input: '#ticket-category',
       //closeByOutsideClick: true,
       cols: [
@@ -63,6 +88,8 @@ var appPickers = {
 
    ticketLimit: function () {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#ticket-limit',
        //closeByOutsideClick: true,
        cols: [
@@ -77,6 +104,8 @@ var appPickers = {
 
    eventCategories: function (element) {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#' + element,
        //closeByOutsideClick: true,
        cols: [
@@ -93,6 +122,8 @@ var appPickers = {
 
    eventRestrictions: function (element) {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#' + element,
        //closeByOutsideClick: true,
        cols: [
@@ -109,6 +140,8 @@ var appPickers = {
 
    eventDresscode: function (element) {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#' + element,
       // closeByOutsideClick: true,
        cols: [
@@ -124,6 +157,8 @@ var appPickers = {
 
    cardTypes: function (element) {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#' + element,
        cols: [
          {
@@ -138,6 +173,8 @@ var appPickers = {
 
    countries: function (element) {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#' + element,
        momentumRatio: 40,
        scrollToInput: true,
@@ -393,6 +430,8 @@ var appPickers = {
 
    currency: function (element) {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#' + element,
       // closeByOutsideClick: true,
        cols: [
@@ -410,6 +449,8 @@ var appPickers = {
 
    venueType: function (element) {
      var picker = app.picker({
+       scrollToInput: true,
+       closeByOutsideClick: true,
        input: '#' + element,
       // closeByOutsideClick: true,
        cols: [
@@ -425,5 +466,5 @@ var appPickers = {
 
    },
 
-  
+
 };

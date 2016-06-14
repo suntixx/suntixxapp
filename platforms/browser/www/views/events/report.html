@@ -1,6 +1,6 @@
 
-<div class="pages navbar-through toolbar-through">
-  <div data-page="report" class="page">
+<div class="pages">
+  <div data-page="report" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left sliding"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
@@ -23,26 +23,27 @@
     </div>
     <div class="card">
       <div class="card-content">
-        <div class="row" id="ticket-report-header">
-          <div class="col-40">Ticket Type</div>
-          <div class="col-15">Price</div>
-          <div class="col-15">Sold</div>
-          <div class="col-15">Bal</div>
-          <div class="col-15">Scan</div>
-        </div>
-
-        <div id="ticket-report-details">
-          {{#each tickets}}
-          <div class="row">
-            <div class="col-40 ticket-details">{{tickettype}}</div>
-            <div class="col-15 ticket-details">${{js "this.price.toFixed(2)"}}</div>
-            <div class="col-15 ticket-details">{{soldquantity}}</div>
-            <div class="col-15 ticket-details">{{js "this.quantity - this.soldquantity"}}</div>
-            <div class="col-15 ticket-details">{{scannedquantity}}</div>
+        <div class="card-content-inner">
+          <div class="row no-gutter" id="ticket-report-header">
+            <div class="col-40">Ticket Type</div>
+            <div class="col-15">Price</div>
+            <div class="col-15">Sold</div>
+            <div class="col-15">Bal</div>
+            <div class="col-15">Scan</div>
           </div>
-          {{/each}}
-        </div>
 
+          <div id="ticket-report-details">
+            {{#each tickets}}
+            <div class="row no-gutter">
+              <div class="col-40 ticket-details">{{tickettype}}</div>
+              <div class="col-15 ticket-details">${{js "this.price.toFixed(2)"}}</div>
+              <div class="col-15 ticket-details" style="text-align:center">{{soldquantity}}</div>
+              <div class="col-15 ticket-details" style="text-align:center">{{js "this.quantity - this.soldquantity"}}</div>
+              <div class="col-15 ticket-details" style="text-align:center">{{scannedquantity}}</div>
+            </div>
+            {{/each}}
+          </div>
+        </div>
       </div>
     </div>
     </div>

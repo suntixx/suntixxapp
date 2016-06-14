@@ -1,25 +1,20 @@
 
-
 <div class="pages">
-  <!-- Page, data-page contains page name-->
-  <div data-page="update-committee" class="page navbar-fixed toolbar-fixed">
+  <div data-page="update-committee" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center sliding">Committee Members</div>
+        <div class="center sliding">Resellers</div>
         <!--<div class="right"><a href="#" class="link add-member icon-only open-popup" data-popup=".form-popup"><i class="icon icon-plus"></i></a></div>-->
       </div>
     </div>
-    <a href="#" class="floating-button color-orange add-member open-popup" data-popup=".form-popup">
+    <a href="#" class="floating-button color-orange add-member">
       <i class="icon icon-new"></i>
     </a>
-    <!-- Scrollable page content-->
     <div class="page-content">
-      <div class="content-block-title">Update Committee Members</div>
       <div class="list-block media-list" id="committee-list-form">
         <ul>
-          <li class="item-divider">Committee Members</li>
-
+          {{#js_compare "this.commuser.length > 0"}}
           {{#each commuser}}
 
             <li class="swipeout" commId="{{id}}">
@@ -40,6 +35,9 @@
             </li>
 
           {{/each}}
+          {{else}}
+          <span style="text-align:center">You have not added any committee members yet!</span>
+          {{/js_compare}}
         </ul>
       </div>
     </div>

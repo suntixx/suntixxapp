@@ -18,11 +18,11 @@ var Menus = {
           '            <div class="item-title">Manage Tickets</div>'+
           '        </div>'+
           '      </a>'+
-          '      <a href="#" class="item-link item-content event-menu-link" menuItem="preprinted" event-id={{id}}>'+
-          '        <div class="item-inner">'+
-          '            <div class="item-title">Order Preprinted Tickets</div>'+
-          '        </div>'+
-          '      </a>'+
+          //'      <a href="#" class="item-link item-content event-menu-link" menuItem="preprinted" event-id={{id}}>'+
+          //'        <div class="item-inner">'+
+          //'            <div class="item-title">Order Preprinted Tickets</div>'+
+          ///'        </div>'+
+          //'      </a>'+
           //'      <a href="#" class="item-link item-content event-menu-link" menuItem="pos" event-id={{id}}>'+
           //'        <div class="item-inner">'+
           //'            <div class="item-title">Retail Outlets</div>'+
@@ -58,18 +58,18 @@ var Menus = {
           '   <li class="accordion-item">'+
           '     <a href="#" class="item-link item-content">'+
           '        <div class="item-inner">'+
-          '          <div class="item-title"><b>Committee</b></div>'+
+          '          <div class="item-title"><b>Box Office</b></div>'+
           '        </div>'+
           '      </a>'+
           '     <div class="accordion-item-content">' +
           '       <a href="#" class="item-link item-content event-menu-link" menuItem="ctickets" event-id={{id}}>'+
           '         <div class="item-inner">'+
-          '            <div class="item-title">Committee Tickets</div>'+
+          '            <div class="item-title">Box Office Tickets</div>'+
           '        </div>'+
           '      </a>'+
           '       <a href="#" class="item-link item-content event-menu-link" menuItem="cmembers" event-id={{id}}>'+
           '         <div class="item-inner">'+
-          '            <div class="item-title">Committee Members</div>'+
+          '            <div class="item-title">Resellers</div>'+
           '        </div>'+
           '      </a>'+
           '     </div>' +
@@ -114,13 +114,13 @@ var Menus = {
           '        </div>'+
           '      </a>'+
           '    </li>'+
-          '    <li>'+
-          '      <a href="views/user/update-preferences.html" class="close-panel item-link item-content user-menu-link" menuItem="preferences">'+
-          '        <div class="item-inner">'+
-          '          <div class="item-title">Manage Recommended</div>'+
-          '        </div>'+
-          '      </a>'+
-          '    </li>'+
+          //'    <li>'+
+          //'      <a href="views/user/update-preferences.html" class="close-panel item-link item-content user-menu-link" menuItem="preferences">'+
+          //'        <div class="item-inner">'+
+          //'          <div class="item-title">Manage Recommended</div>'+
+          //'        </div>'+
+          //'      </a>'+
+          //'    </li>'+
 
 
           '  </ul>'+
@@ -141,7 +141,7 @@ var Menus = {
         '          <div class="item-title">Auto Scan</div>'+
         //'          <div class="item-input">'+
         '            <label class="label-switch">'+
-        '              <input type="checkbox">'+
+        '              <input class="auto-scan" type="checkbox">'+
         '              <div class="checkbox"></div>'+
         '            </label>'+
       //  '          </div>'+
@@ -160,13 +160,22 @@ $$(document).on('click', '.event-menu-link', function () {
   var menuItem = $$(this).attr('menuItem');
   app.closePanel();
   if (menuItem == "tickets") {
+    var onlineTickets = [];
+    for (var i=0;i<selectedEventLocal.tickets.length;i++) {
+      if (Number(selectedEventLocal.tickets[i].permissions) == 0 || Number(selectedEventLocal.tickets[i].permissions) % 9 > 0) {
+        onlineTickets.push(selectedEventLocal.tickets[i]);
+      }
+    }
     mainView.router.load({
       url: 'views/events/event-tickets.html',
-      context: selectedEventLocal,
+      context: {
+        event: selectedEventLocal,
+        onlineTickets: onlineTickets
+      }
     });
   } else if (menuItem == "details") {
     //alert(menuItem);
-    selectedEventLocal.mystarttime = selectedEventLocal.starttime.substring(0,19);
+    //selectedEventLocal.mystarttime = selectedEventLocal.starttime.substring(0,19);
     mainView.router.load({
       url: 'views/events/event-details.html',
       context: selectedEventLocal,
@@ -218,9 +227,18 @@ $$(document).on('click', '.event-menu-link', function () {
       context: selectedEventLocal
     });
   } else if (menuItem == "ctickets") {
+    var commTickets = [];
+    for (var i=0;i<selectedEventLocal.tickets.length;i++) {
+      if (Number(selectedEventLocal.tickets[i].permissions) != 0 && Number(selectedEventLocal.tickets[i].permissions) % 9 == 0) {
+        commTickets.push(selectedEventLocal.tickets[i]);
+      }
+    }
     mainView.router.load({
       url: 'views/events/committee-tickets.html',
-      context: selectedEventLocal
+      context: {
+        event: selectedEventLocal,
+        commTickets: commTickets,
+      }
     });
   }
 });

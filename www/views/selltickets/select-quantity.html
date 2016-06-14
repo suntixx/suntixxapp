@@ -25,11 +25,11 @@
                   <div class="item-content">
                     <div class="item-inner row">
                       <!--<div class="item-text">-->
-                      <div class="row">{{ticket.tickettype}} - ${{js "this.ticket.price.toFixed(2)"}}</div>
+                      <div class="row">{{ticket.tickettype}} - ${{js "this.ticket.price.toFixed(2)"}} {{@root.event.currency}}</div>
                       <div class="row">Quantity Available: {{js "this.quantity - this.soldquantity"}}</div>
                         <div class="item-title label">Quantity</div>
                         <div class="item-input">
-                        <input type="number" name="quantity-{{id}}-{{@index}}" value="0" id="ticket-limit">
+                        <input type="number" name="quantity-{{id}}-{{@index}}" value="0" quantity='{{js "this.quantity - this.soldquantity"}}' id="ticket-limit">
                       </div>
                       <!--</div>-->
                     </div>

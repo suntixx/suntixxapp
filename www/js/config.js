@@ -1,10 +1,24 @@
 var app;
+
+storage = window.localStorage;
+var autoScan = storage.getItem('autoscan');
+if (!autoScan) {
+  storage.setItem('autoscan', false);
+}
 var config = {
-  server: "https://dev.suntixx.com",
+  server: "https://www.suntixx.com",
   version: "1.0.0",
   Developer: "Jason Cox",
   appName: "Sun Tixx",
   secret: "SunT1xxPhon#AppAPISecret",
+  owner: "Sun Tixx Caribbean",
+  settings: {
+    autoScan :storage.getItem('autoscan'),
+  },
+  paypalIds: {
+      "PayPalEnvironmentProduction": "APP-6NU67772PM858250S",
+      "PayPalEnvironmentSandbox" :"AfbXNxAP7tf-teLj2t8S4gP2eVyTAznqr2tIRC-u79hS6KLjB7cYtOzGML-0"
+  },
 };
 moment().format();
 
@@ -12,27 +26,32 @@ moment().format();
 //localStorage.clear();
 var user = null;
 var selectedEventLocal;
-var allEvents;
+var allUserEvents;
 var storage;
 var storedUser;
 var camera;
+var geolocation;
 var connection;
 var fileTransfer;
 var fileSystem;
 //var cropper;
 
 
-//storage = window.localStorage;
+
+
+
+config.settings.autoScan = autoScan;
+
 //storage.setItem('userId', 1);
 //storage.setItem('userEmail', 'admin@suntixx.com');
 //storage.setItem('userPassword', '123123');
 
-//storedUser = {
-//  id: storage.getItem('userId'),
-//  email: storage.getItem('userEmail'),
-//  password: storage.getItem('userPassword'),
-//  session : ''
-//};
+user = {
+  id: storage.getItem('userId'),
+  email: storage.getItem('userEmail'),
+  password: storage.getItem('userPassword'),
+};
+
 
 /*user = {
   id: 1,
@@ -43,7 +62,7 @@ var fileSystem;
 // Initialize your app
 app = new Framework7({
       //cache: true,
-      modalTitle: 'Sun Tixx',
+      modalTitle: config.appName,
       uniqueHistory: true,
       init: false,
       material: true,
@@ -96,31 +115,29 @@ document.addEventListener('backbutton', onBackKey, false);
 
 function onDeviceReady() {
   camera = navigator.camera;
+  navigator.splashscreen.hide();
+  geolocation = navigator.geolocation;
   window.open = cordova.InAppBrowser.open;
-  fileSystem = cordova.file;
-  //fileTransfer = FileTransfer;
-  //connection= navigator.connection;
-//  navigator.camera.getPicture(onCameraSuccess, onCameraFail, { quality: 50,
-    //  destinationType: Camera.DestinationType.FILE_URI });
-      navigator.splashscreen.show();
-    setTimeout( function() {
-      navigator.splashscreen.hide();
-    }, 3000);
-    //alert(JSON.stringify(camera));
+  connection= navigator.connection;
+  //if (connection.type === Connection.NONE) {
+  //xhr.abort();
+  //  app.alert("Unable to Find an Internet Connection");
+  //}
+  document.addEventListener("offline", function() {
+    app.alert("No Internet Connection Detected");
+  }, false);
 
 }
-
 
 function onBackKey() {
-  if ($$('.back')) {
+  if ( $$(document).find('.back').length > 0 ){
     $$('.back').click();
-  } else if ($$('.back-button')){
-      $$('.back-button').click();
+  } else {
+    $$('.back-button').click();
   }
-
 }
-//alert(JSON.stringify(camera));
 
-
-
-//alert(JSON.stringify(navigator));
+var mainView = app.addView('.view-main', {
+  domCache: true,
+});
+mainView.router.loadPage('home.html');

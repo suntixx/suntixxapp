@@ -4,18 +4,18 @@
       <div class="navbar-inner">
         <div class="left">
           <a href="#" class="link icon-only home back-button"> <i class="icon icon-back"></i></a>
-          <a href="#" data-panel="left" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
         </div>
         <div class="center">My Events</div>
       </div>
     </div>
+    <a href="#" class="floating-button color-orange create-event">
+      <i class="icon icon-new"></i>
+    </a>
     <div class="page-content">
       <div class="accordion-item managed-events">
         <div class="accordion-item-toggle button button-big">Managed Events</div>
         <div class="accordion-item-content">
-          {{#js_compare "this.managedEventList.length == 0"}}
-          <p><i>No Events</i></p>
-          {{else}}
+          {{#js_compare "this.managedEventList.length > 0"}}
           {{#each managedEventList}}
           <div class="search-details">
             <a href="#" class="item-content item-link event-link search-details" event-id="{{id}}">
@@ -45,15 +45,15 @@
             </a>
           </div>
           {{/each}}
+          {{else}}
+          <p><i>No Events</i></p>
           {{/js_compare}}
         </div>
       </div>
       <div class="accordion-item committee-events">
-        <div class="accordion-item-toggle button button-big">Committee Events</div>
+        <div class="accordion-item-toggle button button-big">Box Office</div>
         <div class="accordion-item-content">
-        {{#js_compare "this.committeeEventList.length == 0"}}
-        <p><i>No Events</i></p>
-        {{else}}
+        {{#js_compare "this.committeeEventList.length > 0"}}
         {{#each committeeEventList}}
         <div class="search-details">
           <a href="#" class="item-content item-link committee-event-link search-details" event-id="{{id}}">
@@ -87,15 +87,15 @@
           </a>
         </div>
         {{/each}}
+        {{else}}
+        <p><i>No Events</i></p>
         {{/js_compare}}
       </div>
       </div>
       <div class="accordion-item access-events">
-        <div class="accordion-item-toggle button button-big">Access Events</div>
+        <div class="accordion-item-toggle button button-big">Access Control</div>
         <div class="accordion-item-content">
-          {{#js_compare "this.scanningEventList.length == 0"}}
-          <p><i>No Events</i></p>
-          {{else}}
+          {{#js_compare "this.scanningEventList.length > 0"}}
           {{#each scanningEventList}}
           <div class="search-details">
             <a href="#" class="item-content item-link scanning-event-link search-details" event-id="{{id}}">
@@ -135,6 +135,8 @@
             </a>
           </div>
           {{/each}}
+          {{else}}
+          <p><i>No Events</i></p>
           {{/js_compare}}
         </div>
       </div>

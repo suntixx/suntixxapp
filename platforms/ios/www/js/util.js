@@ -1,7 +1,7 @@
 var util = {
 
   getCategoryId: function(name) {
-    var a = name.split(" ");
+    var a = name.split(' ');
     if (a[0] == "Concerts") {
       return 9;
     } else if (name == "Sports") {

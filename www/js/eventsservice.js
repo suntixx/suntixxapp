@@ -20,10 +20,10 @@ function formatEventData (serverEvent, condition) {
   data.currency = serverEvent.currency;
   data.facebook = serverEvent.facebook;
   data.twitter = serverEvent.twitter;
-  //data.imagePath = "/thumbnails/events/" + serverEvent.id + "/portrait.png";
-  //data.imageLandscapePath = "/thumbnails/events/" + serverEvent.id + "/landscape.png";
-  data.imagePath = " ";
-  data.imageLandscapePath = " ";
+  data.imagePath = "/thumbnails/events/" + serverEvent.id + "/portrait.png";
+  data.imageLandscapePath = "/thumbnails/events/" + serverEvent.id + "/landscape.png";
+  //data.imagePath = "foo";
+  //data.imageLandscapePath = "foo";
   //alert(JSON.stringify(data));
   if (condition == 1) {
     data.venue = serverEvent.venue;
@@ -58,6 +58,18 @@ var eventsService = {
     return true;
   },
 
+  getEventLocation: function(url) {
+    if (url == "") return null;
+    var data = $$.parseUrlQuery(url);
+    var result = {};
+    if (data.ll) {
+      var tmp = data.ll.split(',');
+      result.latitude = tmp[0];
+      result.longitude = tmp[1];
+    }
+    return result;
+  },
+
   addScanCondition: function (events) {
     //alert(JSON.stringify(events));
     var now = moment();
@@ -71,6 +83,23 @@ var eventsService = {
     }
     //alert(JSON.stringify(events));
     return events;
+  },
+
+  getMoreEvents: function (list, lastIndex) {
+    var result =  {
+      index: 0,
+      events: [],
+    };
+    var offset = lastIndex + 2;
+    if (offset > list.length) {
+      offset = list.length;
+    }
+    var i;
+    for (i=lastIndex; i < offset; i++) {
+      result.events.push(list[i]);
+    }
+    result.index = i;
+    return result;
   },
 
   validateForm: function(formid) {
@@ -115,13 +144,17 @@ var eventsService = {
       result.startdate = moment(data.start).format("YYYY-MM-DD");
       result.endtime = moment(data.end).format("HH:mm");
       result.enddate = moment(data.end).format("YYYY-MM-DD");
-      result.category_id = serverEvent.category_id;
+      result.category_id = util.getCategoryId(data.category);
       result.restrictions_id = util.getRestrictionId(data.restriction);
       result.dresscode_id = util.getDresscodeId(data.dresscode);
       result.status_id = 19;
       if (data.private.length == 0) {
         result.status_id = 18;
       }
+      delete result.private;
+      delete result.category;
+      delete result.restriction;
+      delete result.dresscode;
       result.hostedby = data.hostedby;
       result.recommend = serverEvent.recommend;
       result.featured = serverEvent.featured;
@@ -129,8 +162,8 @@ var eventsService = {
       result.city = serverEvent.city;
       result.country = serverEvent.country;
       result.venuetype_id = serverEvent.venuetype_id;
-      //result.imagePath = "/thumbnails/events/" + serverEvent.id + "/portrait.png";
-      result.imagePath = " ";
+      result.imagePath = "/thumbnails/events/" + serverEvent.id + "/portrait.png";
+      //result.imagePath = "foo";
       result.imageLandscapePath = data.imageLandscapePath;
       result.poslist = [];
     } else if (options.area == "tickets") {
@@ -166,7 +199,7 @@ var eventsService = {
           price.push(existingTickets[x].price);// = existingTickets[x].id;
           quantity.push(existingTickets[x].quantity);
           limit.push(existingTickets[x].limit);
-          ticketimagepath.push(" ");
+          ticketimagepath.push("foo");
           tickets_id.push(existingTickets[x].id);
           //enable.push = " ";
           if (existingTickets[x].enable == false) {
@@ -200,7 +233,7 @@ var eventsService = {
       result.poslist = [];
     } else if (options.area == "venue") {
       result = formatEventData(serverEvent, 0);
-      result.poslist = [];
+      result.poslist = new Array();
       //result.selectPOS = "";
       result.venue = data.venue;
       result.city = data.city;

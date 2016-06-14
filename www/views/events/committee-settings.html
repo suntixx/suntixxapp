@@ -1,10 +1,10 @@
 
-<div class="pages navbar-fixed">
-  <div data-page="committee-settings" class="page">
+<div class="pages">
+  <div data-page="committee-settings" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back-button back-committee link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center sliding">Committee Settings</div>
+        <div class="center sliding">Ticket Assignment</div>
         <!--<div class="right"><a href="#" class="link assign-tickets"></i><span>Assign</span></a></div>-->
       </div>
     </div>
@@ -30,17 +30,22 @@
                 </a>
                 <div class="swipeout-actions-right">
                   {{#js_compare "this.soldquantity == 0"}}
-                  <a href="#" class="swipeout-delete bg-red" data-close-on-cancel="true" data-confirm="Are you sure want to delete this assignment?" data-confirm-title="Delete?" userTicketId="{{id}}">Delete</a>
+                  <a href="#" class="delete swipeout-delete bg-red" data-close-on-cancel="true" data-confirm="Are you sure want to delete this assignment?" data-confirm-title="Delete?" userTicketId="{{id}}">Delete</a>
                   {{/js_compare}}
                   <a href="#" class="disable bg-blue swipeout-close" status="{{enable}}" userTicketId="{{id}}">{{#js_compare "this.enable == 0"}}Enable{{else}}Disable{{/js_compare}}</a>
                 </div>
-                <div class="accordion-item-content row">
-                  <div class="item-title label col-60">New Quantity</div>
-                  <div class="item-input col-20">
-                    <input type="number" value="{{quantity}}" name="newquantity" id="newquantity-{{id}}"/>
-                  </div>
-                  <div class="col-20">
-                    <a href="#" class="button button-fill color-green save-quantity" userTicketId="{{id}}">Save</a>
+                <div class="accordion-item-content">
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title label">New Quantity</div>
+                      <div class="item-input">
+                        <input type="number" value="{{quantity}}" name="newquantity" id="newquantity-{{id}}"/>
+                        <input type="hidden" value="{{quantity}}" name="oldquantity"/>
+                      </div>
+
+                        <a href="#" class="button button-fill color-green save-quantity" userTicketId="{{id}}">Save</a>
+
+                    </div>
                   </div>
                 </div>
               </li>

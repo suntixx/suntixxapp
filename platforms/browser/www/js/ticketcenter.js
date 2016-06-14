@@ -13,6 +13,25 @@ app.onPageInit('purchases', function (page) {
     if (upcomingPurchases.length > 0) {
       $$('#upcomingPurchasesTab').html(Template7.templates.purchasesTemplate(upcomingPurchases));
     }
+
+    $$('.purchase-link').on('click', function () {
+      //alert('clicked');
+      var purchaseId = $$(this).attr('purchase-id');
+      var eventId = $$(this).attr('event-id');
+      var userTickets = JSON.parse(Server.getTickets(purchaseId, eventId));
+      var thisEvent = JSON.parse(Server.getEvent(eventId));
+
+      //alert(JSON.stringify(userTickets));
+      //alert(thisEvent.EnglishStartDate+ '' +thisEvent.EnglishStartTime);
+      mainView.router.load({
+        url: 'views/tickets/tickets.html',
+        context: {
+          tickets: userTickets,
+          event: thisEvent,
+        }
+      });
+
+    });
   });
 
   $$('#previousPurchasesTab').on('show', function () {
@@ -21,17 +40,42 @@ app.onPageInit('purchases', function (page) {
     if (previousPurchases.length > 0) {
       $$('#previousPurchasesTab').html(Template7.templates.purchasesTemplate(previousPurchases));
     }
+
+    $$('.purchase-link').on('click', function () {
+      //alert('clicked');
+      var purchaseId = $$(this).attr('purchase-id');
+      var eventId = $$(this).attr('event-id');
+      var userTickets = JSON.parse(Server.getTickets(purchaseId, eventId));
+      var thisEvent = JSON.parse(Server.getEvent(eventId));
+
+      //alert(JSON.stringify(userTickets));
+      //alert(thisEvent.EnglishStartDate+ '' +thisEvent.EnglishStartTime);
+      mainView.router.load({
+        url: 'views/tickets/tickets.html',
+        context: {
+          tickets: userTickets,
+          event: thisEvent,
+        }
+      });
+
+    });
+  });
+
+  $$('.home').on('click', function () {
+    //allEvents = JSON.parse(Server.getEvents(user.id));
+    mainView.router.back ({
+      url: 'home.html',
+      force: true,
+      ignoreCache: true,
+    });
   });
 
   $$('.purchase-link').on('click', function () {
-    //alert('clicked');
     var purchaseId = $$(this).attr('purchase-id');
     var eventId = $$(this).attr('event-id');
     var userTickets = JSON.parse(Server.getTickets(purchaseId, eventId));
     var thisEvent = JSON.parse(Server.getEvent(eventId));
 
-    //alert(JSON.stringify(userTickets));
-    //alert(thisEvent.EnglishStartDate+ '' +thisEvent.EnglishStartTime);
     mainView.router.load({
       url: 'views/tickets/tickets.html',
       context: {
@@ -52,7 +96,6 @@ app.onPageInit('tickets-list', function(page) {
       tickets: tickets,
       index: index,
     };
-    //alert(JSON.stringify(slides));
     $$('.view-popup').html(barcodes(slides));
     app.popup('.form-popup');
   });
@@ -87,8 +130,10 @@ app.onPageInit('ticket-barcodes', function(page) {
     onInit: function (swiper) {
       var id = $$('.barcode-active').attr('id');
       var code = $$('.barcode-active').attr('code');
+      var nameonticket = $$('.barcode-active').attr('nameonticket');
       qrcode = new QRCode(document.getElementById(id), qrcodeOptions(code));
       $$('#barcode-text').text(code);
+      $$('#barcode-nameonticket').text(nameonticket);
     },
   });
   //barcodeSwiper.slideTo(index, 10, true);

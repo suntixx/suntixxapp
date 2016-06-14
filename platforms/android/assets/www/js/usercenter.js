@@ -1,12 +1,11 @@
 app.onPageInit('create-new-user', function(page) {
-  // $$('.form-error').hide();
-  $$('input#user-country').on('focus', function() {
-    var userCountry = appPickers.countries('user-country');
+  var userCountry = appPickers.countries('user-country');
+  $$('input#user-country').on('click', function() {
     userCountry.open();
   });
 
-  $$('input#title-field').on('focus', function () {
-    var titlePicker = appPickers.userTitle();
+  var titlePicker = appPickers.userTitle();
+  $$('input#title-field').on('click', function () {
     titlePicker.open();
   });
 
@@ -33,6 +32,10 @@ app.onPageInit('create-new-user', function(page) {
     }, function (err) {
       app.alert("Camera Error: " + err);
     }, cameraOptions);
+  });
+
+  $$('.crop-cancel').on('click', function () {
+    cropper.destroy();
   });
 
   $$('.crop-image').on('click', function() {
@@ -107,14 +110,22 @@ app.onPageInit('update-details', function (page) {
   $$('#right-panel-menu').html(Menus.user);
   app.formFromJSON('#update-details-form', user);
 
-  $$('input#title-field').on('focus', function () {
-    var titlePicker = appPickers.userTitle();
+  var titlePicker = appPickers.userTitle();
+  $$('input#title-field').on('click', function () {
     titlePicker.open();
   });
 
-  $$('input#user-country').on('focus', function() {
-    var userCountry = appPickers.countries('user-country');
+  var userCountry = appPickers.countries('user-country');
+  $$('input#user-country').on('click', function() {
     userCountry.open();
+  });
+
+  $$('.home').on('click', function () {
+    mainView.router.back ({
+      url: 'home.html',
+      force: true,
+      ignoreCache: true,
+    });
   });
 
   $$('.save-user').on('click', function () {
@@ -136,6 +147,10 @@ app.onPageInit('update-details', function (page) {
     }, function (err) {
       app.alert("Camera Error: " + err);
     }, cameraOptions);
+  });
+
+  $$('.crop-cancel').on('click', function () {
+    cropper.destroy();
   });
 
   $$('.crop-image').on('click', function() {
@@ -184,6 +199,113 @@ app.onPageInit('update-details', function (page) {
   });
 });
 
+app.onPageInit('complete-registration', function (page) {
+
+  app.formFromJSON('#update-details-form', user);
+  var titlePicker = appPickers.userTitle();
+  $$('input#title-field').on('click', function () {
+    titlePicker.open();
+  });
+
+  var userCountry = appPickers.countries('user-country');
+  $$('input#user-country').on('click', function() {
+    userCountry.open();
+  });
+
+  $$('.cancel-registration').on('click', function () {
+    myApp.confirm("If you don't complete registration, you will be logged out",
+      function () {
+        storage.removeItem("userId");
+        storage.removeItem("userEmail");
+        storage.removeItem("userPassword");
+        user = null;
+        Template7.global.user = null;
+        Server.logoutUser();
+        showLoginOrCreate();
+        mainView.router.back ({
+          url: 'home.html',
+          force: true,
+          ignoreCache: true,
+        });
+      },
+      function () {
+        //
+      }
+    );
+  });
+
+  $$('.save-user').on('click', function () {
+    if (!userService.validateForm('#update-details-form') ) {return;}
+    var formData = app.formToJSON('#update-details-form');
+    Server.updateUser(formData);
+  });
+
+  var cropper;
+  var originalImage;
+  $$('.change-image').on('click', function() {
+    var cameraOptions = Images.cameraOptions();
+    camera.getPicture(function(imageURI) {
+      originalImage = imageURI;
+      $$('#imageCropper').prop('src', imageURI);
+      var image = document.getElementById('imageCropper');
+      app.popup('.image-popup');
+      cropper = Images.cropper(image, 178/272, 0.75);
+    }, function (err) {
+      app.alert("Camera Error: " + err);
+    }, cameraOptions);
+  });
+
+  $$('.crop-cancel').on('click', function () {
+    cropper.destroy();
+  });
+
+  $$('.crop-image').on('click', function() {
+    var imageData = cropper.getData();
+    $$('#user-image-id').prop('src', cropper.getCroppedCanvas().toDataURL('image/jpeg'));
+    app.closeModal('.image-popup');
+
+    var options = new FileUploadOptions();
+    options.fileName = Math.random() + '.jpg';
+    options.mimeType = "image/jpeg";
+    options.fileKey = "file";
+    options.httpMethod = "POST";
+    var container = $$('body');
+    var ft = new FileTransfer();
+    ft.onprogress = function(progressEvent) {
+      app.showProgressbar(container, 'yellow');
+    };
+    ft.upload(originalImage, encodeURI(Server.userImageUpload), function(data) {
+      app.hideProgressbar();
+      //data = JSON.parse(data.response.path);
+      var item = {
+        cropX: Math.round(imageData.x),
+        cropY: Math.round(imageData.y),
+        cropW: Math.round(imageData.width),
+        cropH: Math.round(imageData.height)
+      };
+
+      data = data.response.split(':');
+      var path = data[1];
+      path = path.substring(1, path.length - 2 );
+      //alert(path);
+      //$$('#user-image-id').prop('src', imageURI);
+      $$('#user-imagePath').val(path);
+      var request = {
+        src: path,
+        imgType: 'users',
+        userId: user.id,
+        images: [item],
+      };
+      var result = JSON.parse(Server.userImageSave(request));
+    }, function (err) {
+      app.hideProgressbar();
+      err = JSON.stringify(err);
+      app.alert("Unable to upload image: "+ err);
+    }, options);
+  });
+});
+
+
 app.onPageInit('update-organization', function(page) {
   $$('.save-user').on('click', function() {
     if (!userService.validateForm('#update-organization-form') ) {return;}
@@ -206,6 +328,70 @@ app.onPageInit('update-organization', function(page) {
       $$('.url-check').addClass('icon-wrong');
       $$('.url-check').removeClass('icon-checked-green');
     }
+  });
+
+  var cropper;
+  var originalImage;
+  $$('.change-image').on('click', function() {
+    var cameraOptions = Images.cameraOptions();
+    camera.getPicture(function(imageURI) {
+      originalImage = imageURI;
+      $$('#imageCropper').prop('src', imageURI);
+      var image = document.getElementById('imageCropper');
+      app.popup('.image-popup');
+      cropper = Images.cropper(image, 178/272, 0.75);
+    }, function (err) {
+      app.alert("Camera Error: " + err);
+    }, cameraOptions);
+  });
+
+  $$('.crop-cancel').on('click', function () {
+    cropper.destroy();
+  });
+
+  $$('.crop-image').on('click', function() {
+    var imageData = cropper.getData();
+    $$('#user-image-id').prop('src', cropper.getCroppedCanvas().toDataURL('image/jpeg'));
+    app.closeModal('.image-popup');
+
+    var options = new FileUploadOptions();
+    options.fileName = Math.random() + '.jpg';
+    options.mimeType = "image/jpeg";
+    options.fileKey = "file";
+    options.httpMethod = "POST";
+    var container = $$('body');
+    var ft = new FileTransfer();
+    ft.onprogress = function(progressEvent) {
+      app.showProgressbar(container, 'yellow');
+    };
+    ft.upload(originalImage, encodeURI(Server.userImageUpload), function(data) {
+      app.hideProgressbar();
+      //data = JSON.parse(data.response.path);
+      var item = {
+        cropX: Math.round(imageData.x),
+        cropY: Math.round(imageData.y),
+        cropW: Math.round(imageData.width),
+        cropH: Math.round(imageData.height)
+      };
+
+      data = data.response.split(':');
+      var path = data[1];
+      path = path.substring(1, path.length - 2 );
+      //alert(path);
+      //$$('#user-image-id').prop('src', imageURI);
+      $$('#user-imagePath').val(path);
+      var request = {
+        src: path,
+        imgType: 'organizations',
+        userId: user.id,
+        images: [item],
+      };
+      var result = JSON.parse(Server.userImageSave(request));
+    }, function (err) {
+      app.hideProgressbar();
+      err = JSON.stringify(err);
+      app.alert("Unable to upload image: "+ err);
+    }, options);
   });
 });
 
@@ -236,46 +422,108 @@ app.onPageInit('update-password', function(page) {
   });
 });
 
-$$(document).on('click', '.login-submit', function(){
-  //
-  app.closeModal('.login-screen');
-  var formData = app.formToJSON('#loginForm');
-  if (formData.server == "Live") {
-    config.server = "https://www.suntixx.com";
-  }
-  user = JSON.parse(Server.loginUser(formData));
-  //alert(requestedArea);
-  //alert(JSON.stringify(user));
-  if (user.id > 0) {
-    showAvatar();
-    Template7.global.user = user;
-    $$(document).find('.logout-menu').show();
-    //alert(requestedPage);
-    if (requestedPage) {
-      if (requestedPage == "events") {
-        eventsMenuClick(requestedArea);
-      } else if (requestedPage == "tickets") {
-        ticketsMenuClick();
-      } else if (requestedPage == "user") {
-        userMenuClick();
+$$('.login-screen').on('opened', function () {
+
+  $$(document).keypress(function (e) {
+    if(e.which == 13) {
+      app.closeModal('.login-screen');
+      var formData = app.formToJSON('#loginForm');
+
+      storage.setItem('userPassword', formData.password);
+      user = JSON.parse(Server.loginUser(formData));
+      if (user.id > 0) {
+        storage.setItem('userId', user.id);
+        storage.setItem('userEmail', user.email);
+        showAvatar();
+        Template7.global.user = user;
+        $$(document).find('.logout-menu').show();
+        if (user.mobilephone == "") {
+          mainView.router.load({
+            url: 'views/user/complete-registration.html',
+          });
+          return;
+        }
+        if (requestedPage) {
+          if (requestedPage == "events") {
+            eventsMenuClick(null, requestedArea);
+          } else if (requestedPage == "tickets") {
+            ticketsMenuClick();
+          } else if (requestedPage == "user") {
+            userMenuClick();
+          }
+        }
       }
-
     }
-    //storage.setItem('userId', user.id);
-  //  storage.setItem('userEmail', user.email);
-    //return true;
-  //  app.hidePreloader();
-  }
-  //return false;
-});
+  });
 
-$$(document).on('click','.cancel-login', function(){
+  $$('.login-submit').on('click', function(){
+    //
+    app.closeModal('.login-screen');
+    var formData = app.formToJSON('#loginForm');
+
+    storage.setItem('userPassword', formData.password);
+    //if (formData.server == "Live") {
+    //  config.server = "https://www.suntixx.com";
+    //}
+    user = JSON.parse(Server.loginUser(formData));
+    //alert(requestedArea);
+    //alert(JSON.stringify(user));
+    if (user.id > 0) {
+      storage.setItem('userId', user.id);
+      storage.setItem('userEmail', user.email);
+      showAvatar();
+      Template7.global.user = user;
+      $$(document).find('.logout-menu').show();
+      if (user.mobilephone == "") {
+        mainView.router.load({
+          url: 'views/user/complete-registration.html',
+        });
+        return;
+      }
+      if (requestedPage) {
+        if (requestedPage == "events") {
+          eventsMenuClick(null, requestedArea);
+        } else if (requestedPage == "tickets") {
+          ticketsMenuClick();
+        } else if (requestedPage == "user") {
+          userMenuClick();
+        }
+      }
+    }
+  });
+
+  $$('.cancel-login').on('click', function(){
+    app.closeModal('.login-screen');
+  });
+
+
+
+  $$('.create-new-account').on('click', function () {
+    app.closeModal('.login-screen');
+    mainView.router.load({
+      url: 'views/user/create-user.html'
+    });
+  });
+
+})
+
+$$(document).find('.forgot-password').on('click',  function () {
   app.closeModal('.login-screen');
+  app.prompt('Enter your account email', function (value) {
+    var request = {
+      email: value,
+    };
+    Server.forgotPassword(request);
+  }, function (value) {
+    app.closeModal('.forgot-password');
+  });
 });
 
 
 $$(document).on('click','.logout',  function () {
-  //localStorage.clear();
+  storage.removeItem("userId");
+  storage.removeItem("userEmail");
+  storage.removeItem("userPassword");
   user = null;
   Template7.global.user = null;
   Server.logoutUser();
@@ -286,11 +534,9 @@ $$(document).on('click','.login',  function () {
   app.loginScreen();
 });
 
-$$(document).on('click','.forgot-password',  function () {
-  app.alert("Not configured Yet! :)");
-});
 
-$$(document).on('click','.create-user',  function () {
+
+$$(document).on('click','.create-new-user',  function () {
     mainView.router.load({
       url: 'views/user/create-user.html'
     });

@@ -1,10 +1,9 @@
 
-<div class="pages navbar-fixed">
-  <!-- Page, data-page contains page name-->
-  <div data-page="update-venue-details" class="page">
+<div class="pages">
+  <div data-page="update-venue-details" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="left"><a href="#" class="back-event back-button link icon-only"> <i class="icon icon-back"></i></a></div>
         <div class="center sliding">Venue Details</div>
         <div class="right">
           <!--<a href="#" class="link save-event" event-id="{{id}}"></i><span>Save</span></a>-->
@@ -17,7 +16,7 @@
     </a>
     <!-- Scrollable page content-->
     <div class="page-content">
-      <div class="content-block-title">Update Venue Details</div>
+      <div id="venue-map"></div>
       <form class="list-block" id="update-venue-details-form">
         <ul>
           <li>
@@ -79,7 +78,7 @@
               <div class="item-inner">
                 <div class="item-title label">Map Link</div>
                 <div class="item-input">
-                  <input type="text" name="maplink" id="venue-maplink" value="{{mapLink}}"/>
+                  <input type="text" readonly name="maplink" id="venue-maplink" value="{{maplink}}"/>
                 </div>
               </div>
             </div>

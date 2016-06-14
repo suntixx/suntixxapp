@@ -2,7 +2,7 @@
   <div class="page navbar-fixed toolbar-fixed" data-page="ticket-barcodes">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="close-popup link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
         <div class="center">Tickets</div>
       </div>
     </div>
@@ -11,9 +11,10 @@
       <div class="barcode-container">
         <div class="swiper-wrapper barcode-wrapper">
           {{#each tickets}}
-            <div class="swiper-slide link" id="barcode-{{@index}}" code="{{code}}"></div>
+            <div class="swiper-slide link" id="barcode-{{@index}}" code="{{code}}" nameonticket="{{nameonticket}}"></div>
           {{/each}}
         </div>
+        <div id="barcode-nameonticket"></div>
         <div id="barcode-text"></div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>

@@ -5,10 +5,6 @@
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
         <div class="center">Event Details</div>
-        <div class="right">
-          <!--{{#js_compare "this.tickets.length > 0"}}<a href="#" class="purchase-tickets link" data-view=".view-purchase"><span>Buy</span></a>{{/js_compare}}-->
-          <a href="#" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
-        </div>
       </div>
     </div>
     {{#js_compare "this.tickets.length > 0"}}
@@ -41,21 +37,26 @@
             </div>
             <span class="color-black">Starts: {{StartTime}}</span><br><span class="color-black">Ends: {{EndTime}}</span><br>
             <span class="color-gray">{{venue}}</span><br><span class="color-gray">{{city}}, {{country}}</span>
+            <div id="event-map"></div>
             <div class="divider"></div>
               <h4>Description</h4>
-          {{description}}
-          <div class="divider"></div>
+          <div>{{description}}</div>
+
           {{#js_compare "this.tickets.length > 0"}}
+          <div class="divider"></div>
+
           <h4>Ticket Information</h4>
           <div class="row">
             <div class="col-50">Ticket Type</div>
             <div class="col-50">Price</div>
           </div>
           {{#each tickets}}
+            {{#js_compare "this.origin == 0"}}
             <div class="row">
               <div class="col-50">{{tickettype}}</div>
               <div class="col-50">{{js "this.price.toFixed(2)"}} {{@root.currency}}</div>
             </div>
+            {{/js_compare}}
           {{/each}}
 
           {{/js_compare}}
@@ -64,12 +65,12 @@
         <div class="card-footer">
 
           {{#if facebook}}
-          <a href="{{facebook}}" class="link icon-only"><i class="icon icon-facebook-event"></i></a>
+          <a href="#" class="link icon-only facebook-link"><i class="icon icon-facebook-event"></i></a>
           {{/if}}
           {{#if twitter}}
-          <a href="{{twitter}}" class="link"><i class="icon icon-twitter-event"></i></a>
+          <a href="#" class="link twitter-link icon-only"><i class="icon icon-twitter-event"></i></a>
           {{/if}}
-          <a href="#" class="link icon-only"><i class="icon icon-share-orange"></i></a>
+          <a href="#" class="link icon-only share-event" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
         </div>
       </div>
     </div>

@@ -1,56 +1,44 @@
 
-<div class="pages navbar-through toolbar-through">
-  <div data-page="sell-ticket-names" class="page">
+<div class="pages">
+  <div data-page="sell-ticket-names" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
         <div class="center sliding">Ticket Names</div>
-        <!--<div class="right"><a href="#" class="link save-ticket-names"></i><span>Checkout</span></a></div>-->
       </div>
     </div>
     <a href="#" class="floating-button color-orange save-ticket-names">
       <i class="icon icon-checkout"></i>
     </a>
-    <div class="page-content"><div class="content-block-title">Change Name on Ticket</div>
+    <div class="page-content">
        <div class="card">
-         <div class="card-content">
-
-               <div class="row">
-                 <div class="col-35">Ticket Type</div>
-                 <div class="col-50">Name</div>
-                 <div class="col-15">Price</div>
-               </div>
-               <div class="list-block media-list">
-                 <form  id="ticket-names-form">
-               <ul>
-               {{#each cart}}
-               <li class=" item-content">
-               <div class="shopping-cart item-inner row">
-
-                   <div class="col-35">{{tickettype}}</div>
-
-
-                     <div class="item-input col-50 shopping-cart-name">
-                       <input type="text" placeholder="Admit One" name="nameonticket-{{id}}-{{@index}}">
-
-
-                     </div>
-                  <div class="col-15">${{js "this.price.toFixed(2)"}}</div>
-
-               </div>
-
-             </li>
-               {{/each}}
-             </ul>
-           </form>
+         <div class="card-header">
+           <span>Change Name on Ticket</span>
          </div>
-               <div class="row">
-                 <div class="col-35">&nbsp;</div>
-                 <div class="col-50">Total</div>
-                 <div class="col-15">${{js "this.total.toFixed(2)"}}</div>
-               </div>
-
-       </div>
+         <div class="card-content">
+           <div class="card-content-inner">
+             <div class="list-block media-list">
+               <form  id="ticket-names-form">
+                 <ul>
+                 {{#each cart}}
+                  <li class=" item-content">
+                    <div class="shopping-cart item-inner">
+                      <div class="col-100">{{ticket.tickettype}} - ${{js "this.ticket.price.toFixed(2)"}} {{@root.event.currency}}</div>
+                      <div class="item-input col-70 shopping-cart-name">
+                        <input type="text" placeholder="Admit One" name="nameonticket-{{id}}-{{@index}}">
+                      </div>
+                    </div>
+                  </li>
+                  {{/each}}
+                </ul>
+              </form>
+            </div>
+          </div>
+           <div class="row">
+             <div class="col-65" style="text-align:right">Total</div>
+             <div class="col-35">${{js "this.total.toFixed(2)"}}</div>
+           </div>
+        </div>
       </div>
     </div>
   </div>

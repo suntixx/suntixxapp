@@ -14,43 +14,43 @@
     <a href="#" class="floating-button color-orange add-ticket" event-id="{{id}}">
       <i class="icon icon-new"></i>
     </a>
-   <div class="page-content"><div class="content-block-title">{{name}}</div>
+   <div class="page-content"><div class="content-block-title">{{event.name}}</div>
 
-    {{#each tickets}}
-
+    {{#each onlineTickets}}
       <div class="card ticket-details">
-        <div class="header">
-          <img src="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png" valign="bottom" class="ticket-image card-header color-white no-border">
-        </div>
-        <div class="card-content">
-          <div class="content-block-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}&nbsp;{{@root.currency}}</div>
-          <div class="content-block">
-            <div class="color-gray">
-              <i>Sold: {{soldquantity}}, Balance:  {{Balance}}</i><br>
-              <i>Scanned: {{scannedquantity}}, Pending: {{Pending}}</i>
-            </div>
+        <a href="#" class="link edit-ticket" ticket-id="{{id}}">
+          <div class="header">
+            <img src="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png" valign="bottom" class="ticket-image card-header color-white no-border">
           </div>
-            <div class="card-content-inner row">
-              <div class="content-block col-auto">
-                <!--<div class="content-block-inner-inner">-->
-                  <div class="item-title">Quantity - {{quantity}}</div>
-                <!--</div>-->
-              </div>
-              <div class="content-block col-auto">
-                <!--<div class="item-inner">-->
-                  <div class="item-title">Limit - {{limit}}</div>
-                <!--</div>-->
+          <div class="card-content">
+            <div class="content-block-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}&nbsp;{{@root.event.currency}}</div>
+            <div class="content-block">
+              <div class="color-gray">
+                <i>Sold: {{soldquantity}}, Balance:  {{Balance}}</i><br>
+                <i>Scanned: {{scannedquantity}}, Pending: {{Pending}}</i>
               </div>
             </div>
-          </div>
+              <div class="card-content-inner row">
+                <div class="content-block col-auto">
+                  <!--<div class="content-block-inner-inner">-->
+                    <div class="item-title">Quantity - {{quantity}}</div>
+                  <!--</div>-->
+                </div>
+                <div class="content-block col-auto">
+                  <!--<div class="item-inner">-->
+                    <div class="item-title">Limit - {{limit}}</div>
+                  <!--</div>-->
+                </div>
+              </div>
+            </div>
+          </a>
         <div class="card-footer">
-          <a href="#" class="link edit-ticket" ticket-id="{{id}}">Edit</a>
-            <a href="#" class="link disable-ticket" enabled="{{enable}}" ticket-id="{{id}}">{{#if enable}}Disable{{else}}Enable{{/if}}</a>
-            {{#js_compare "this.soldquantity == 0"}}<a href="#" class="link delete-ticket" ticket-id="{{id}}">Delete</a>{{/js_compare}}
+            <a href="#" class="link disable-ticket icon-only" enabled="{{enable}}" ticket-id="{{id}}">{{#js_compare "this.enable == 1"}}<i class="icon icon-enabled"></i>{{else}}<i class="icon icon-disabled"></i>{{/js_compare}}</a>
+            {{#js_compare "this.soldquantity == 0"}}<a href="#" class="link delete-ticket icon-only" ticket-id="{{id}}"><i class="icon icon-delete-orange"></i></a>{{/js_compare}}
         </div>
       </div>
-
-        {{/each}}
+      {{/each}}
+        <div class="floating-button-space"></div>
 
     </div>
   </div>
