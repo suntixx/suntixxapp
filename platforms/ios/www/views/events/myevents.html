@@ -18,7 +18,7 @@
           {{#js_compare "this.managedEventList.length > 0"}}
           {{#each managedEventList}}
           <div class="search-details">
-            <a href="#" class="item-content item-link event-link search-details" event-id="{{id}}">
+            <a href="#" class="item-content item-link my-event-link search-details" event-id="{{id}}">
               <div class="row no-gutter header">
                 <span>{{name}}</span>
               </div>
@@ -46,7 +46,7 @@
           </div>
           {{/each}}
           {{else}}
-          <p><i>No Events</i></p>
+          <div class="oops-message">No Events</div>
           {{/js_compare}}
         </div>
       </div>
@@ -88,7 +88,7 @@
         </div>
         {{/each}}
         {{else}}
-        <p><i>No Events</i></p>
+        <div class="oops-message">No Events</div>
         {{/js_compare}}
       </div>
       </div>
@@ -136,7 +136,52 @@
           </div>
           {{/each}}
           {{else}}
-          <p><i>No Events</i></p>
+          <div class="oops-message">No Events</div>
+          {{/js_compare}}
+        </div>
+      </div>
+      <div class="accordion-item previous-events">
+        <div class="accordion-item-toggle button button-big">Previous Events</div>
+        <div class="accordion-item-content">
+          {{#js_compare "this.previousEventList.length > 0"}}
+          <div class="swiper-container swiper-init" data-speed="400" data-space-between="40" data-pagination=".swiper-pagination">
+            <div class="swiper-wrapper">
+          {{#each previousEventList}}
+              <div class="swiper-slide">
+                <div class="search-details">
+                  <a href="#" class="item-content item-link previous-event-link search-details" event-id="{{id}}">
+                    <div class="row no-gutter header">
+                      <span>{{name}}</span>
+                    </div>
+                    <div class="row no-gutter content">
+                        <div class="col-50 image">
+                          <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
+                        </div>
+                      <div class="col-50 content-details">
+                        <span>{{ShortStartDate}}</span>
+                        <span>{{ShortStartTime}}</span>
+                        <span>{{venue}}</span>
+                      </div>
+                    </div>
+                    <div class="row footer no-gutter">
+                      <div class="col-50 category">
+                        <span>Sold: {{SoldTotal}}/{{Total}}</span>
+                      </div>
+                      <div class="col-50">
+                        <span>
+                          Scanned: {{Scanned}}/{{SoldTotal}}
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            {{/each}}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+          {{else}}
+          <div class="oops-message">No Events</div>
           {{/js_compare}}
         </div>
       </div>

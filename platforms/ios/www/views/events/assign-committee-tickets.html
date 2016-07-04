@@ -1,25 +1,29 @@
 
 <div class="pages">
-  <div data-page="committee-tickets-assignment" class="page navbar-fixed">
+  <div data-page="committee-tickets-assignment" class="page navbar-fixed toolbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center">Unassigned Tickets</div>
-        <!--<div class="right"><a href="#" class="link save-committee-ticket-assignments"> <i class="icon"></i><span>Save</span></a></div>-->
+        <div class="left"><a href="#" class="back link icon-only back-button"> <i class="icon icon-back"></i></a></div>
+        <div class="center">Available Ticket Types</div>
+      </div>
+    </div>
+    <div class="toolbar premium">
+      <div class="toolbar-inner">
+        <div class="premium-service">Premium Service</div>
       </div>
     </div>
     <a href="#" class="floating-button color-orange save-committee-ticket-assignments">
       <i class="icon icon-save"></i>
     </a>
    <div class="page-content">
+     {{#js_compare "this.length > 0"}}
       <div class="card">
         <div class="card-content">
           <div class="list-block media-list">
             <form id="ticket-assignment-form">
             <ul>
-              {{#js_compare "this.length == 0"}}
-              <span style="text-align:center">There are no tickets to assign</span>
-              {{else}}
+
+
               {{#each this}}
 
                   <li>
@@ -37,12 +41,16 @@
                   </li>
 
               {{/each}}
-              {{/js_compare}}
+
             </ul>
           </form>
           </div>
         </div>
       </div>
+      {{else}}
+      <div class="oops-image-load"></div>
+      <div class="oops-message-load">There are not tickets available to assign to this Seller.</div>
+      {{/js_compare}}
     </div>
   </div>
 </div>

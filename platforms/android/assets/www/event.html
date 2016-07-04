@@ -7,11 +7,11 @@
         <div class="center">Event Details</div>
       </div>
     </div>
-    {{#js_compare "this.tickets.length > 0"}}
-    <a href="#" class="floating-button color-orange purchase-tickets" data-view=".view-purchase">
+    {{#if hasOnlineTickets}}
+    <a href="#" class="floating-button color-orange purchase-event-tickets">
       <i class="icon icon-purchase"></i>
     </a>
-    {{/js_compare}}
+    {{/if}}
     <div class="page-content">
       <div class="card event-details">
 
@@ -42,7 +42,7 @@
               <h4>Description</h4>
           <div>{{description}}</div>
 
-          {{#js_compare "this.tickets.length > 0"}}
+          {{#if hasOnlineTickets}}
           <div class="divider"></div>
 
           <h4>Ticket Information</h4>
@@ -59,7 +59,7 @@
             {{/js_compare}}
           {{/each}}
 
-          {{/js_compare}}
+          {{/if}}
           </div>
         </div>
         <div class="card-footer">

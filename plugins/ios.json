@@ -48,6 +48,12 @@
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.suntixx.application"
         }
     },
     "dependent_plugins": {}

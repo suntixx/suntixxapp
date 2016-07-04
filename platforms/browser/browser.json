@@ -11,6 +11,10 @@
                         {
                             "xml": "<feature name=\"Camera\"><param name=\"browser-package\" value=\"Camera\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"browser-package\" value=\"Device\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -58,6 +62,18 @@
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-fullscreen": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.suntixx.application"
         }
     },
@@ -409,6 +425,45 @@
             "merges": [
                 ""
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "pluginId": "cordova-plugin-device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/src/browser/DeviceProxy.js",
+            "id": "cordova-plugin-device.DeviceProxy",
+            "pluginId": "cordova-plugin-device",
+            "runs": true
+        },
+        {
+            "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+            "id": "cordova-sqlite-storage.SQLitePlugin",
+            "pluginId": "cordova-sqlite-storage",
+            "clobbers": [
+                "SQLitePlugin"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-fullscreen/www/AndroidFullScreen.js",
+            "id": "cordova-plugin-fullscreen.AndroidFullScreen",
+            "pluginId": "cordova-plugin-fullscreen",
+            "clobbers": [
+                "AndroidFullScreen"
+            ]
+        },
+        {
+            "file": "plugins/ionic-plugin-keyboard/www/browser/keyboard.js",
+            "id": "ionic-plugin-keyboard.keyboard",
+            "pluginId": "ionic-plugin-keyboard",
+            "clobbers": [
+                "cordova.plugins.Keyboard"
+            ],
+            "runs": true
         }
     ],
     "plugin_metadata": {
@@ -425,6 +480,10 @@
         "cordova-plugin-splashscreen": "3.1.0",
         "cordova-plugin-whitelist": "1.2.1",
         "cordova-plugin-x-socialsharing": "5.0.12",
-        "cordova-plugin-inappbrowser": "1.4.0"
+        "cordova-plugin-inappbrowser": "1.4.0",
+        "cordova-plugin-device": "1.1.2",
+        "cordova-sqlite-storage": "1.4.3",
+        "cordova-plugin-fullscreen": "1.1.0",
+        "ionic-plugin-keyboard": "2.2.1"
     }
 }

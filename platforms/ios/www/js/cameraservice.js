@@ -23,6 +23,7 @@ var Images = {
     var options = {
       quality: 50,
       destinationType: Camera.DestinationType.FILE_URI,
+      //destinationType: Camera.DestinationType.DATA_URL,
       sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
       encodingType: Camera.EncodingType.JPEG,
       mediaType: Camera.MediaType.PICTURE,

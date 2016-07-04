@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap:  https://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000 https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; script-src https://api.instagram.com https://maps.googleapis.com/ 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' data: gap: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap:  https://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000 https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; script-src https://api.instagram.com https://maps.googleapis.com/ 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' data: gap: android-webview-video-poster: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
 
     <title>Sun Tixx</title>
     <!-- Path to Framework7 Library CSS-->
@@ -22,7 +22,7 @@
           <div class="page no-toolbar no-swipeback navbar-fixed">
             <div class="navbar">
               <div class="navbar-inner">
-                <div class="left"><a href="#" class="close-login-screen link icon-only"> <i class="icon icon-back"></i></a></div>
+                <div class="left"><a href="#" class="close-login-screen link icon-only back-button"> <i class="icon icon-back"></i></a></div>
                 <div class="center">Sign In</div>
               </div>
             </div>
@@ -34,53 +34,26 @@
                     <li class="item-content">
                       <div class="item-inner">
                         <div class="item-input">
-                          <input type="email" name="email" placeholder="Email" value="">
+                          <input type="email" name="email" placeholder="Email" value="" class="login-email">
                         </div>
                       </div>
                     </li>
                     <li class="item-content">
                       <div class="item-inner">
                         <div class="item-input">
-                          <input type="password" name="password" placeholder="Password" value="">
+                          <input type="password" name="password" placeholder="Password" value="" class="login-password">
                         </div>
                       </div>
                     </li>
-                    <!--<li>
-                     <div class="item-content">
-                       <div class="item-inner">
-                         <div class="item-title label">Select Server</div>
-                         <div class="item-input">
-                           <select name="server">
-                            <option>Sandbox</option>
-                            <option>Live</option>
-                          </select>
-                         </div>
-                       </div>
-                     </div>
-                   </li>-->
                    <li>
-                     <a href="#" class="button button-big button-fill color-orange login-submit">Sign In</a>
+                     <a href="#" class="button button-big button-fill link color-orange close-login-screen login-submit">Sign In</a>
                    </li>
                    <li>
-                     <a href="#" class="button button-big color-orange create-new-account">Create Account</a>
-                     <a href="#" class="forgot-password col-50 link">Forgot Password?</a>
+                     <a href="#" class="button button-big color-orange link close-login-screen create-new-account">Create Account</a>
+                     <a href="#" class="forgot-password close-login-screen link">Forgot Password?</a>
                    </li>
                   </ul>
                 </div>
-                <!--<div class="list-block">
-                  <ul>
-
-                    <li class="row">
-                      <div class="col-50">
-                        <a href="#" class="button button-big button-fill color-red cancel-login">Cancel</a>
-                      </div>
-                      <div class="col-50">
-                        <a href="#" class="button button-big button-fill color-green login-submit">Sign In</a>
-                      </div>
-                    </li>
-                  </ul>
-
-                </div>-->
               </form>
             </div>
           </div>
@@ -139,6 +112,8 @@
                       <a href="#" class="icon-only link close-panel social-icon" social="facebook"><i class="icon icon-facebook"></i></a>
                       <a href="#" class="icon-only link close-panel social-icon" social="twitter"><i class="icon icon-twitter"></i></a>
                       <a href="#" class="icon-only link close-panel social-icon" social="instagram"><i class="icon icon-instagram"></i></a>
+                      <a href="#" class="icon-only link close-panel social-icon share-app"><i class="icon icon-app-share"></i></a>
+                      <a href="#" class="icon-only link close-panel social-icon rate-app"><i class="icon icon-rate"></i></a>
                     </div>
                   </div>
                 </li>
@@ -147,11 +122,17 @@
                     <div class="item-title-row">
                       <div class="item-title">About</div>
                     </div>
-                    <div class="item-subtitle">Sun Tixx v1.0.1</div>
+                    <div class="item-subtitle">Sun Tixx v1.1.6</div>
                   </div>
                 </li>
                 <li class="item-content logout-menu">
-                  <a href="#homepage-Tab" class="link close-panel logout">Logout</a>
+                  <a href="#" class="link close-panel logout">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">Logout</div>
+                      </div>
+                    </div>
+                  </a>
                 </li>
               </ul>
           </div>
@@ -166,7 +147,24 @@
     <!-- Views-->
     <div class="views tabs">
       <div class="view view-main active tab" id="homepage-tab">
-        <div class="pages "> </div>
+        <div class="pages ">
+          <div data-page="init-page" class="page navbar-fixed toolbar-fixed">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left">
+                  <a href="#" data-panel="left" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
+                  <a href="#" data-popover=".event-categories" class="link open-popover icon-only"><i class="icon icon-suntixx"></i><i class="icon icon-down"></i></a>
+                </div>
+                <div class="right">
+                  <a href="#" class="link icon-only open-search"> <i class="icon icon-search"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div id="page-loading"></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="view tab view-form" id="formViewTab">
         <div class="pages">
@@ -218,7 +216,7 @@
               {{/js_compare}}
             </div>
               <a href="#" class="share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
-              {{#js_compare "this.tickets.length > 0"}}<a href="#" class="link purchase-tickets icon-only"  data-view=".view-form" event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/js_compare}}
+              {{#if hasOnlineTickets}}<a href="#" class="link purchase-tickets icon-only"  data-view=".view-form" event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/if}}
             <!--</div>-->
           </div>
         </div>
@@ -229,12 +227,7 @@
       <div class="content-block-title">
         Search Results - <span class="search-count">{{count}} Events Found</span>
       </div>
-      {{#js_compare "this.length == 0"}}
-      <div style="text-align:center;width:100%">
-        <img src="" class="oops-image">
-        <p><i>No Events Found</i></p>
-      </div>
-      {{else}}
+      {{#js_compare "this.length > 0"}}
       {{#each this}}
       <div class="search-details">
         <a href="#" class="item-content item-link event-link search-details" event-id="{{id}}">
@@ -270,6 +263,9 @@
         </a>
       </div>
       {{/each}}
+      {{else}}
+        <div class="oops-image"></div>
+        <div class="oops-message">No Events Found</div>
       {{/js_compare}}
     </script>
     <!--Instagram Feed Tempalte-->
@@ -283,7 +279,7 @@
             There was a problem displaying this video
           </video>
           {{else}}
-          <a href="{{link}}"><img  class="lazy" src="{{images.low_resolution.url}}" /></a>
+          <a href="#" onclick='window.open("{{link}}", "_system")'><img  class="lazy" src="{{images.low_resolution.url}}" /></a>
           {{/js_compare}}
           <div class="interaction">
             <div>&hearts; {{likes.count}} likes</div>
@@ -298,7 +294,7 @@
       <div class="content-block">
         {{#each this}}
         <div class="search-details">
-          <a href="#" class="item-content item-link purchase-link search-details" purchase-id="{{PurchaseId}}" event-id="{{EventId}}">
+          <a href="#" class="item-content link purchases-link search-details" purchase-id="{{PurchaseId}}" event-id="{{EventId}}">
             <div class="row no-gutter header">
               <span>{{EventName}}</span>
             </div>
@@ -338,16 +334,14 @@
     </div>
     <div class="popup enable-committee">
       <div class="content-block">
-        <p>To use this feature you must agree to our terms and services</p>
+        <p>To use this feature you must agree to our Terms and Services</p>
         <div class="list-block">
           <ul>
-            <li class="row">
-              <div class="col-50">
-                <a href="#" class="button button-big button-fill color-red committee-terms-cancel">Cancel</a>
-              </div>
-              <div class="col-50">
-                <a href="#" class="button button-big button-fill color-green committee-terms-agree">Agree</a>
-              </div>
+            <li>
+              <a href="#" class="button button-big button-fill color-orange committee-terms-agree">Agree</a>
+            </li>
+            <li>
+              <a href="#" class="button button-big button-fill color-red committee-terms-cancel">Cancel</a>
             </li>
           </ul>
         </div>
@@ -397,59 +391,18 @@
         </div>
       </div>
     </div>
-    <div class="popup edit-purchaser">
-      <div class="content-block">
-        <p>Edit Purchaser Information</p>
-        <div class="list-block">
-          <ul>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                  <div class="item-input">
-                    <input type="text" placeholder="First Name">
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                  <div class="item-input">
-                    <input type="text" placeholder="Last Name">
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                  <div class="item-input">
-                    <input type="email" placeholder="E-mail">
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="row">
-              <div class="col-50">
-                <a href="#" class="button button-big button-fill color-red close-popup">Cancel</a>
-              </div>
-              <div class="col-50">
-                <a href="#" class="button button-big button-fill color-green edit-purchaser">Continue</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
     <div class="popup form-popup">
       <div class="view view-popup"></div>
     </div>
-    <div class="popup image-popup">
-      <div class="cropper-container bg-black">
+    <div class="popup image-popup bg-black color-white">
+      <h2 class="cropper-label"></h2>
+      <div class="cropper-container ">
         <div class="cropper-image-container">
           <img id="imageCropper">
         </div>
+
         <div class="row cropper-buttons">
+
           <div class="col-50">
             <a href="#" data-popup=".image-popup" class="button button-big button-fill color-red close-popup crop-cancel">Cancel</a>
           </div>

@@ -3,7 +3,7 @@
   <div data-page="add-venue" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
         <div class="center sliding">Venue Details</div>
         <!--<div class="right"><a href="#" class="link save-new-event"></i><span>Save</span></a></div>-->
       </div>
@@ -18,6 +18,7 @@
          <li>
            <a href="#" class="item-link smart-select" data-searchbar="true" data-searchbar-placeholder="Search Venues" data-back-on-select="true">
              <select name="venue-select" id="venue-select">
+               <option value="0">Custom</option>
                {{#each venues.Venue_Names}}
                  <option value={{value}}>{{label}}</option>
                {{/each}}
@@ -51,7 +52,7 @@
                <div class="item-title label"><i class="icon icon-required"></i>Street Address</div>
                <div class="item-subtitle color-red form-error address"></div>
                <div class="item-input">
-                 <input type="text" placeholder="Street Address" name="address" id="venue-address" required/>
+                 <input type="text" placeholder="Street Address" name="address" id="venue-address" value="{{address}}" required/>
                </div>
              </div>
            </div>
@@ -62,7 +63,7 @@
                <div class="item-title label"><i class="icon icon-required"></i>City</div>
                <div class="item-subtitle color-red form-error city"></div>
                <div class="item-input">
-                 <input type="text" placeholder="" name="city" id="venue-city" required/>
+                 <input type="text" placeholder="" name="city" id="venue-city" value="{{city}}" required/>
                </div>
              </div>
            </div>
@@ -73,7 +74,7 @@
                <div class="item-title label"><i class="icon icon-required"></i>Country</div>
                <div class="item-subtitle color-red form-error country"></div>
                <div class="item-input">
-                 <input type="text" placeholder="" name="country" id="venue-country" required/>
+                 <input type="text" placeholder="" name="country" id="venue-country" value="{{country}}" required/>
                </div>
              </div>
            </div>
@@ -84,7 +85,7 @@
                <div class="item-title label"><i class="icon icon-required"></i>Venue Type</div>
                <div class="item-subtitle color-red form-error venuetype"></div>
                <div class="item-input">
-                 <input type="text" placeholder="" name="venuetype" id="venue-type" required/>
+                 <input type="text" placeholder="" name="venuetype" id="venue-type" value={{maplink}} required/>
                </div>
              </div>
            </div>
