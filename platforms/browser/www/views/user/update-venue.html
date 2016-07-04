@@ -19,6 +19,7 @@
     </a>
     <!-- Scrollable page content-->
     <div class="page-content">
+      <div id="venue-map"></div>
       <form class="list-block" id="update-venue-form">
         <ul>
           <li>
@@ -38,7 +39,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Country</div>
                 <div class="item-subtitle color-red form-error country"></div>
                 <div class="item-input">
-                  <input type="text" placeholder="Country" name="country" required id="user-country"/>
+                  <input type="text" placeholder="Country" name="country" required id="user-venue-country"/>
                 </div>
               </div>
             </div>
@@ -70,7 +71,7 @@
               <div class="item-inner">
                 <div class="item-title label">Map Link</div>
                 <div class="item-input">
-                  <input type="text" placeholder="Map Link" name="mapLink"/>
+                  <input type="text" readonly placeholder="Map Link" id="venue-maplink" name="mapLink"/>
                 </div>
               </div>
             </div>

@@ -52,16 +52,17 @@ var userService = {
    },
 
   createUpdateRequest: function(options) {
-    var tmp= user;
+    var tmp = JSON.parse(JSON.stringify(user));
     var area = options.area;
     var data = options.data;
     if (area == "organization") {
-      tmp.organization = data;
+      tmp.org = data;
     } else if ( area =="venue") {
       tmp.venue = data;
     } else if (area == "password"){
       tmp.password = data.password;
       tmp.proile_confirmpassword = data.profile_confirmpassword;
+      tmp.passwordIsChanged = 1;
     }
     delete tmp.id;
     return tmp;
@@ -75,8 +76,8 @@ function validateEmail(email) {
 }
 
 function validatePhone(phone) {
-  var phoneno = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
-  return phoneno.test(phone);
+  var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+  return re.test(phone);
 }
 
 function validateAge(dateString) {

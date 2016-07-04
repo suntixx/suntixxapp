@@ -11,11 +11,11 @@
   border-bottom: double 1px #000;
 }
 
-#category {
+/*#category {
   width:100vw;
   padding:0;
   margin:0;
-}
+}*/
 
 #ticket-report-header  div{
   text-align: center;
@@ -23,14 +23,85 @@
   text-transform: capitalize;;
 }
 
-.page {
-  background-color: #eee;
-  margin-bottom: 12vh;
+.user-announcement {
+  color: red;
+  font-size: 0.8em;
+  text-align: center;
 }
 
-.scan-page {
-  margin-bottom: 0;
+#page-loading {
+  background: url('../img/suntixx-bg.png') no-repeat center;
+  width:100vw;
+  height:100vw;
+  vertical-align: middle;
+  text-align: center;
 }
+
+#page-loading .preloader {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.premium, .premium div {
+  background-color:#fff;
+}
+.premium-service {
+  text-align: center;
+  width: 100vw;
+  text-transform: capitalize;
+  font-weight: bold;
+  background-color: #fff;
+  color:#f9a11b;
+  font-size: 18px;
+}
+
+div.infinite-scroll-preloader {
+  position:absolute;
+  bottom:-20;
+  left:50%;
+}
+div.infinite-scroll-preloader .preloader {
+  width:34px;
+  height:34px;
+  display: none;
+}
+
+.tabbar .tab-link-highlight{
+  background: rgba(249,161,27,0.9)
+}
+
+.tabbar, .tabbar.toolbar-inner {
+  background-color: #fff;
+}
+
+a.button.tab-link {
+  background-color: #fff;
+  color:#f9a11b;
+  border-color: #fff;
+
+}
+
+
+.oops-message, .oops-message-load{
+  text-align: center;
+  padding: 0;
+  border: none;
+  vertical-align: middle;
+}
+div.oops-image-load, div.oops-image {
+  background: url("../img/oops-icon.png") no-repeat center;
+  width:70vw;
+  height:70vw;
+  margin: 0 auto;
+  padding: 0;
+  vertical-align: middle;
+}
+
+
+.page {
+  background-color: #eee;
+}
+
 
 .card, .search-details {
   background-color: #fff;
@@ -53,11 +124,7 @@
   margin: 0 auto;
 }
 
-.oops-image {
-  width: 70vw;
-  margin: 0 auto;
-  display: block;
-}
+
 
 .login-submit, .cancel-login {
   width: 60vw;
@@ -136,7 +203,7 @@
 }
 
 .toolbar  {
-  opacity: 0.8;
+  opacity: 0.95;
 }
 
 
@@ -353,13 +420,13 @@ i.icon.icon-delete-orange {
 i.icon.icon-enabled {
   width:24px;
   height: 24px;
-  background-image: url("../img/power-button-off.svg");
+  background-image: url("../img/enabled.svg");
 }
 
 i.icon.icon-disabled {
   width:24px;
   height: 24px;
-  background-image: url("../img/power-button-on.svg");
+  background-image: url("../img/disabled.svg");
 }
 
 i.icon.icon-start-scan {
@@ -369,8 +436,8 @@ i.icon.icon-start-scan {
 }
 
 i.icon.icon-scan {
-  width:10vh;
-  height: 10vh;
+  width:25vw;
+  height: 25vw;
   background-image: url("../img/start-scan.svg");
   padding-top:50%;
 }
@@ -382,8 +449,8 @@ i.icon.icon-save {
 }
 
 i.icon.icon-facebook {
-  width:24px;
-  height: 24px;
+  width:32px;
+  height: 32px;
   background-image: url("../img/facebook-logo.svg");
 }
 
@@ -399,24 +466,36 @@ i.icon.icon-twitter-event {
   background-image: url("../img/twitter.svg");
 }
 
+i.icon.icon-app-share {
+  width:32px;
+  height: 32px;
+  background-image: url("../img/app-share.svg");
+}
+
+i.icon.icon-rate {
+  width:32px;
+  height: 32px;
+  background-image: url("../img/rate-icon.svg");
+}
+
 i.icon.icon-twitter {
-  width:24px;
-  height: 24px;
+  width:32px;
+  height: 32px;
   background-image: url("../img/twitter-logo.svg");
 }
 i.icon.icon-instagram {
-  width:24px;
-  height: 24px;
+  width:32px;
+  height: 32px;
   background-image: url("../img/instagram-logo.svg");
 }
 i.icon.icon-linkedin {
-  width:24px;
-  height: 24px;
+  width:32px;
+  height: 32px;
   background-image: url("../img/linkedin-logo.svg");
 }
 i.icon.icon-googleplus {
-  width:24px;
-  height: 24px;
+  width:32px;
+  height: 32px;
   background-image: url("../img/google-plus-logo.svg");
 }
 
@@ -546,6 +625,10 @@ img.edit-thumbnail {
   overlow:hidden;
 }
 
+.cropper-label {
+  text-align: center;
+}
+
 div.image-preview {
   width:100vw;
   height:37vw;
@@ -563,15 +646,21 @@ div.thumbnail-preview {
 }
 
 .manual-scan-button {
-  width: 20vh;
-  height: 20vh;
+  width: 40vw;
+  height: 40vw;
   background-color: orange;
   border-radius: 50%;
-  margin: 0 auto;
+  position: absolute;
+  left:30%;
+  bottom:0;
 }
 
 .manual-scan-button i{
   vertical-align: middle;
+}
+
+.scan-result-container {
+  max-height: 60vh;
 }
 
 .barcode-container {
@@ -593,7 +682,7 @@ div.thumbnail-preview {
   height:60vw;
 }
 
-#barcode-text, #barcode-nameonticket {
+#barcode-text, #barcode-nameonticket, #barcode-ticketid {
   text-align: center;
   font-size: 20px
   display:block;

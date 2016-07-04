@@ -3,7 +3,7 @@
   <div data-page="event-tickets" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="left"><a href="#" class="back-event link icon-only back-button"> <i class="icon icon-back"></i></a></div>
         <div class="center sliding">Ticket Details</div>
         <div class="right">
           <!--<a href="#" class="link add-ticket" event-id="{{id}}"></i><span>Add</span></a>-->
@@ -11,19 +11,20 @@
         </div>
       </div>
     </div>
-    <a href="#" class="floating-button color-orange add-ticket" event-id="{{id}}">
+    <a href="#" class="floating-button color-orange add-ticket">
       <i class="icon icon-new"></i>
     </a>
-   <div class="page-content"><div class="content-block-title">{{event.name}}</div>
-
-    {{#each onlineTickets}}
+   <div class="page-content">
+    {{#js_compare "this.tickets.length > 0"}}
+    {{#each tickets}}
+      {{#js_compare "this.origin == 0"}}
       <div class="card ticket-details">
         <a href="#" class="link edit-ticket" ticket-id="{{id}}">
           <div class="header">
             <img src="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png" valign="bottom" class="ticket-image card-header color-white no-border">
           </div>
           <div class="card-content">
-            <div class="content-block-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}&nbsp;{{@root.event.currency}}</div>
+            <div class="content-block-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}&nbsp;{{../currency}}</div>
             <div class="content-block">
               <div class="color-gray">
                 <i>Sold: {{soldquantity}}, Balance:  {{Balance}}</i><br>
@@ -45,11 +46,16 @@
             </div>
           </a>
         <div class="card-footer">
-            <a href="#" class="link disable-ticket icon-only" enabled="{{enable}}" ticket-id="{{id}}">{{#js_compare "this.enable == 1"}}<i class="icon icon-enabled"></i>{{else}}<i class="icon icon-disabled"></i>{{/js_compare}}</a>
+            <a href="#" class="link disable-ticket icon-only" enabled="{{enable}}" ticket-id="{{id}}">{{#if enable}}<i class="icon icon-enabled"></i>{{else}}<i class="icon icon-disabled"></i>{{/if}}</a>
             {{#js_compare "this.soldquantity == 0"}}<a href="#" class="link delete-ticket icon-only" ticket-id="{{id}}"><i class="icon icon-delete-orange"></i></a>{{/js_compare}}
         </div>
       </div>
+      {{/js_compare}}
       {{/each}}
+      {{else}}
+      <div class="oops-image-load"></div>
+      <div class="oops-message-load">No tickets found.  Click the button below to add a ticket</div>
+      {{/js_compare}}
         <div class="floating-button-space"></div>
 
     </div>

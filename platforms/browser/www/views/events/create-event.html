@@ -1,9 +1,9 @@
 
 <div class="pages">
-  <div data-page="create-new-event" class="page  navbar-fixed toolbar-fixed">
+  <div data-page="create-new-event" class="page  navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="left"><a href="#" class="{{#if previous}}back-event{{else}}back{{/if}} link icon-only back-button"> <i class="icon icon-back"></i></a></div>
         <div class="center sliding">New Event</div>
         <!--<div class="right">
           <a href="#" class="link add-venue"><span>Continue</span></a>
@@ -15,7 +15,7 @@
     </a>
     <div class="page-content">
       <div class="event-details">
-        <img class="link edit-image" src="{{@global.config.server}}/thumbnails/events/0/landscape.png" valign="bottom" id="add-event-image"/>
+        <img class="link edit-image" src="{{@global.config.server}}/thumbnails/events/{{#if cloneEvent}}{{id}}{{else}}0{{/if}}/landscape.png" valign="bottom" id="add-event-image"/>
         <div class="item-subtitle color-red form-error imageLandscapePath"></div>
       </div>
       <form class="list-block" id="create-event-details-form">
@@ -26,7 +26,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Hosted By</div>
                 <div class="item-subtitle color-red form-error hostedby"></div>
                 <div class="item-input">
-                  <input type="text" name="hostedby" id="event-host" value="" required/>
+                  <input type="text" name="hostedby" id="event-host" value="{{HostedBy}}" required/>
                 </div>
               </div>
             </div>
@@ -37,9 +37,9 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Name</div>
                 <div class="item-subtitle color-red form-error name"></div>
                 <div class="item-input">
-                  <input type="text" name="name" required/>
-                  <input type="hidden" name="imageLandscapePath" value=" " id="add-event-image-landscapepath" required/>
-                  <input type="hidden" name="imagePath" value=" " id="add-event-image-path"/>
+                  <input type="text" name="name" value="{{name}}" required/>
+                  <input type="hidden" name="imageLandscapePath" value="/thumbnails/events/{{id}}/landscape.png" id="add-event-image-landscapepath" required/>
+                  <input type="hidden" name="imagePath" value="/thumbnails/events/{{id}}/landscape.png" id="add-event-image-path"/>
                 </div>
               </div>
             </div>
@@ -49,7 +49,7 @@
               <div class="item-inner">
                 <div class="item-title label">Headline</div>
                 <div class="item-input">
-                  <input type="text" placeholder="Headline" name="headline"/>
+                  <input type="text" placeholder="Headline" name="headline" value="{{headline}}"/>
                 </div>
               </div>
             </div>
@@ -60,7 +60,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Category</div>
                 <div class="item-subtitle color-red form-error category"></div>
                 <div class="item-input">
-                  <input type="text" name="category" id="event-category" placeholder="Please Select"  required/>
+                  <input type="text" name="category" id="event-category" placeholder="Please Select"  value="{{#if cloneEvent}}{{category.name}}{{/if}}" required/>
                 </div>
               </div>
             </div>
@@ -95,7 +95,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Currency</div>
                 <div class="item-subtitle color-red form-error currency"></div>
                 <div class="item-input">
-                  <input type="text" name="currency" id="currency" placeholder="Please Select" required/>
+                  <input type="text" name="currency" id="currency" placeholder="Please Select" value="{{currency}}" required/>
                 </div>
               </div>
             </div>
@@ -106,7 +106,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Start Date</div>
                 <div class="item-subtitle color-red form-error start"></div>
                 <div class="item-input">
-                  <input type="datetime-local" name="start" required/>
+                  <input type="datetime-local" name="start" required value="{{now}}"/>
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>End Date</div>
                 <div class="item-subtitle color-red form-error end"></div>
                 <div class="item-input">
-                  <input type="datetime-local" name="end" required/>
+                  <input type="datetime-local" name="end" required value=""/>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Restrictions</div>
                 <div class="item-subtitle color-red form-error restriction"></div>
                 <div class="item-input">
-                  <input type="text" placeholder="Please Select" name="restriction" id="event-restriction"  required/>
+                  <input type="text" placeholder="Please Select" name="restriction" id="event-restriction" value="{{#if cloneEvent}}{{restrictions.name}}{{/if}}" required/>
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@
                 <div class="item-title label"><i class="icon icon-required"></i>Dress Code</div>
                 <div class="item-subtitle color-red form-error dresscode"></div>
                 <div class="item-input">
-                  <input type="text" placeholder="Please Select" name="dresscode" id="event-dresscode" required/>
+                  <input type="text" placeholder="Please Select" name="dresscode" id="event-dresscode" value="{{#if cloneEvent}}{{dresscode.name}}{{/if}}" required/>
                 </div>
               </div>
             </div>
@@ -149,17 +149,17 @@
               <div class="item-inner">
                 <div class="item-title label">Facebook Link</div>
                 <div class="item-input">
-                  <input type="text" placeholder="https://www.facebook.com/" name="facebook" />
+                    <input type="text" placeholder="https://www.facebook.com/" name="facebook" value="{{facebook}}"/>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          <li>
-            <div class="item-content">
-              <div class="item-inner">
-                <div class="item-title label">Twitter Link</div>
-                <div class="item-input">
-                  <input type="text" placeholder="https://www.twitter.com/" name="twitter"/>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-title label">Twitter Link</div>
+                  <div class="item-input">
+                    <input type="text" placeholder="https://www.twitter.com/" name="twitter" value="{{twitter}}"/>
                 </div>
               </div>
             </div>

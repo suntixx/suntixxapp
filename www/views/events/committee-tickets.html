@@ -1,54 +1,73 @@
 
 <div class="pages">
-  <div data-page="committee-tickets-list" class="page navbar-fixed">
+  <div data-page="committee-tickets-list" class="page navbar-fixed toolbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="left"><a href="#" class="back-event back-button link icon-only"> <i class="icon icon-back"></i></a></div>
         <div class="center">Box Office Tickets</div>
         <div class="right">
-          <!--<a href="#" class="link add-committee-tickets open-popup icon-only" data-popup=".form-popup"> <i class="icon icon-plus"></i></a>-->
           <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
         </div>
+      </div>
+    </div>
+    <div class="toolbar premium">
+      <div class="toolbar-inner">
+        <div class="premium-service">Premium Service</div>
       </div>
     </div>
     <a href="#" class="floating-button color-orange add-committee-tickets">
       <i class="icon icon-new"></i>
     </a>
    <div class="page-content">
+     {{#js_compare "this.commTickets.length > 0"}}
       <div class="card">
         <div class="card-content">
-          {{#js_compare "this.commTickets.length > 0"}}
+
           <div class="list-block media-list">
             <ul>
 
               {{#each commTickets}}
               <li class="swipeout">
-                <div class="swipeout-content">
-                  <a href="#" class="item-link item-content edit-ticket-link " ticket-id="{{id}}">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}</div>
-                      </div>
-                      <div class="item-subtitle">Quantity: {{quantity}}</div>
-                      <div class="item-text"><span>Sold Quantity: {{soldquantity}}</span><br><span>Scanned Quantity: {{scannedquantity}}</span></div>
+                <div class="swipeout-content row no-gutter item-content {{#if enable}}{{else}}color-gray{{/if}}" id="ticket-content-{{id}}">
+                  <div class="col-20">
+                    <div class="item-media">
+                      <a href="#" class="disable" status="{{enable}}" ticketId="{{id}}">
+                        {{#if enable}}
+                          <i class="icon icon-enabled"></i>
+                          {{else}}
+                          <i class="icon icon-disabled"></i>
+                        {{/if}}
+                      </a>
                     </div>
-                  </a>
+                  </div>
+                  <div class="col-80">
+                    <a href="#" class="item-link edit-ticket-link " ticket-id="{{id}}">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}&nbsp;{{@root.event.currency}}</div>
+                        </div>
+                        <div class="item-subtitle">Quantity: {{quantity}}</div>
+                        <div class="item-text"><span>Sold Quantity: {{soldquantity}}</span><br><span>Scanned Quantity: {{scannedquantity}}</span></div>
+                      </div>
+                    </a>
+                  </div>
                 </div>
                 <div class="swipeout-actions-right">
                   {{#js_compare "this.soldquantity == 0"}}
                   <a href="#" class="delete swipeout-delete bg-red" data-close-on-cancel="true" data-confirm="Are you sure want to delete this ticket? This cannot be undone!" data-confirm-title="Delete?" ticketId="{{id}}">Delete</a>
                   {{/js_compare}}
-                  <a href="#" class="disable bg-blue swipeout-close" status="{{enable}}" ticketId="{{id}}">{{#if "this.enable"}}Disable {{else}} Enable {{/if}}</a>
                 </div>
               </li>
               {{/each}}
             </ul>
           </div>
-          {{else}}
-          No tickets created!
-          {{/js_compare}}
+
         </div>
       </div>
+      {{else}}
+      <div class="oops-image-load"></div>
+      <div class="oops-message-load">You have not added any box office tickets. Click the button below to begin.</div>
+      {{/js_compare}}
     </div>
   </div>
 </div>

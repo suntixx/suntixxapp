@@ -23,11 +23,11 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.2</string>
+    <string>1.1.6</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>1.0.2</string>
+    <string>1.1.6</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -38,8 +38,6 @@
         <dict>
           <key>NSIncludesSubdomains</key>
           <true/>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
         </dict>
         <key>instagram.com</key>
         <dict>
@@ -49,8 +47,6 @@
         <key>google.com</key>
         <dict>
           <key>NSIncludesSubdomains</key>
-          <true/>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
         </dict>
         <key>cdninstagram.com</key>
@@ -64,16 +60,32 @@
           <true/>
         </dict>
       </dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
     </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string></string>
     <key>NSMainNibFile~ipad</key>
     <string></string>
+    <key>UIInterfaceOrientation</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+    </array>
     <key>UIRequiresFullScreen</key>
     <true/>
     <key>UIStatusBarHidden</key>
     <true/>
     <key>UIStatusBarStyle</key>
     <string>UIStatusBarStyleLightContent</string>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    </array>
   </dict>
 </plist>

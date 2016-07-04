@@ -11,10 +11,11 @@
       <div class="barcode-container">
         <div class="swiper-wrapper barcode-wrapper">
           {{#each tickets}}
-            <div class="swiper-slide link" id="barcode-{{@index}}" code="{{code}}" nameonticket="{{nameonticket}}"></div>
+            <div class="swiper-slide link" id="barcode-{{@index}}" code="{{code}}" nameonticket="{{nameonticket}}" ticketid="{{id}}"></div>
           {{/each}}
         </div>
         <div id="barcode-nameonticket"></div>
+        <div id="barcode-ticketid"></div>
         <div id="barcode-text"></div>
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>

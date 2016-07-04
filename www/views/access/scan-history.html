@@ -1,0 +1,46 @@
+
+<div class="pages">
+  <div data-page="scan-history" class="page  navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">Scan History</div>
+        <!--<div class="right"><a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-submenu"></i></a></div>-->
+        <!--<div class="right"><a href="#" class="link start-scanning "> <span>Scan</span><i class="icon icon-next"></i></a></div>-->
+      </div>
+    </div>
+   <div class="page-content infinite-scroll" data-distance="100">
+   {{#with event}}
+     {{> "eventPartial"}}
+   {{/with}}
+      <div class="card" id="select-gates-form">
+        <div class="card-content">
+          {{#js_compare "this.scanhistory.data.length == 0"}}
+          You have not scanned any barcodes yet
+          {{else}}
+          <div class="list-block media-list">
+            <ul>
+              {{#each scanhistory}}
+              <li class="item-content">
+                <div class="item-inner color-{{scancolor}}">
+                 <div class="item-title-row">
+                   <div class="item-title">Barcode: {{code}}</div>
+                 </div>
+                 <div class="item-subtitle">{{scandate}}</div>
+                 <div class="item-text">{{js "this.scanresponse.toUpperCase()"}}!</div>
+               </div>
+              </li>
+              {{/each}}
+            </ul>
+          {{/js_compare}}
+          </div>
+        </div>
+      </div>
+      {{#if scanhistory.scroll}}
+      <div class="infinite-scroll-preloader">
+        <div class="preloader"></div>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

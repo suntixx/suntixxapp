@@ -66,8 +66,10 @@ var eventsService = {
       var tmp = data.ll.split(',');
       result.latitude = tmp[0];
       result.longitude = tmp[1];
-    }
-    return result;
+      return result;
+    } else {
+      return null;
+    }  
   },
 
   addScanCondition: function (events) {
@@ -98,6 +100,7 @@ var eventsService = {
     for (i=lastIndex; i < offset; i++) {
       result.events.push(list[i]);
     }
+
     result.index = i;
     return result;
   },
@@ -165,7 +168,7 @@ var eventsService = {
       result.imagePath = "/thumbnails/events/" + serverEvent.id + "/portrait.png";
       //result.imagePath = "foo";
       result.imageLandscapePath = data.imageLandscapePath;
-      result.poslist = [];
+      result.poslist = [{}];
     } else if (options.area == "tickets") {
       result = formatEventData(serverEvent, 1);
       //result.tickets = [];
@@ -230,7 +233,7 @@ var eventsService = {
       //result.tickets.push(data);
       //var ticketsJSON = JSON.parse(tickets);
       //result.tickets = ticketsJSON;
-      result.poslist = [];
+      result.poslist = [{}];
     } else if (options.area == "venue") {
       result = formatEventData(serverEvent, 0);
       result.poslist = new Array();

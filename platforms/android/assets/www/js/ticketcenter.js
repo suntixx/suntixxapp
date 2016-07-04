@@ -1,89 +1,106 @@
 //===============My Tickets Functions===================================
 app.onPageInit('purchases', function (page) {
 
-  var upcomingPurchases;
-  upcomingPurchases = JSON.parse(Server.getPurchases(user.id, 1));
-  if (upcomingPurchases.length > 0) {
-    $$('#upcomingPurchasesTab').html(Template7.templates.purchasesTemplate(upcomingPurchases));
+  var showTicketList = function () {
+    var purchaseId = $$(this).attr('purchase-id');
+    var eventId = $$(this).attr('event-id');
+    var userTickets;
+    var thisEvent;
+    var nocache = "?t="+moment().unix();
+    app.showPreloader("Loading Tickets");
+    $$.ajax({
+      async: true,
+      url: config.server + "/api/purchasedtickets/" + eventId + "/" + purchaseId + "/" + user.id + nocache,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          userTickets = JSON.parse(data);
+          $$.ajax({
+            async: true,
+            url: config.server + "/api/event/" + eventId + nocache,
+            method: "GET",
+            success: function(data, status, xhr) {
+              if (status == 200 || status == 0 ){
+                thisEvent = JSON.parse(data);
+                app.hidePreloader();
+                mainView.router.load({
+                  url: 'views/tickets/tickets.html',
+                  context: {
+                    tickets: userTickets,
+                    event: thisEvent,
+                  }
+                });
+              }
+            },
+            error: function (xhr, status){
+              app.hidePreloader();
+              app.alert("Oops, there was an error getting the event information");
+            },
+          });
+        }
+      },
+      error: function (xhr, status){
+        app.hidePreloader();
+        app.alert("Oops, there was an error getting the ticket information");
+      },
+    });
   }
 
+
   $$('#upcomingPurchasesTab').on('show', function () {
-    //var upcomingPurchases;
-    upcomingPurchases = JSON.parse(Server.getPurchases(user.id, 1));
-    if (upcomingPurchases.length > 0) {
-      $$('#upcomingPurchasesTab').html(Template7.templates.purchasesTemplate(upcomingPurchases));
-    }
-
-    $$('.purchase-link').on('click', function () {
-      //alert('clicked');
-      var purchaseId = $$(this).attr('purchase-id');
-      var eventId = $$(this).attr('event-id');
-      var userTickets = JSON.parse(Server.getTickets(purchaseId, eventId));
-      var thisEvent = JSON.parse(Server.getEvent(eventId));
-
-      //alert(JSON.stringify(userTickets));
-      //alert(thisEvent.EnglishStartDate+ '' +thisEvent.EnglishStartTime);
-      mainView.router.load({
-        url: 'views/tickets/tickets.html',
-        context: {
-          tickets: userTickets,
-          event: thisEvent,
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      url: config.server + "/api/purchases/1/"  + user.id + nocache,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200){
+          var upcomingPurchases1 = JSON.parse(data);
+          if (upcomingPurchases1.length > 0) {
+            $$('#upcomingPurchasesTab').html(Template7.templates.purchasesTemplate(upcomingPurchases1));
+          } else {
+            $$('#upcomingPurchasesTab').html(noContentMessage);
+            $$(document).find('.oops-message').text("You don't have any tickets purchased for upcoming events");
+          }
         }
-      });
-
+      },
+      complete: function (status, xhr) {
+        $$('.purchases-link').on('click', showTicketList);
+      },
     });
   });
 
+  $$('#upcomingPurchasesTab').trigger('show');
+
   $$('#previousPurchasesTab').on('show', function () {
-    var previousPurchases = {};
-    previousPurchases = JSON.parse(Server.getPurchases(user.id, 2));
-    if (previousPurchases.length > 0) {
-      $$('#previousPurchasesTab').html(Template7.templates.purchasesTemplate(previousPurchases));
-    }
-
-    $$('.purchase-link').on('click', function () {
-      //alert('clicked');
-      var purchaseId = $$(this).attr('purchase-id');
-      var eventId = $$(this).attr('event-id');
-      var userTickets = JSON.parse(Server.getTickets(purchaseId, eventId));
-      var thisEvent = JSON.parse(Server.getEvent(eventId));
-
-      //alert(JSON.stringify(userTickets));
-      //alert(thisEvent.EnglishStartDate+ '' +thisEvent.EnglishStartTime);
-      mainView.router.load({
-        url: 'views/tickets/tickets.html',
-        context: {
-          tickets: userTickets,
-          event: thisEvent,
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      url: config.server + "/api/purchases/2/" + user.id + nocache,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          var previousPurchases = JSON.parse(data);
+          if (previousPurchases.length > 0) {
+            $$('#previousPurchasesTab').html(Template7.templates.purchasesTemplate(previousPurchases));
+          } else {
+            $$('#previousPurchasesTab').html(noContentMessage);
+            $$(document).find('.oops-message').text("You don't have any previously purchased tickets");
+          }
         }
-      });
-
+      },
+      complete: function (status, xhr) {
+        $$('.purchases-link').on('click', showTicketList);
+      }
     });
   });
 
   $$('.home').on('click', function () {
-    //allEvents = JSON.parse(Server.getEvents(user.id));
     mainView.router.back ({
       url: 'home.html',
       force: true,
       ignoreCache: true,
     });
-  });
-
-  $$('.purchase-link').on('click', function () {
-    var purchaseId = $$(this).attr('purchase-id');
-    var eventId = $$(this).attr('event-id');
-    var userTickets = JSON.parse(Server.getTickets(purchaseId, eventId));
-    var thisEvent = JSON.parse(Server.getEvent(eventId));
-
-    mainView.router.load({
-      url: 'views/tickets/tickets.html',
-      context: {
-        tickets: userTickets,
-        event: thisEvent,
-      }
-    });
-
   });
 });
 
@@ -98,6 +115,13 @@ app.onPageInit('tickets-list', function(page) {
     };
     $$('.view-popup').html(barcodes(slides));
     app.popup('.form-popup');
+  });
+
+  $$('.back-purchases').on('click', function() {
+    mainView.router.back ({
+      url: 'views/tickets/purchases.html',
+      force: true,
+    });
   });
 
 });
@@ -128,12 +152,17 @@ app.onPageInit('ticket-barcodes', function(page) {
     prevButton: '.swiper-button-prev',
     slideActiveClass: 'barcode-active',
     onInit: function (swiper) {
-      var id = $$('.barcode-active').attr('id');
-      var code = $$('.barcode-active').attr('code');
-      var nameonticket = $$('.barcode-active').attr('nameonticket');
-      qrcode = new QRCode(document.getElementById(id), qrcodeOptions(code));
-      $$('#barcode-text').text(code);
-      $$('#barcode-nameonticket').text(nameonticket);
+      swiper.slideTo(index, 10, true);
+      if (index == 0) {
+        var id = $$('.barcode-active').attr('id');
+        var code = $$('.barcode-active').attr('code');
+        var ticketId = $$('.barcode-active').attr('ticketid');
+        var nameonticket = $$('.barcode-active').attr('nameonticket');
+        qrcode = new QRCode(document.getElementById(id), qrcodeOptions(code));
+        $$('#barcode-text').text(code);
+        $$('#barcode-nameonticket').text(nameonticket);
+        $$('#barcode-ticketid').text(ticketId);
+      }
     },
   });
   //barcodeSwiper.slideTo(index, 10, true);
@@ -141,12 +170,15 @@ app.onPageInit('ticket-barcodes', function(page) {
 
   barcodeSwiper.on('SlideChangeEnd', function () {
     var code = $$('.barcode-active').attr('code');
+    var nameonticket = $$('.barcode-active').attr('nameonticket');
+    var ticketId = $$('.barcode-active').attr('ticketid');
     if ($$('.barcode-active').html() == "" ) {
       var id = $$('.barcode-active').attr('id');
-
       var qrcode = new QRCode(document.getElementById(id), qrcodeOptions(code));
     }
+    $$('#barcode-nameonticket').text(nameonticket);
     $$('#barcode-text').text(code);
+    $$('#barcode-ticketid').text(ticketId);
   });
 
   /*$$('.swiper-slide').on('click', function () {

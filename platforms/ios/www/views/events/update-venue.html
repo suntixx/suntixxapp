@@ -20,15 +20,17 @@
       <form class="list-block" id="update-venue-details-form">
         <ul>
           <li>
-            <a href="#" class="item-link smart-select" data-searchbar="true" data-searchbar-placeholder="Search Venues" data-back-on-select="true">
+            <a href="#" class="item-link smart-select" data-searchbar="true" data-searchbar-placeholder="Approved Venues" data-back-on-select="true">
               <select name="venue-select" id="venue-select">
+                <option value="0">Custom</option>
                 {{#each venues.Venue_Names}}
                   <option value={{value}}>{{label}}</option>
                 {{/each}}
               </select>
               <div class="item-content">
                 <div class="item-inner">
-                  <div class="item-title">Venues</div>
+                  <div class="item-title">Approved Venues</div>
+                  <div class="item-after smart-select-value"></div>
                 </div>
               </div>
             </a>
@@ -36,7 +38,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Address</div>
+                <div class="item-title label">Venue (Name or Address)</div>
                 <div class="item-input">
                   <input type="text" name="venue" id="venue-address" value="{{venue}}"/>
                 </div>
@@ -58,7 +60,7 @@
               <div class="item-inner">
                 <div class="item-title label">Country</div>
                 <div class="item-input">
-                  <input type="text" name="country" id="venue-country" value="{{country}}"/>
+                  <input type="text"  name="country" id="venue-country" value="{{country}}"/>
                 </div>
               </div>
             </div>

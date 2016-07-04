@@ -3,17 +3,18 @@
   <div data-page="purchase-checkout" class="page navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="left"><a href="#" class="back link back-button icon-only"> <i class="icon icon-back"></i></a></div>
         <div class="center sliding">Checkout</div>
       </div>
     </div>
     <a href="#" class="floating-button color-orange confirm-sale" id="paypal-pay-button">
       <i class="icon icon-pay"></i>
     </a>
-    <div class="page-content"><div class="content-block-title">Checkout</div>
+    <div class="page-content">
+
       <div class="card">
         <div class="card-content">
-          <div class="list-block media-list">
+          <div class=" card-content-inner list-block media-list">
             <form  id="ticket-names-form">
               <div class="row">
                 <div class="col-15">Qty</div>
@@ -42,16 +43,22 @@
                 </ul>
               </div>
               {{/each}}
-              <div class="row">
-                <div class="col-15">&nbsp;</div>
-                <div class="col-35">&nbsp;</div>
-                <div class="col-20">Total</div>
-                <div class="col-30">${{js "this.total.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+              <div class="row no-gutter">
+                <div class="col-60"style="text-align:right">Sub-Total</div>
+                <div class="col-40" style="text-align:right">${{js "this.subTotal.toFixed(2)"}}&nbsp;{{event.currency}}</div>
               </div>
-              <div class="row">
-                <div class="col-40">Rate: {{exchangeRate}}</div>
-                <div class="col-30">Total USD</div>
-                <div class="col-30">${{js "this.totalUSD.toFixed(2)"}}</div>
+              <div class="row no-gutter">
+                <div class="col-60" style="text-align:right">Service Fee</div>
+                <div class="col-40" style="text-align:right">${{js "this.serviceFee.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+              </div>
+              <div class="row no-gutter">
+                <div class="col-60"style="text-align:right">Total</div>
+                <div class="col-40" style="text-align:right">${{js "this.total.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+              </div>
+              <div class="row no-gutter">
+                <div class="col-30">Rate: {{exchangeRate}}</div>
+                <div class="col-30" style="text-align:right">Total USD</div>
+                <div class="col-40" style="text-align:right">${{js "this.totalUSD.toFixed(2)"}} USD</div>
               </div>
           </form>
         </div>
