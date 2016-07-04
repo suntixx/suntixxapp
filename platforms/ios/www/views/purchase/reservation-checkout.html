@@ -1,0 +1,56 @@
+
+<div class="pages">
+  <div data-page="reservation-checkout" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Checkout</div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange confirm-reservation" id="paypal-pay-button">
+      <i class="icon icon-pay"></i>
+    </a>
+    <div class="page-content">
+
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <form  id="ticket-names-form">
+              <div class="row">
+                <div class="col-15">Qty</div>
+                <div class="col-35">Ticket Type</div>
+                <div class="col-20">Price</div>
+                <div class="col-30">Total</div>
+              </div>
+              {{#each cart}}
+              <div class="row shopping-cart">
+                <div class="col-15">{{quantity}}</div>
+                <div class="col-35">{{ticketType}}</div>
+                <div class="col-20">${{js "this.price.toFixed(2)"}}</div>
+                <div class="col-30">${{js "this.lineTotal.toFixed(2)"}}</div>
+              </div>
+              <div class="row">
+                <ul>
+                  {{#each names}}
+                  <li class="item-content">
+                    <div class="item-inner">
+                      <div class="item-input">
+                        <input type="text" readonly name="nameonticket-{{../ticketId}}-{{@index}}" value="{{this}}">
+                      </div>
+                    </div>
+                  </li>
+                {{/each}}
+                </ul>
+              </div>
+              {{/each}}
+              <div class="row">
+                <div class="col-60"style="text-align:right">Total</div>
+                <div class="col-40">${{js "this.total.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+              </div>
+          </form>
+        </div>
+      </div>
+     </div>
+    </div>
+  </div>
+</div>
