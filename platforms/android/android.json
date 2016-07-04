@@ -59,6 +59,22 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SQLitePlugin\"><param name=\"android-package\" value=\"io.sqlc.SQLitePlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AndroidFullScreen\"><param name=\"android-package\" value=\"com.mesmotronic.plugins.FullScreenPlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"io.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -639,6 +655,18 @@
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-fullscreen": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.suntixx.application"
         }
     },
     "dependent_plugins": {},
@@ -924,6 +952,35 @@
                 "cordova.InAppBrowser.open",
                 "window.open"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+            "id": "cordova-sqlite-storage.SQLitePlugin",
+            "clobbers": [
+                "SQLitePlugin"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-fullscreen/www/AndroidFullScreen.js",
+            "id": "cordova-plugin-fullscreen.AndroidFullScreen",
+            "clobbers": [
+                "AndroidFullScreen"
+            ]
+        },
+        {
+            "file": "plugins/ionic-plugin-keyboard/www/android/keyboard.js",
+            "id": "ionic-plugin-keyboard.keyboard",
+            "clobbers": [
+                "cordova.plugins.Keyboard"
+            ],
+            "runs": true
         }
     ],
     "plugin_metadata": {
@@ -940,6 +997,10 @@
         "cordova-plugin-splashscreen": "3.1.0",
         "cordova-plugin-whitelist": "1.2.1",
         "cordova-plugin-x-socialsharing": "5.0.12",
-        "cordova-plugin-inappbrowser": "1.4.0"
+        "cordova-plugin-inappbrowser": "1.4.0",
+        "cordova-plugin-device": "1.1.2",
+        "cordova-sqlite-storage": "1.4.3",
+        "cordova-plugin-fullscreen": "1.1.0",
+        "ionic-plugin-keyboard": "2.2.1"
     }
 }
