@@ -19,9 +19,10 @@
          <li>
            <div class="item-content">
              <div class="item-inner">
-               <div class="item-title label">Ticket Type</div>
+               <div class="item-title label"><i class="icon icon-required"></i>Ticket Type</div>
+               <div class="item-subtitle color-red form-error tickettype"></div>
                <div class="item-input">
-                 <input type="text" value="{{tickettype}}" name="tickettype" id="tickettype"/>
+                 <input type="text" value="{{tickettype}}" name="tickettype" id="tickettype" required/>
                </div>
              </div>
            </div>
@@ -29,9 +30,10 @@
          <li>
            <div class="item-content">
              <div class="item-inner">
-               <div class="item-title label">Price</div>
+               <div class="item-title label"><i class="icon icon-required"></i>Price</div>
+               <div class="item-subtitle color-red form-error price"></div>
                <div class="item-input">
-                 <input type="number" value="{{price}}" name="price" id="ticketprice"/>
+                 <input type="number" value="{{price}}" name="price" id="ticketprice" required/>
                </div>
              </div>
            </div>
@@ -39,9 +41,10 @@
          <li>
            <div class="item-content">
              <div class="item-inner">
-               <div class="item-title label">Quantity</div>
+               <div class="item-title label"><i class="icon icon-required"></i>Quantity</div>
+               <div class="item-subtitle color-red form-error quantity"></div>
                <div class="item-input">
-                 <input type="number" value="{{quantity}}" name="quantity"/>
+                 <input type="number" value="{{quantity}}" name="quantity" required/>
                </div>
              </div>
            </div>
@@ -49,10 +52,10 @@
          <li>
            <div class="item-content">
              <div class="item-inner">
-               <div class="item-title label">Limit</div>
+               <div class="item-title label"><i class="icon icon-required"></i>Limit</div>
                <div class="item-input">
                  <input type="text" value="{{limit}}" name="limit" id="ticket-limit"/>
-                 <input type="hidden" name="ticketimagepath" value="" id="edit-ticket-image-path"/>
+                 <input type="hidden" name="ticketimagepath" value="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png" id="edit-ticket-image-path"/>
                  <input type="hidden" name="ticketid" value="{{id}}"/>
                </div>
              </div>

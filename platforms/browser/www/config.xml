@@ -1,11 +1,22 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.suntixx.application" version="1.1.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.suntixx.application" version="1.5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
     <feature name="Camera">
         <param name="browser-package" value="Camera" />
     </feature>
     <feature name="Device">
         <param name="browser-package" value="Device" />
     </feature>
+    <feature name="FacebookConnectPlugin">
+        <param name="browser-package" value="FacebookConnectPluginBrowser" />
+        <param name="onload" value="true" />
+    </feature>
+    <plugin name="FacebookConnectPlugin" value="FacebookConnectPlugin" />
+    <access origin="https://m.facebook.com" />
+    <access origin="https://connect.facebook.net" />
+    <access origin="https://graph.facebook.com" />
+    <access origin="https://api.facebook.com" />
+    <access origin="https://*.fbcdn.net" />
+    <access origin="https://*.akamaihd.net" />
     <name>Sun Tixx</name>
     <description>Mobile Application for the Sun Tixx Ticketing Engine</description>
     <author email="admin@suntixx.com" href="">Sun Tixx Development Team</author>
@@ -53,13 +64,15 @@
     <gap:splash gap:platform="winphone" src="www/res/screen/windows-phone/screen-portrait.jpg" />
     <allow-intent href="https://*.instagram.com/*" />
     <allow-intent href="https://*.suntixx.com/*" />
+    <allow-intent href="http://181.188.62.63:3000" />
     <access origin="https://*.suntixx.com" />
     <access origin="https://*.instagram.com" />
     <access origin="https://*.google.com" />
     <access origin="https://*.cdninstagram.com" />
-    <access origin="*://181.188.62.63:3000" />
+    <access origin="http://181.188.62.63:3000" />
     <access origin="data:*" />
     <access origin="*://*" />
+    <access origin="content:///*" />
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
@@ -70,7 +83,7 @@
     <preference name="permissions" value="none" />
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="universal" />
-    <preference name="fullscreen" value="true" />
+    <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
     <preference name="prerendered-icon" value="true" />
     <preference name="stay-in-webview" value="false" />
@@ -89,4 +102,5 @@
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" />
+    <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" />
 </widget>

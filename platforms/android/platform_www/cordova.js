@@ -749,7 +749,9 @@ function forceFunction(f) {
 /**
  * Subscribes the given function to the channel. Any time that
  * Channel.fire is called so too will the function.
- * Optionally specify an execution context for the function
+ * Optionally specify an executio
+
+    n context for the function
  * and a guid that can be used to stop subscribing to the channel.
  * Returns the guid.
  */

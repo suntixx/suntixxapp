@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap:  https://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000 https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; script-src https://api.instagram.com https://maps.googleapis.com/ 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' data: gap: android-webview-video-poster: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap:  https://*.suntixx.com:3000  https://*.suntixx.com  https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; connect-src 'self' https://*.suntixx.com ws://*.suntixx.com wss://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000; script-src https://api.instagram.com https://maps.googleapis.com/ https://maps.google.com/ https://*.suntixx.com 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' data: gap: android-webview-video-poster: android-webview: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.google.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
 
     <title>Sun Tixx</title>
     <!-- Path to Framework7 Library CSS-->
@@ -45,10 +45,9 @@
                         </div>
                       </div>
                     </li>
-                   <li>
+                   <li class="login-buttons">
                      <a href="#" class="button button-big button-fill link color-orange close-login-screen login-submit">Sign In</a>
-                   </li>
-                   <li>
+                     <a href="#" class="button button-big button-fill facebook-button link close-login-screen create-new-facebook-integration">Continue With Facebook</a>
                      <a href="#" class="button button-big color-orange link close-login-screen create-new-account">Create Account</a>
                      <a href="#" class="forgot-password close-login-screen link">Forgot Password?</a>
                    </li>
@@ -122,7 +121,7 @@
                     <div class="item-title-row">
                       <div class="item-title">About</div>
                     </div>
-                    <div class="item-subtitle">Sun Tixx v1.1.6</div>
+                    <div class="item-subtitle app-version"></div>
                   </div>
                 </li>
                 <li class="item-content logout-menu">
@@ -147,7 +146,7 @@
     <!-- Views-->
     <div class="views tabs">
       <div class="view view-main active tab" id="homepage-tab">
-        <div class="pages ">
+        <div class="pages">
           <div data-page="init-page" class="page navbar-fixed toolbar-fixed">
             <div class="navbar">
               <div class="navbar-inner">
@@ -166,20 +165,202 @@
           </div>
         </div>
       </div>
-      <div class="view tab view-form" id="formViewTab">
+      <div class="view tab view-store" id="store-tab">
         <div class="pages">
-          <div class="page navbar-fixed" data-page="purchases">
+          <div data-page="store-init" class="page">
+            <div class="page-content">
+              <div id="page-loading"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-      <!--Homepage Events template-->
+    <script type="text/template7" id="userProfileTemplate">
+      <div class="card-header user-profile">
+          <img class="link user-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png{{nocache}}">
+          {{#unless notMe}}
+          {{#if organization_id}}{{#if organization}}<a href="#" class="buttons user-organization button">{{@global.language.USER_AREA.ORGANIZATION}}</a>{{/if}}{{/if}}
+          {{/unless}}
+      </div>
+      <div class="card-content">
+        <div>
+          <span class="fullname capitalize">{{name2}} {{name3}} {{name4}}</span>
+        </div>
+        <div>
+          <span class="email"><i class="icon icon-email"></i>{{email}}</span>
+        </div>
+        <!--<div>
+          <span class="user-profile-label">{{@global.language.OTHER.AGE_FIELD}}:</span><span class="user-profile-field">{{age}}</span>
+        </div>-->
+        <div>
+          {{#if mobilephone}}
+          <span class="user-profile-label"><i class="icon icon-phone"></i></span><span class="user-profile-field">{{mobilephone}}</span>
+          {{/if}}
+        </div>
+        <div>
+          {{#if addresscity}}
+          <span class="user-profile-label">
+            <i class="icon icon-location"></i>
+          </span>
+          <span class="user-profile-field capitalize">{{addresscity}}&nbsp;|&nbsp;<span class="user-country">{{addresscountry}}</span></span>
+          {{/if}}
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="userOrganizationTemplate">
+      <div class="card-header user-profile">
+          <img class="link user-image" src="{{@global.config.server}}/thumbnails/organizations/{{organization.id}}/portrait.png{{nocache}}">
+          {{#unless notMe}}
+          <a href="#" class="buttons user-personal button">{{@global.language.USER_AREA.PERSONAL}}</a>
+          {{/unless}}
+      </div>
+      <div class="card-content">
+        <div>
+          <span class="fullname capitalize">{{organization.name}}</span>
+        </div>
+        <div>
+          <span class="email"><i class="icon icon-email"></i>{{organization.email}}</span>
+        </div>
+        <div>
+          <span class="user-profile-label"></span><span class="user-profile-field">{{organization.description}}</span>
+        </div>
+        <div>
+          <span class="user-profile-label"><i class="icon icon-phone"></i></span><span class="user-profile-field">{{organization.phone}}</span>
+        </div>
+        <div>
+          <span class="user-profile-label">
+            {{#if organization.website}}<i class="icon icon-link"></i>{{else}}
+            {{#if organization.facebook}}<i class="icon icon-link"></i>{{else}}
+            {{#if organization.twitter}}<i class="icon icon-link"></i>{{/if}}{{/if}}{{/if}}
+          </span>
+          <span class="user-profile-field">
+            {{#if organization.website}}<a href="#" url="{{website}}" class="external-link">Site</a>&nbsp;{{#if organization.facebook}}|{{/if}}{{/if}}
+            {{#if organization.facebook}}<a href="#" url="{{facebook}}" class="external-link">Facebook</a>&nbsp;{{#if organization.twitter}}|{{/if}}{{/if}}
+            {{#if organization.twitter}}<a href="#" url="{{twitter}}" class="external-link">Twitter</a>&nbsp;{{/if}}
+          </span>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="userFriendsTemplate">
+      {{#if social_id}}
+      {{#js_compare "this.friends.length > 0"}}
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul>
+              {{#each friends}}
+              <li>
+                <div class="row no-gutter">
+                  <div class="col-80 item-content link show-friend-profile" friend-id="{{id}}">
+
+                      <div class="item-media">
+                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                      </div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                        </div>
+                        <div class="item-subtitle">{{addresscity}}, {{addresscountry}}</div>
+                      </div>
+
+                  </div>
+                  <div class="col-20 item-media">
+                    <!--<a href="#" class="link message-friend" friend-id="{{id}}"><i class="icon icon-chats-orange"></i></a>-->
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.USER_AREA.NO_FACEBOOK_FRIENDS}}</div>
+      <div style="text-align:center;width:90vw;margin: 0 auto">
+        <a href="#" class="button button-big button-fill facebook-button link close-login-screen share-app">{{@global.language.USER_AREA.SHARE_APP}}</a>
+      </div>
+      {{/js_compare}}
+      {{else}}
+      <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.USER_AREA.NO_FACEBOOK_INTEGRATION}}</div>
+      <div style="text-align:center;width:90vw;margin: 0 auto">
+        <a href="#" class="button button-big button-fill facebook-button link close-login-screen add-facebook-integration">{{@global.language.USER_AREA.FACEBOOK_LOGIN}}</a>
+      </div>
+      {{/if}}
+    </script>
+    <script type="text/template7" id="userChatsTemplate">
+      {{#js_compare "this.chats.length > 0"}}
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul>
+              {{#each chats}}
+              <li class="item-content link start-chat" friend-id="{{id}}">
+                <div class="item-media">
+                  <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                </div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                    <div class="item-after"><span class="badge">{{unread}}</span></div>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.USER_AREA.NO_FACEBOOK_INTEGRATION}}</div>
+      <div style="text-align:center;width:50vw;margin: 0 auto"><a href="#" class="button button-fill color-green add-facebook-integration">Continue</a></div>
+      {{/js_compare}}
+    </script>
+    <script type="text/template7" id="eventSellersTemplate">
+      {{#with this}}
+        {{> "eventPartial"}}
+      {{/with}}
+      {{#js_compare "this.commuser.length > 0"}}
+       <div class="card full-screen-width">
+         <div class="card-content">
+           <div class="list-block media-list">
+             <ul>
+              {{#each commuser}}
+              <li>
+                <div class="row no-gutter">
+                  <div class="col-80 item-content link show-seller-profile" user-id="{{id}}">
+                    <div class="item-media">
+                      <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                    </div>
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                      </div>
+                      <div class="item-subtitle">{{email}}</div>
+                    </div>
+                  </div>
+                  <div class="col-20 item-media">
+                    <!--<a href="#" class="link message-seller" user-id="{{id}}"><i class="icon icon-chats-orange"></i></a>-->
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{/js_compare}}
+    </script>
+    <script type="text/template7" id="eventActivityTemplate">
+      {{#with event}}
+        {{> "eventPartial"}}
+      {{/with}}
+    </script>
     <script type="text/template7" id="eventsTemplate">
       {{#each this}}
         <div class="card event-details">
           <a href="#" class="link event-link" event-id="{{id}}">
           <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
-          <div class="header">
+          <div class="card-header">
             <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
           </div>
             <div class="card-content">
@@ -193,15 +374,15 @@
                     {{user.fullname}}
                   {{else}}
                       {{#js_compare "this.hostedby == 1"}}
-                        {{user.fullname}}
+                        {{user.organization.name}}
                       {{else}}
                         {{hostedby}}
                       {{/js_compare}}
                   {{/js_compare}}
 
               </div>
-              <span class="color-black">{{EnglishTime}}</span><br>
-              <span class="color-gray">{{venue}}</span><br><span class="color-gray">{{city}}, {{country}}</span>
+              <span class="color-black">{{englishtime starttime}}</span><br>
+              <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
             </div>
           </div>
           </a>
@@ -215,8 +396,8 @@
                 {{/js_compare}}
               {{/js_compare}}
             </div>
-              <a href="#" class="share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
-              {{#if hasOnlineTickets}}<a href="#" class="link purchase-tickets icon-only"  data-view=".view-form" event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/if}}
+              <a href="#" class="link share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
+              {{#if hasOnlineTickets}}<a href="#" class="link purchase-online-tickets icon-only"  event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/if}}
             <!--</div>-->
           </div>
         </div>
@@ -322,6 +503,135 @@
         {{/each}}
       </div>
     </script>
+    <!--store purchase checkout template-->
+    <script type="text/template7" id="purchaseCheckoutTemplate">
+      <div class="pages">
+        <div data-page="purchase-checkout" class="page navbar-fixed">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="left"><a href="#" class="close-popup back-button icon-only"> <i class="icon icon-back"></i></a></div>
+              <div class="center sliding">Checkout</div>
+            </div>
+          </div>
+          <a href="#" class="floating-button color-orange confirm-sale" id="paypal-pay-button">
+            <i class="icon icon-pay"></i>
+          </a>
+          <div class="page-content">
+
+            <div class="card">
+              <div class="card-content">
+                <div class=" card-content-inner list-block media-list">
+                  <form  id="ticket-names-form">
+                    <div class="row">
+                      <div class="col-15">Qty</div>
+                      <div class="col-35">Ticket Type</div>
+                      <div class="col-20">Price</div>
+                      <div class="col-30">Total</div>
+                    </div>
+                    {{#each cart}}
+                    <div class="row shopping-cart">
+                      <div class="col-15">{{quantity}}</div>
+                      <div class="col-35">{{ticketType}}</div>
+                      <div class="col-20">${{js "this.price.toFixed(2)"}}</div>
+                      <div class="col-30">${{js "this.lineTotal.toFixed(2)"}}</div>
+                    </div>
+                    <div class="row">
+                      <ul>
+                        {{#each names}}
+                        <li class="item-content">
+                          <div class="item-inner">
+                            <div class="item-input">
+                              <input type="text" readonly name="nameonticket-{{../ticketId}}-{{@index}}" value="{{this}}">
+                            </div>
+                          </div>
+                        </li>
+                      {{/each}}
+                      </ul>
+                    </div>
+                    {{/each}}
+                    <div class="row no-gutter">
+                      <div class="col-60"style="text-align:right">Sub-Total</div>
+                      <div class="col-40" style="text-align:right">${{js "this.subTotal.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+                    </div>
+                    <div class="row no-gutter">
+                      <div class="col-60" style="text-align:right">Service Fee</div>
+                      <div class="col-40" style="text-align:right">${{js "this.serviceFee.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+                    </div>
+                    <div class="row no-gutter">
+                      <div class="col-60"style="text-align:right">Total</div>
+                      <div class="col-40" style="text-align:right">${{js "this.total.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+                    </div>
+                    <div class="row no-gutter">
+                      <div class="col-30">Rate: {{exchangeRate}}</div>
+                      <div class="col-30" style="text-align:right">Total USD</div>
+                      <div class="col-40" style="text-align:right">${{totalUSD}} USD</div>
+                    </div>
+                </form>
+              </div>
+            </div>
+           </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <!--store purchase checkout template-->
+    <script type="text/template7" id="reservationCheckoutTemplate">
+      <div class="pages">
+        <div data-page="reservation-checkout" class="page navbar-fixed">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+              <div class="center sliding">Checkout</div>
+            </div>
+          </div>
+          <a href="#" class="floating-button color-orange confirm-reservation" id="paypal-pay-button">
+            <i class="icon icon-pay"></i>
+          </a>
+          <div class="page-content">
+
+            <div class="card">
+              <div class="card-content">
+                <div class="list-block media-list">
+                  <form  id="ticket-names-form">
+                    <div class="row">
+                      <div class="col-15">Qty</div>
+                      <div class="col-35">Ticket Type</div>
+                      <div class="col-20">Price</div>
+                      <div class="col-30">Total</div>
+                    </div>
+                    {{#each cart}}
+                    <div class="row shopping-cart">
+                      <div class="col-15">{{quantity}}</div>
+                      <div class="col-35">{{ticketType}}</div>
+                      <div class="col-20">${{js "this.price.toFixed(2)"}}</div>
+                      <div class="col-30">${{js "this.lineTotal.toFixed(2)"}}</div>
+                    </div>
+                    <div class="row">
+                      <ul>
+                        {{#each names}}
+                        <li class="item-content">
+                          <div class="item-inner">
+                            <div class="item-input">
+                              <input type="text" readonly name="nameonticket-{{../ticketId}}-{{@index}}" value="{{this}}">
+                            </div>
+                          </div>
+                        </li>
+                      {{/each}}
+                      </ul>
+                    </div>
+                    {{/each}}
+                    <div class="row">
+                      <div class="col-60"style="text-align:right">Total</div>
+                      <div class="col-40">${{js "this.total.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+                    </div>
+                </form>
+              </div>
+            </div>
+           </div>
+          </div>
+        </div>
+      </div>
+    </script>
     <!--Popups-->
     <div class="popup barcodes">
       <div class="tabs-swipeable-wrap">
@@ -348,15 +658,19 @@
       </div>
     </div>
     <div class="popup add-purchaser">
-      <div class="content-block">
+      <div class="content-block-title">
         <p>Enter the purchaser's name and email to continue</p>
-        <div class="list-block" id="add-purchaser-form">
+      </div>
+
+        <form class="list-block inset" id="add-purchaser-form">
+          <div class="error-message color-red"></div>
           <ul>
             <li>
               <div class="item-content">
                 <div class="item-inner">
+                  <div class="form-error fname"></div>
                   <div class="item-input">
-                    <input type="text" placeholder="First Name" name="fname">
+                    <input type="text" placeholder="First Name" name="fname" class="purchaser-info" required/>
                   </div>
                 </div>
               </div>
@@ -364,8 +678,9 @@
             <li>
               <div class="item-content">
                 <div class="item-inner">
+                  <div class="form-error lname"></div>
                   <div class="item-input">
-                    <input type="text" placeholder="Last Name" name="lname">
+                    <input type="text" placeholder="Last Name" name="lname" class="purchaser-info"  required/>
                   </div>
                 </div>
               </div>
@@ -373,23 +688,29 @@
             <li>
               <div class="item-content">
                 <div class="item-inner">
+                  <div class="form-error email"></div>
                   <div class="item-input">
-                    <input type="email" placeholder="E-mail" name="email">
+                    <input type="email" placeholder="E-mail" name="email" class="purchaser-info" required/>
                   </div>
                 </div>
               </div>
             </li>
-            <li class="row">
-              <div class="col-50">
-                <a href="#" class="button button-big button-fill color-red close-popup">Cancel</a>
-              </div>
-              <div class="col-50">
-                <a href="#" class="button button-big button-fill color-green confirm-sale close-popup">Continue</a>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="form-error confirmemail"></div>
+                  <div class="item-input">
+                    <input type="email" placeholder="Confirm E-mail" name="confirmemail" class="purchaser-info" required/>
+                  </div>
+                </div>
               </div>
             </li>
           </ul>
-        </div>
-      </div>
+        </form>
+          <div class="buttons-row">
+            <a href="#" class="button button-big button-fill color-red close-popup back-button">Cancel</a>
+            <a href="#" class="button button-big button-fill color-green confirm-sale">Sell</a>
+          </div>
     </div>
     <div class="popup form-popup">
       <div class="view view-popup"></div>
@@ -448,6 +769,7 @@
     <script type="text/javascript" src="js/libs/cropper.min.js"></script>
     <script type="text/javascript" src="js/libs/qrcode.min.js"></script>
     <script type="text/javascript" src="js/paypal-mobile-js-helper.js"></script>
+    <script type="text/javascript" src="https://dev.suntixx.com/socket.io/socket.io.js"></script>
     <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDB79qDTV8MRbfZUFQH1pp7AclMbkQrd8Q"></script>-->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript" src="js/libs/gmaps.min.js"></script>
@@ -458,6 +780,7 @@
 
 
     <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/db.js"></script>
     <script type="text/javascript" src="js/util.js"></script>
     <script type="text/javascript" src="js/server.js"></script>
     <script type="text/javascript" src="js/plugins.js"></script>
@@ -473,5 +796,8 @@
     <script type="text/javascript" src="js/purchasecenter.js"></script>
     <script type="text/javascript" src="js/eventcenter.js"></script>
     <script type="text/javascript" src="js/usercenter.js"></script>
+    <script type="text/javascript" src="js/chatcenter.js"></script>
+    <script type="text/javascript" src="js/sellcenter.js"></script>
+    <!--<script type="text/javascript" src="js/pushcenter.js"></script>-->
   </body>
 </html>

@@ -3,7 +3,7 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left">
-          <a href="#" class="link icon-only home back-button"> <i class="icon icon-back"></i></a>
+          <a href="#" class="link icon-only home back-button" data-ignore-cache="true"> <i class="icon icon-back"></i></a>
         </div>
         <div class="center">My Events</div>
       </div>
@@ -34,7 +34,11 @@
               </div>
               <div class="row footer no-gutter">
                 <div class="col-50 category">
+                  {{#if Total}}
                   <span>Sold: {{SoldTotal}}/{{Total}}</span>
+                  {{else}}
+                  <span>{{@global.language.EVENTS.NO_TICKETS}}</span>
+                  {{/if}}
                 </div>
                 <div class="col-50">
                   <span>
@@ -72,7 +76,11 @@
             </div>
             <div class="row footer no-gutter">
               <div class="col-50 category">
+                {{#if UserTickets.Total}}
                 <span>Sold: {{UserTickets.SoldTotal}}/{{UserTickets.Total}}</span>
+                {{else}}
+                <span>{{global.language.EVENTS.NO_TICKETS}}</span>
+                {{/if}}
               </div>
               <div class="col-50">
                 <span>

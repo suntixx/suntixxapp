@@ -29,7 +29,13 @@ var userService = {
         }
      }
    });
-   return invalidFields == 0;
+   if(invalidFields > 0) {
+     app.alert(language.OTHER.FORM_ERRORS, function() {
+       return false;
+     });
+   } else {
+     return true;
+   }
  },
 
    validatePasswords: function(formid) {
@@ -68,6 +74,195 @@ var userService = {
     return tmp;
   },
 
+  getFacebookProfileInfo : function (authResponse) {
+    facebookConnectPlugin.api('/me?fields=email,name,first_name,last_name,birthday,location,middle_name,gender&access_token=' + authResponse.accessToken, null,
+      function (response) {
+				console.log("getProfileInfo", JSON.stringify(response));
+        if (user && user.mobilephone) {
+          //contact server and add facebook integration
+        } else {
+          //contact server, create user, add facebook integration and login user
+        }
+        console.log("facebookFriends", JSON.stringify(response.friends));
+        //storage.setItem('facebookId', response.id);
+      //  storage.setItem('facebookEmail', response.email);
+        //storage.setItem('facebookImage', "http://graph.facebook.com/" + authResponse.userID + "/picture?type=large");
+        return response;
+      },
+      function (response) {
+				console.log(JSON.stringify(response));
+        return response;
+      }
+    );
+  },
+
+  /*facebookAddSuccess: function (response) {
+    console.log("loginSuccess", JSON.stringify(response));
+    if (!response.authResponse){
+     facebookLoginFail("Cannot find the authResponse");
+     return;
+    }
+    var authResponse = response.authResponse;
+    var request = {
+     facebook: authResponse,
+     userid: user.id
+    };
+    app.showIndicator();
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      url: config.server + "/api/facebooklogin" + nocache,
+      method: "POST",
+      timeout: 20 * 1000,
+      contentType: "application/x-www-form-urlencoded",
+      data: request,
+      success: function(data, status, xhr) {
+       if (status == 200 || status == 0 ){
+         app.hideIndicator();
+         var returnUser = JSON.parse(data);
+         if (returnUser.id) {
+           user = returnUser;
+           Template7.global.user = user;
+           storage.setItem('userData', JSON.stringify(user));
+           app.showTab('#userDetailsTab');
+         }
+       }
+     },
+     error: function (xhr, status){
+       app.hideIndicator();
+     },
+   });
+ },*/
+
+  facebookLoginSuccess: function (response) {
+  console.log("loginSuccess", JSON.stringify(response));
+   if (!response.authResponse){
+     userService.facebookLoginFail("Cannot find the authResponse");
+     return;
+   }
+   //console.log("loginSuccess", JSON.stringify(response));
+   var authResponse = response.authResponse;
+   var request = {
+     facebook: authResponse
+   };
+   if (user && user.id) {
+     request.userid = user.id;
+   }
+   if(!response.background) {
+     app.showIndicator();
+   }
+   var nocache = "?t="+moment().unix();
+   $$.ajax({
+     async: true,
+     url: config.server + "/api/facebooklogin" + nocache,
+     method: "POST",
+     timeout: 20 * 1000,
+     contentType: "application/x-www-form-urlencoded",
+     data: request,
+     success: function(data, status, xhr) {
+       if (status == 200 || status == 0 ){
+         app.hideIndicator();
+         var returnUser = JSON.parse(data);
+         if (returnUser.id && returnUser.mobilephone) {
+           user = returnUser;
+           Template7.global.user = user;
+           storage.setItem('userData', JSON.stringify(user));
+           showAvatar();
+           if(!response.background) {
+             mainView.router.load({
+               url: 'views/user/profile.html',
+               context: user,
+               reload:true,
+             });
+           }
+         } else if (returnUser.newuser) {
+           console.log("new facebook user");
+           mainView.router.load({
+             url: 'views/user/complete-facebook-registration.html',
+             context: returnUser,
+           });
+         } else {
+           user = returnUser;
+           console.log("existing facebook user");
+           Template7.global.user = user;
+           showAvatar();
+           storage.setItem('userData', JSON.stringify(user));
+           mainView.router.load({
+             url: 'views/user/complete-registration.html',
+             context: user,
+           });
+         }
+       }
+     },
+     error: function (xhr, status){
+       app.hideIndicator();
+       /*if(!response.background) {
+         facebookConnectPlugin.logout(userService.facebookLogoutSuccess, userService.facebookLogoutFail);
+       }*/
+       showLoginOrCreate();
+       user = null;
+       Template7.global.user = null;
+       app.addNotification({
+         message: language.SYSTEM.SERVER_ERROR,
+         hold: 2000,
+       });
+     },
+   });
+ },
+
+ facebookLoginFail: function(error) {
+   app.alert(language.USER_AREA.FACEBOOK_ERROR);
+   console.log('fbLoginError', error);
+ },
+
+ facebookLogoutSuccess: function() {
+   //call server and delete database entry
+   app.showIndicator();
+   var nocache = "?t="+moment().unix();
+   $$.ajax({
+     async: true,
+     url: config.server + "/api/removefacebook" + nocache,
+     method: "POST",
+     timeout: 20 * 1000,
+     contentType: "application/x-www-form-urlencoded",
+     data: {},
+     success: function(data, status, xhr) {
+       if (status == 200 || status == 0 ){
+         user = JSON.parse(data);
+         storage.setItem('userData', user);
+         Template7.global.user = user;
+         app.hideIndicator()
+         mainView.router.load({
+           url: 'views/user/profile.html',
+           context: user,
+           reload:true,
+         });
+       }
+     },
+     error: function (xhr, status){
+       app.hideIndicator();
+       if (user) {
+         delete user.social;
+         delete user.social_id;
+       }
+       storage.setItem('userData', user);
+       Template7.global.user = user;
+       mainView.router.back({
+         url: 'home.html',
+         force:true,
+         reload:true,
+       });
+     },
+   });
+ },
+
+ facebookLogoutFail: function(error) {
+   app.alert(language.USER_AREA.FACEBOOK_ERROR);
+ },
+
+
+ //facebookPermissions: ['email', 'public_profile', 'user_friends', 'user_events', 'rsvp_events', 'user_actions.music'],
+ facebookPermissions: ['email', 'public_profile', 'user_friends'],
 };
 
 function validateEmail(email) {

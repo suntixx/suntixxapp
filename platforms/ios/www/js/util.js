@@ -23,9 +23,9 @@ var util = {
   getRestrictionId: function (name) {
     if (name == "All Ages") {
       return 28;
-    } else if (name == "12yrs & Over") {
+    } else if (name == "12 & Over") {
         return 29;
-    } else if (name == "18yrs & Over") {
+    } else if (name == "18 & Over") {
         return 30;
     }
   },
@@ -78,7 +78,7 @@ var util = {
     for(var i in data) {
       var lineInfo = i.split('-');
       var item =  {
-        nameonticket: data[i],
+        nameonticket: data[i].trim(),
         ticketid: lineInfo[1],
       };
       result.push(item);

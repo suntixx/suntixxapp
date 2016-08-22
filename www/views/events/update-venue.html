@@ -38,9 +38,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Venue (Name or Address)</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Venue (Name or Address)</div>
+                <div class="item-subtitle color-red form-error venue"></div>
                 <div class="item-input">
-                  <input type="text" name="venue" id="venue-address" value="{{venue}}"/>
+                  <input type="text" name="venue" id="venue-address" value="{{venue}}" required/>
                 </div>
               </div>
             </div>
@@ -48,9 +49,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">City</div>
+                <div class="item-title label"><i class="icon icon-required"></i>City</div>
+                <div class="item-subtitle color-red form-error city"></div>
                 <div class="item-input">
-                  <input type="text" placeholder="Headline" name="city" id="venue-city" value="{{city}}"/>
+                  <input type="text" name="city" id="venue-city" value="{{city}}" required/>
                 </div>
               </div>
             </div>
@@ -58,9 +60,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Country</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Country</div>
+                <div class="item-subtitle color-red form-error country"></div>
                 <div class="item-input">
-                  <input type="text"  name="country" id="venue-country" value="{{country}}"/>
+                  <input type="text"  name="country" id="venue-country" value="{{country}}" required/>
                 </div>
               </div>
             </div>
@@ -68,9 +71,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Venue Type</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Venue Type</div>
+                <div class="item-subtitle color-red form-error venuetype"></div>
                 <div class="item-input">
-                  <input type="text" name="venuetype" id="venue-type" value="{{VenueTypeName}}"/>
+                  <input type="text" name="venuetype" id="venue-type" value="{{VenueTypeName}}" required/>
                 </div>
               </div>
             </div>
@@ -78,7 +82,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Map Link</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Map Link</div>
                 <div class="item-input">
                   <input type="text" readonly name="maplink" id="venue-maplink" value="{{maplink}}"/>
                 </div>

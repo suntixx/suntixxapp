@@ -17,6 +17,7 @@ app.onPageInit('purchases', function (page) {
           userTickets = JSON.parse(data);
           $$.ajax({
             async: true,
+            timeout: 20 * 1000,
             url: config.server + "/api/event/" + eventId + nocache,
             method: "GET",
             success: function(data, status, xhr) {
@@ -51,6 +52,7 @@ app.onPageInit('purchases', function (page) {
     var nocache = "?t="+moment().unix();
     $$.ajax({
       async: true,
+      timeout: 20 * 1000,
       url: config.server + "/api/purchases/1/"  + user.id + nocache,
       method: "GET",
       success: function(data, status, xhr) {
@@ -67,6 +69,9 @@ app.onPageInit('purchases', function (page) {
       complete: function (status, xhr) {
         $$('.purchases-link').on('click', showTicketList);
       },
+      error: function(status, xhr) {
+        app.alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      }
     });
   });
 
@@ -78,6 +83,7 @@ app.onPageInit('purchases', function (page) {
       async: true,
       url: config.server + "/api/purchases/2/" + user.id + nocache,
       method: "GET",
+      timeout: 20 * 1000,
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var previousPurchases = JSON.parse(data);
@@ -91,6 +97,9 @@ app.onPageInit('purchases', function (page) {
       },
       complete: function (status, xhr) {
         $$('.purchases-link').on('click', showTicketList);
+      },
+      error: function(status, xhr) {
+        app.alert(language.SYSTEM.GENERAL_SERVER_ERROR);
       }
     });
   });
@@ -127,6 +136,15 @@ app.onPageInit('tickets-list', function(page) {
 });
 
 app.onPageInit('ticket-barcodes', function(page) {
+
+  var speed = 20, p=0;
+  var animateImage = function() {
+    $$('#barcode-verified').css('background-position', p+'px 0');
+     p--;
+     setTimeout(animateImage, speed);
+  };
+  animateImage();
+
   var barcodeType = 0;
   var index = $$('.clicked-ticket').attr('ticket');
   var width = $$('.barcode-container').width();
@@ -161,7 +179,7 @@ app.onPageInit('ticket-barcodes', function(page) {
         qrcode = new QRCode(document.getElementById(id), qrcodeOptions(code));
         $$('#barcode-text').text(code);
         $$('#barcode-nameonticket').text(nameonticket);
-        $$('#barcode-ticketid').text(ticketId);
+        $$('#barcode-ticketid').text('#: '+ticketId);
       }
     },
   });
@@ -178,7 +196,7 @@ app.onPageInit('ticket-barcodes', function(page) {
     }
     $$('#barcode-nameonticket').text(nameonticket);
     $$('#barcode-text').text(code);
-    $$('#barcode-ticketid').text(ticketId);
+    $$('#barcode-ticketid').text('#: '+ticketId);
   });
 
   /*$$('.swiper-slide').on('click', function () {

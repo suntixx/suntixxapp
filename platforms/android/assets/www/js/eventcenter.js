@@ -1,12 +1,13 @@
 var updateEvent = function(data, redirect) {
   var nocache = "?t="+moment().unix();
   app.showPreloader("Updating Event");
+  console.log(JSON.stringify(data));
   var returnEvent = {};
   $$.ajax({
     async: true,
     url: config.server + "/api/event/" + selectedEventLocal.id + nocache,
     method: "PUT",
-    timeout: 10 * 1000,
+    timeout: 20 * 1000,
     //contentType: "application/x-www-form-urlencoded",
     contentType: "application/json; charset=utf-8",
     data: JSON.stringify(data),
@@ -102,12 +103,14 @@ app.onPageAfterAnimation('all-user-events', function (page) {
     var eventId = $$(this).attr('event-id');
     var nocache = "?t="+moment().unix();
     var result;
+    app.showPreloader(language.SYSTEM.LOADING);
     $$.ajax({
       async: true,
-      timeout: 10 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/event/" + eventId + nocache,
       method: "GET",
       success: function(data, status, xhr) {
+        app.hidePreloader();
         if (status == 200 || status == 0 ){
           result = JSON.parse(data);
           if (result && result.id>0) {
@@ -119,7 +122,11 @@ app.onPageAfterAnimation('all-user-events', function (page) {
             });
           }
         }
-      }
+      },
+      error: function (xhr, status) {
+        app.hidePreloader();
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
 
     });
   });
@@ -128,12 +135,14 @@ app.onPageAfterAnimation('all-user-events', function (page) {
     var eventId = $$(this).attr('event-id');
     var nocache = "?t="+moment().unix();
     var result;
+    app.showPreloader(language.SYSTEM.LOADING);
     $$.ajax({
       async: true,
-      timeout: 10 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/event/" + eventId + nocache,
       method: "GET",
       success: function(data, status, xhr) {
+        app.hidePreloader();
         if (status == 200 || status == 0 ){
           result = JSON.parse(data);
           if (result && result.id>0) {
@@ -145,7 +154,11 @@ app.onPageAfterAnimation('all-user-events', function (page) {
             });
           }
         }
-      }
+      },
+      error: function (xhr, status) {
+        app.hidePreloader();
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
 
     });
   });
@@ -154,9 +167,10 @@ app.onPageAfterAnimation('all-user-events', function (page) {
     selectedEventId = $$(this).attr('event-id');
     var nocache = "?t="+moment().unix();
     var result;
+    app.showPreloader(language.SYSTEM.LOADING);
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/event/" + selectedEventId + nocache,
       method: "GET",
       success: function(data, status, xhr) {
@@ -166,11 +180,12 @@ app.onPageAfterAnimation('all-user-events', function (page) {
             selectedEventLocal = result;
             $$.ajax({
               async: true,
-              timeout: 5 * 1000,
+              timeout: 20 * 1000,
               url: config.server + "/api/getusertickets/"+ selectedEventId+ "/"+user.id + nocache,
               method: "GET",
               xhrFields: { withCredentials: true },
               success: function(data, status, xhr) {
+                app.hidePreloader();
                 if (status == 200){
                   var sellerTickets = JSON.parse(data);
                   mainView.router.load({
@@ -181,11 +196,19 @@ app.onPageAfterAnimation('all-user-events', function (page) {
                     }
                   });
                 }
-              }
+              },
+              error: function (xhr, status) {
+                app.hidePreloader();
+                alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+              },
             });
           }
         }
-      }
+      },
+      error: function (xhr, status) {
+        app.hidePreloader();
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
     });
 
   });
@@ -197,6 +220,7 @@ app.onPageAfterAnimation('all-user-events', function (page) {
   });
 
   $$('.home').on('click', function () {
+    app.removeFromCache('home.html');
     mainView.router.back ({
       url: 'home.html',
       force: true,
@@ -208,12 +232,14 @@ app.onPageAfterAnimation('all-user-events', function (page) {
     var eventId = $$(this).attr('event-id');
     var nocache = "?t="+moment().unix();
     var result;
+    app.showPreloader(language.SYSTEM.LOADING);
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/event/" + eventId + nocache,
       method: "GET",
       success: function(data, status, xhr) {
+        app.hidePreloader();
         if (status == 200 || status == 0 ){
           result = JSON.parse(data);
           if (result && result.id>0) {
@@ -224,14 +250,21 @@ app.onPageAfterAnimation('all-user-events', function (page) {
             });
           }
         }
-      }
+      },
+      error: function (xhr, status) {
+        app.hidePreloader();
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
     });
   });
 });
 
 app.onPageInit('event-details', function(page) {
   var thisEvent = page.context;
-  var location = eventsService.getEventLocation(thisEvent.maplink);
+  var location = null;
+  if (thisEvent.maplink) {
+    location = eventsService.getEventLocation(thisEvent.maplink);
+  }
   var map;
   var isFloat = function(n) {
    return n % 1 !== 0;
@@ -294,6 +327,236 @@ app.onPageInit('event-details', function(page) {
     });
   }
 
+  $$('.user-profile').on('click', function() {
+    /*var thisId = $$(this).attr('user-id');
+    thisEvent.user.isOrg = $$(this).attr('profile') === "1";
+    //thisProfile.isOrg = isOrg;\
+    alert(thisEvent.user.isOrg);
+    mainView.router.load({
+      url: 'views/user/user-profile.html',
+      context: thisEvent.user,
+    });*/
+    app.showTab('#eventPromoterTab');
+  });
+
+
+  $$('#eventPromoterTab').on('show', function() {
+    //thisEvent.user.notMe = true;
+    //if (user && thisEvent.user.id == user.id) {
+      thisEvent.user.notMe = true;
+      //alert("here");
+      if (thisEvent.user.organization && thisEvent.hostedby == "1" || (thisEvent.user.organization && thisEvent.hostedby.trim() == thisEvent.user.organization.name.trim() ) ) {
+        $$('#eventPromoterTab .profile').html(Template7.templates.userOrganizationTemplate(thisEvent.user));
+      } else  {
+        $$('#eventPromoterTab .profile').html(Template7.templates.userProfileTemplate(thisEvent.user));
+      }
+    //  delete user.notMe;
+  /*  } else {
+      var nocache = "?t="+moment().unix();
+      $$.ajax({
+        async: true,
+        timeout: 20 * 1000,
+        url: config.server + "/api/userinfo/"+thisEvent.user.id + nocache,
+        method: "GET",
+        success: function(data, status, xhr) {
+          if (status == 200 || status == 0 ){
+            var thisProfile = JSON.parse(data);
+            thisProfile.notMe = true;
+            //alert("here");
+            if (thisProfile.organization && thisEvent.hostedby == "1" || (thisProfile.organization && thisEvent.hostedby.trim() == thisProfile.organization.name.trim() ) ) {
+              $$('#eventPromoterTab .profile').html(Template7.templates.userOrganizationTemplate(thisProfile));
+            } else  {
+              $$('#eventPromoterTab .profile').html(Template7.templates.userProfileTemplate(thisProfile));
+            }
+          }
+        },
+        error: function(status, xhr) {
+          //app.hidePreloader();
+          app.alert(language.SYSTEM.GENERAL_SERVER_ERROR, function() {
+            app.showTab('#eventDetailsTab');
+          });
+        },
+      });
+    }*/
+   //alert(thisEvent.hostedby);
+  // else {
+    //  $$('#eventPromoterTab .profile').html(Template7.templates.userProfileTemplate(thisEvent.user));
+  //  }
+  });
+
+  $$('.page-content').on('scroll', function() {
+    $$('.floating-button').hide();
+    setTimeout(function() {
+      $$('.floating-button').show();
+    }, 2000);
+  });
+
+  if (user && SEARCHJS.matchObject(thisEvent.attending, {id: Number(user.id)})) {
+    $$('.attending').removeClass("color-gray");
+    $$('.attending').attr("attending", "true");
+  }
+  var updatingAttending = false;
+
+  $$('.attending').on('click', function() {
+    if (updatingAttending) return;
+    if (!user) {
+      app.loginScreen();
+      return;
+    }
+    updatingAttending = true;
+    var remove = 0;
+    if ($$(this).attr("attending")  == "true") {
+      remove = 1;
+    }
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      url: config.server + "/api/attending/" + user.id +"/"+ thisEvent.id +"/1/"+ remove + nocache,
+      method: "GET",
+      timeout: 20 * 1000,
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          thisEvent = JSON.parse(data);
+          if (remove == 1) {
+            $$('.attending').addClass("color-gray");
+            $$('.attending').attr("attending", "false");
+          } else {
+            $$('.attending').removeClass("color-gray");
+            $$('.attending').attr("attending", "true");
+            $$('.interested').addClass("color-gray");
+            $$('.interested').attr("interested", "false");
+          }
+          $$('.attending-count').html(thisEvent.attending.length);
+          $$('.interested-count').html(thisEvent.interested.length);
+          updatingAttending = false;
+        }
+      },
+      error: function (xhr, status){
+
+      },
+    });
+  });
+
+  if(user && SEARCHJS.matchObject(thisEvent.interested, {id: Number(user.id)})) {
+    $$('.interested').removeClass("color-gray");
+    $$('.interested').attr("interested", "true");
+  }
+  var updatingInterested = false;
+  $$('.interested').on('click', function() {
+    if (updatingInterested || $$('.attending').attr("attending") == "true") return;
+    if (!user) {
+      app.loginScreen();
+      return;
+    }
+    updatingInterested = true;
+    var remove = 0;
+    if ($$(this).attr("interested")  == "true") {
+      remove = 1;
+    }
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      url: config.server + "/api/attending/" + user.id +"/"+ thisEvent.id +"/2/"+ remove + nocache,
+      method: "GET",
+      timeout: 20 * 1000,
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          thisEvent = JSON.parse(data);
+          if (remove == 1) {
+            $$('.interested').addClass("color-gray");
+            $$('.interested').attr("interested", "false");
+          } else {
+            $$('.interested').removeClass("color-gray");
+            $$('.interested').attr("interested", "true");
+          }
+          $$('.interested-count').html(thisEvent.interested.length);
+          updatingInterested = false;
+        }
+      },
+      error: function (xhr, status){
+
+      },
+    });
+  });
+  //get quantity of persons in chat room
+  if (socket) {
+    socket.emit('room-count', {
+      room: 'room-'+thisEvent.id
+    });
+  }
+
+  $$('.show-chat').on('click', function() {
+    if (!user) {
+      app.loginScreen();
+      return;
+    }
+    //var eventId = $$(this).attr('event-id');
+    mainView.router.load({
+      url: 'views/user/chat.html',
+      context : {eventId: thisEvent.id},
+    });
+  });
+
+  $$('#eventDetailsTab').on('show', function() {
+    //app.showTab('#eventDetailsTab');
+    $$('.center').text(language.OTHER.DETAILS);
+    $$('.floating-button').show();
+  });
+
+  $$('#eventSellersTab').on('show', function() {
+    //app.showTab('#eventSellersTab');
+    $$('.center').text(language.EVENTS.SELLERS);
+    $$('#eventSellersTab').html(Template7.templates.eventSellersTemplate(thisEvent));
+    $$('.floating-button').hide();
+
+    $$('.message-seller').on('click', function() {
+      if (!user) {
+        app.loginScreen();
+        return;
+      }
+      var seller = $$(this).attr('user-id');
+      mainView.router.load({
+        url: 'views/user/chat.html',
+        context : {
+          receiver: seller
+        },
+      });
+    });
+
+    $$('.show-seller-profile').on('click', function() {
+      var thisId = $$(this).attr('user-id');
+      var nocache = "?t="+moment().unix();
+      $$.ajax({
+        async: true,
+        url: config.server + "/api/userinfo/" + thisId + nocache,
+        method: "GET",
+        timeout: 20 * 1000,
+        success: function(data, status, xhr) {
+          if (status == 200 || status == 0 ){
+            var thisProfile = JSON.parse(data);
+            mainView.router.load({
+              url: 'views/user/user-profile.html',
+              context: thisProfile,
+            });
+          }
+        },
+        error: function (xhr, status){
+          app.addNotification({
+            message: language.USER_ARE.USER_NOT_FOUND,
+            hold: 1500,
+          });
+        },
+      });
+    });
+  });
+
+  $$('#eventActivityTab').on('show', function() {
+    //app.showTab('#eventActivityTab');
+    $$('.center').text(language.OTHER.ACTIVITY);
+    $$('#eventActivityTab').html(Template7.templates.eventActivityTemplate(thisEvent));
+    $$('.floating-button').hide();
+  });
+
   $$('.facebook-link').on('click', function() {
     window.open(thisEvent.facebook, "_system", "");
   });
@@ -302,15 +565,25 @@ app.onPageInit('event-details', function(page) {
     window.open(thisEvent.twitter, "_system", "");
   });
 
+
+
   $$('.purchase-event-tickets').on('click', function () {
     if (!user) {
      app.loginScreen();
       return;
     }
-    mainView.router.load({
+
+    storeView = app.addView('.view-store', {
+      allowDuplicateUrls: true
+    });
+    storeView.router.load({
       url: 'views/purchase/select-quantity.html',
       context: thisEvent,
+      //ignoreCache:true,
+      reload:true,
     });
+    app.showTab('#store-tab');
+
   });
 });
 
@@ -355,8 +628,13 @@ app.onPageInit('create-new-event', function(page) {
 
   $$('.add-venue').on('click', function() {
     //alert(JSON.stringify(eventHost.displayValue));
+    if (uploading)  {
+      app.alert(language.OTHER.PLEASE_WAIT_UPLOADING);
+      return;
+    }
     if ( !eventsService.validateForm('#create-event-details-form') ) {return;}
     var eventDetails = app.formToJSON('#create-event-details-form');
+    eventDetails.description = eventDetails.description.replace(/\r?\n/g, '<br />');
     var host = eventHost.displayValue;
     if (!host || host[0] == "personal") { eventDetails.hostedby = 0; }
     else { eventDetails.hostedby = 1; }
@@ -364,7 +642,7 @@ app.onPageInit('create-new-event', function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 10 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/venuelist/" + nocache,
       method: "GET",
       contentType: "application/x-www-form-urlencoded",
@@ -404,13 +682,15 @@ app.onPageInit('create-new-event', function(page) {
         return;
       }
       app.popup('.image-popup');
+      $$('.crop-image').text('Save');
+      $$('.cropper-label').text("Main Image");
       $$('#imageCropper').prop('src', imageURI);
         var image = document.getElementById('imageCropper');
         cropper = Images.cropper(image, 27/10);
         $$('.cropper-label').text("Main Image");
     }, function (err) {
       cropper.destroy();
-      app.alert("Camera Error: " + err);
+      app.alert(err);
     },
       cameraOptions
     );
@@ -419,8 +699,11 @@ app.onPageInit('create-new-event', function(page) {
   $$('.crop-cancel').on('click', function () {
     $$('#add-event-image').prop('src', config.server+"/thumbnails/events/0/landscape.png");
     cropper.destroy();
+    if (thumbnailCropper) {
+      thumbnailCropper.destroy();
+    }
   });
-
+  var uploading = false;
   $$('.crop-image').on('click', function() {
 
       if ($$(this).text() == 'Save') {
@@ -435,6 +718,11 @@ app.onPageInit('create-new-event', function(page) {
       }
 
       var croppedThumbnailData = thumbnailCropper.getData();
+      thumbnailCropper.destroy();
+      //var resetCropper = function() {
+
+    //  };
+      //ßresetCropper();
       app.closeModal('.image-popup');
 
       var options = new FileUploadOptions();
@@ -450,9 +738,10 @@ app.onPageInit('create-new-event', function(page) {
       var ft = new FileTransfer();
       ft.onprogress = function(progressEvent) {
         app.showProgressbar(container, 'yellow');
+        uploading = true;
       };
       ft.upload(originalImage, encodeURI(Server.eventImageUpload), function(data) {
-        app.hideProgressbar();
+        //app.hideProgressbar();
         data = data.response.split(':');
         var imageServerPath = data[1];
         imageServerPath = imageServerPath.substring(1, imageServerPath.length - 2 );
@@ -470,18 +759,17 @@ app.onPageInit('create-new-event', function(page) {
           return item;
         }
         formatedImageData.push(formatImageData(croppedThumbnailData));
-        formatedImageData.push({});
+        //formatedImageData.push({});
         formatedImageData.push(formatImageData(croppedImageData));
 
         var request = {
-          src: [imageServerPath, ' '],
+          src: [imageServerPath, "/thumbnails/events/0/portrait.png"],
           images: [formatImageData(croppedThumbnailData), ' ', formatImageData(croppedImageData)],
-          eventId: selectedEventLocal.id
         };
         var nocache = "?t="+moment().unix();
         $$.ajax({
           async: true,
-          timeout: 10 * 1000,
+          timeout: 20 * 1000,
           url: config.server + "/api/eventimages" + nocache,
           method: "POST",
           contentType: "application/x-www-form-urlencoded",
@@ -490,17 +778,25 @@ app.onPageInit('create-new-event', function(page) {
           success: function(data, status, xhr) {
             if (status == 200 || status == 0 ){
               var result = data;
-            } else {
-              app.alert("There was a problem saving the event images")
+              app.hideProgressbar();
+              uploading = false;
             }
           },
           error: function(status, xhr) {
-            app.alert("There was a problem saving the event images")
+            app.alert("There was a problem saving the event images");
+            app.hideProgressbar();
+            uploading = false;
           }
         });
       }, function (err) {
         app.hideProgressbar();
-        cropper.destroy();
+        uploading = false;
+        if (cropper) {
+          cropper.destroy();
+        }
+        if (thumbnailCropper) {
+          thumbnailCropper.destroy();
+        }
         err = JSON.stringify(err);
         if (device.platform.toLowerCase() == "android" && parseFloat(device.version) < 5) {
           app.alert("Oops! Something went wrong. Android v"+device.version+" is not fully supported. Please modify your image using suntixx.com");
@@ -520,7 +816,6 @@ app.onPageInit('add-venue', function (page) {
     var longitude = data.latLng.lng();
     var newMapLink = "http://maps.google.com/?ie=UTF8&hq=&ll="+latitude+","+longitude+"&z=15";
     $$('#venue-maplink').val(newMapLink);
-
   };
   var map;
   geolocation.getCurrentPosition (function (position) {
@@ -534,16 +829,43 @@ app.onPageInit('add-venue', function (page) {
     map.addMarker({
       lat: latitude,
       lng: longitude,
-      title: 'My Location',
-      draggable: false,
+      title: 'Venue Location',
+      draggable: true,
       infoWindow: {
-        content: '<p>My Location</p>'
+        content: '<p>Venue Location</p>'
         },
       dragend: updateMapLink,
     });
   }, function (err) {
-  alert('geolocation error '+err);
-  }, { enableHighAccuracy: true, timeout: 5000 });
+  console.log('geolocation error '+ JSON.stringify(err));
+  map = new GMaps({
+    div: '#venue-map',
+  });
+  GMaps.geocode({
+    address: user.addresscountry,
+    callback: function(results, status) {
+      var latlng;
+      latlng = results[0].geometry.location;
+      map.setCenter(latlng.lat(), latlng.lng());
+      updateMapLink( {
+        latLng: {
+          lat: latlng.lat,
+          lng: latlng.lng,
+        },
+      });
+      map.addMarker({
+        lat: latlng.lat(),
+        lng: latlng.lng(),
+        title: 'My Venue',
+        draggable: true,
+        infoWindow: {
+          content: '<p>My Venue</p>'
+          },
+        dragend: updateMapLink,
+      });
+    },
+  });
+}, { enableHighAccuracy: true, timeout: 30000 });
 
 
   var countries = appPickers.countries('venue-country');
@@ -578,6 +900,55 @@ app.onPageInit('add-venue', function (page) {
     if ( !eventsService.validateForm('#add-venue-form') ) {return;}
     var eventDetails = page.context.newEvent;
     var venueDetails = app.formToJSON('#add-venue-form');
+    var saveEvent = function() {
+
+      var venueDetails = app.formToJSON('#add-venue-form');
+      var request = eventsService.generateNewEventRequest(eventDetails, venueDetails);
+      //alert(JSON.stringify(request));
+      //return;
+      var nocache = "?t="+moment().unix();
+      app.showIndicator();
+      var result = null;
+      $$.ajax({
+        async: true,
+        timeout: 60 * 1000,
+        url: config.server + "/api/event/" + nocache,
+        method: "POST",
+        contentType: "application/x-www-form-urlencoded",
+        xhrFields: { withCredentials: true },
+        data: request,
+        success: function(data, status, xhr) {
+          if (status == 200 || status == 0 ) {
+            var nocache = "?t="+moment().unix();
+            $$.ajax({
+              async: true,
+              timeout: 30 * 1000,
+              url: config.server + "/api/getprofileevents/" + user.id + nocache,
+              method: "GET",
+              success: function(data, status, xhr) {
+                if (status == 200 || status == 0 ){
+                  allUserEvents = JSON.parse(data);
+                  //allUserEvents = result;
+                  allUserEvents.scanningEventList = eventsService.addScanCondition(allUserEvents.scanningEventList);
+                  app.hideIndicator();
+                  mainView.router.load({
+                    url: 'views/events/myevents.html',
+                    context: allUserEvents,
+                  });
+                }
+              }, error: function (xhr, status){
+                app.hideIndicator();
+                mainView.router.loadPage('home.html');
+              },
+            });
+          }
+        },
+        error: function (xhr, status){
+          app.hideIndicator();
+          app.alert("The was an error while trying to create your event");
+        },
+      });
+    };
     if(venueDetails.maplink == "") {
       var venueAddress = venueDetails.address +" "+venueDetails.city+" "+venueDetails.country;
       GMaps.geocode({
@@ -593,7 +964,7 @@ app.onPageInit('add-venue', function (page) {
                 lng: latlng.lng,
               },
             });
-            map.addMarker({
+            /*map.addMarker({
               lat: latlng.lat(),
               lng: latlng.lng(),
               title: 'My Venue',
@@ -602,223 +973,23 @@ app.onPageInit('add-venue', function (page) {
                 content: '<p>My Venue</p>'
                 },
               dragend: updateMapLink,
-            });
+            });*/
+            saveEvent();
           } else {
             app.alert("We cannot locate your address.  Please drag the marker to the event location");
+            app.hideIndicator();
             map.setDraggable(true);
             map.setTitle("My Venue");
             return;
           }
         },
       });
+    } else {
+      saveEvent();
     }
-    var request = eventsService.generateNewEventRequest(eventDetails, venueDetails);
-    var nocache = "?t="+moment().unix();
-    app.showPreloader("Creating Event");
-    var result = null;
-    $$.ajax({
-      async: true,
-      timeout: 10 * 1000,
-      url: config.server + "/api/event/" + nocache,
-      method: "POST",
-      contentType: "application/x-www-form-urlencoded",
-      xhrFields: { withCredentials: true },
-      data: request,
-      success: function(data, status, xhr) {
-        if (status == 200 || status == 0 ){
-          result = JSON.parse(data);
-          app.hidePreloader();
-          if (result && result.id) {
-            selectedEventLocal = result;
-            mainView.router.load({
-              url: 'views/events/event.html',
-              context: selectedEventLocal
-            });
-          } else {
-            app.alert("The was an error while trying to create your event");
-          }
-        }
-      },
-      error: function (xhr, status){
-        app.hidePreloader();
-        app.alert("The was an error while trying to create your event");
-      },
-    });
   });
 });
 
-
-//******************************************************************************
-
-
-
-//===========================Sell Tickets
-
-app.onPageInit('sell-quantity', function(page) {
-  var userTickets = page.context.tickets;
-  var ticketLimit = null;
-  $$('#ticket-limit').on('click', function() {
-    var available = $$(this).attr('quantity');
-    if (available > 10) {
-      available = 10;
-    }
-    if (!ticketLimit) {
-      ticketLimit = appPickers.limitPicker('ticket-limit', available );
-    }
-    ticketLimit.open();
-  });
-
-  $$('.save-ticket-quantity').on('click', function() {
-    var data = app.formToJSON('#ticket-quantity-form');
-    data = util.getQtySummary(data);
-    var ticketList = [];
-    var userTicketList =[];
-    var totalPrice = 0;
-    for(var i=0;i<data.length;i++) {
-      var ticketId = Number(data[i].ticketid);
-      var userTicket = SEARCHJS.matchArray(userTickets, {id: ticketId});
-
-      userTicket = userTicket[0];
-      var quantity = Number(data[i].quantity);
-      if (quantity > 0) {
-        userTicketList.push(userTicket);
-        for(var n=0;n< quantity;n++) {
-          ticketList.push(userTicket);
-          totalPrice += Number(userTicket.ticket.price);
-        }
-      }
-    }
-    if (ticketList.length == 0) {
-      app.alert("A Quantity is required to continue");
-      return;
-    }
-    mainView.router.load ({
-      url: 'views/selltickets/ticket-names.html',
-      context: {
-        cart: ticketList,
-        total: totalPrice,
-        userTickets: userTicketList,
-        event: selectedEventLocal,
-      },
-    });
-  });
-});
-
-app.onPageInit('sell-ticket-names', function(page) {
-  var total = page.context.total;
-  var userTickets = page.context.userTickets;
-  $$('.save-ticket-names').on('click', function() {
-    var tickets =[];
-    var cartInfo = app.formToJSON("#ticket-names-form");
-    cartInfo = util.getCartSummary(cartInfo);
-    var checkoutCart =[];
-    for( var i=0;i<userTickets.length;i++) {
-      var ticket = userTickets[i].ticket;
-      var cartItem = SEARCHJS.matchArray(cartInfo, {ticketid: userTickets[i].id.toString()});
-      if (cartItem.length >0) {
-
-        var lineTotal = cartItem.length * ticket.price;
-        var lineTicketType = ticket.tickettype;
-        var lineQuantity = cartItem.length;
-        var lineTicketId = ticket.id;
-        var linePrice = ticket.price;
-        var lineNames =[];
-        for (var n=0;n<cartItem.length;n++) {
-          if (cartItem[n].nameonticket.trim() == "") {
-            lineNames.push("Admit One");
-            ticket.nameonticket = "Admit One";
-            ticket.userticketid = userTickets[i].id;
-            tickets.push(ticket);
-          } else {
-            lineNames.push(cartItem[n].nameonticket);
-            ticket.nameonticket = cartItem[n].nameonticket;
-            ticket.userticketid = userTickets[i].id;
-            tickets.push(ticket);
-          }
-        }
-
-        var cartLineItem = {
-          price: linePrice,
-          lineTotal: lineTotal,
-          ticketType: lineTicketType,
-          quantity: lineQuantity,
-          id: tickets[i].id,
-          names: lineNames,
-        };
-        checkoutCart.push(cartLineItem);
-      }
-    }
-    mainView.router.load({
-      url: 'views/selltickets/checkout.html',
-      context: {
-        total: total,
-        cart: checkoutCart,
-        event: selectedEventLocal,
-        tickets: tickets,
-      },
-    });
-  });
-});
-
-app.onPageInit('sell-checkout', function (page) {
-  var checkoutCart = page.context;
-  $$('.confirm-sale').on('click', function() {
-    var purchaser = app.formToJSON('#add-purchaser-form');
-    var capitalize = function(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-    var firstname = capitalize(purchaser.fname);
-    var lastname = capitalize(purchaser.lname);
-    var request = {
-      user_id: 0,
-      event_id: selectedEventLocal.id,
-		  pos_user_id: user.id,
-		  cardtype: "Committee-Mobile",
-		  nameoncard: firstname +" "+lastname,
-      email: purchaser.email,
-  		fname: firstname,
-  		lname: lastname,
-  		ticketsquantity: checkoutCart.tickets.length,
-  		totalprice: checkoutCart.total,
-      currency: selectedEventLocal.currency,
-      tickets: checkoutCart.tickets,
-      order: checkoutCart.cart,
-    };
-    app.showPreloader("Completing Payment")
-    var nocache = "?t="+moment().unix();
-    var result;
-    $$.ajax({
-      async: true,
-      timeout: 7 * 1000,
-      url: config.server + "/api/savecommpayment" + nocache,
-      method: "POST",
-      contentType: "application/x-www-form-urlencoded",
-      data: request,
-      xhrFields: { withCredentials: true },
-      success: function(data, status, xhr) {
-        if (status == 200 || status == 0 ){
-          result = JSON.parse(data);
-          app.hidePreloader();
-          app.alert("Sale was successful. Don't forget to collect the money", function() {
-            mainView.router.back({
-              url: 'home.html',
-              force:true,
-            });
-          });
-
-
-        }
-      },
-      error: function(status, xhr) {
-        app.hidePreloader();
-        app.alert("Oops! Something went wrong");
-        return;
-      },
-    });
-  });
-});
-
-//*******************************************************************************
 
 
 
@@ -874,7 +1045,7 @@ app.onPageInit('event-tickets', function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/disableticket/" + nocache,
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
@@ -915,7 +1086,7 @@ app.onPageInit('event-tickets', function(page) {
       var returnEvent;
       $$.ajax({
         async: true,
-        timeout: 5 * 1000,
+        timeout: 20 * 1000,
         url: config.server + "/api/deleteticket/" + nocache,
         method: "POST",
         contentType: "application/x-www-form-urlencoded",
@@ -955,7 +1126,7 @@ app.onPageInit('event-tickets', function(page) {
 
 
 app.onPageInit('edit-ticket', function(page) {
-  var cropper;
+  var cropper = null;
   var thisTicket = app.formToJSON('#edit-ticket-form');
   var imageType = "ticket";
   $$('.edit-image').on('click', function() {
@@ -973,7 +1144,7 @@ app.onPageInit('edit-ticket', function(page) {
         cropper = Images.cropper(image, 27/10);
     }, function (err) {
       cropper.destroy();
-      app.alert("Camera Error: " + err);
+      app.alert(err);
     },
       cameraOptions
     );
@@ -983,7 +1154,10 @@ app.onPageInit('edit-ticket', function(page) {
     cropper.destroy();
   });
 
+  var uploading = false;
+
  $$('.crop-image').on('click', function() {
+    uploading = true;
     var image = cropper.getCroppedCanvas().toDataURL('image/jpeg')
     var originalImage = $$(document).find('#imageCropper').prop('src');
     //var blob = util.dataToBlob(image);
@@ -1004,12 +1178,14 @@ app.onPageInit('edit-ticket', function(page) {
     var ft = new FileTransfer();
     ft.onprogress = function(progressEvent) {
       app.showProgressbar(container, 'yellow');
+      uploading = true;
     };
     ft.upload(originalImage, encodeURI(Server.ticketImageUpload), function(data) {
-      app.hideProgressbar();data = data.response.split(':');
+      //app.hideProgressbar();
+      data = data.response.split(':');
       var imageServerPath = data[1];
       imageServerPath = imageServerPath.substring(1, imageServerPath.length - 2 );
-      $$(document).find('#edit-ticket-image-path').val(imageServerPath);
+      $$('#edit-ticket-image-path').val(imageServerPath);
       var imageData = [];
       var item = {
         cropX: Math.round(cropData.x),
@@ -1029,22 +1205,23 @@ app.onPageInit('edit-ticket', function(page) {
       var result;
       $$.ajax({
         async: true,
-        timeout: 10 * 1000,
+        timeout: 20 * 1000,
         url: config.server + "/api/ticketimages" + nocache,
         method: "POST",
         contentType: "application/x-www-form-urlencoded",
         data: request,
         xhrFields: { withCredentials: true },
         success: function(data, status, xhr) {
-          app.hidePreloader();
+
           if (status == 200 || status == 0 ){
+            app.hideProgressbar();
+            uploading = false;
             result = data;
-          } else {
-            app.alert("There was a problem saving the ticket image");
           }
         },
         error: function(status, xhr) {
-          app.hidePreloader();
+          app.hideProgressbar();
+          uploading = false;
           app.alert("There was a problem saving the ticket image");
         }
 
@@ -1052,7 +1229,7 @@ app.onPageInit('edit-ticket', function(page) {
 
     }, function (err) {
       app.hideProgressbar();
-      app.hidePreloader();
+      uploading = false;
       err = JSON.stringify(err);
       if (device.platform.toLowerCase() == "android" && parseFloat(device.version) < 5) {
         app.alert("Oops! Something went wrong. Android v"+device.version+" is not fully supported. Please modify your image using suntixx.com");
@@ -1063,6 +1240,11 @@ app.onPageInit('edit-ticket', function(page) {
   });
 
   $$('.update-ticket').on('click', function () {
+    if (uploading)  {
+      app.alert(language.OTHER.PLEASE_WAIT_UPLOADING);
+      return;
+    }
+    if ( !eventsService.validateForm('#edit-ticket-form') ) {return;}
     var updatedTicket = app.formToJSON('#edit-ticket-form');
     updatedTicket.eventid = selectedEventLocal.id;
     var nocache = "?t="+moment().unix();
@@ -1070,10 +1252,10 @@ app.onPageInit('edit-ticket', function(page) {
     var returnEvent = {};
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/editticket/" +nocache,
       method: "POST",
-      timeout: 10 * 1000,
+      timeout: 20 * 1000,
       contentType: "application/x-www-form-urlencoded",
       data: updatedTicket,
       //data: data,
@@ -1082,6 +1264,9 @@ app.onPageInit('edit-ticket', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           app.hidePreloader();
+          if (cropper) {
+            cropper.destroy();
+          }
           app.alert("Ticket Update Successful!");
           returnEvent = JSON.parse(data);
           if (returnEvent && returnEvent.id) {
@@ -1092,6 +1277,8 @@ app.onPageInit('edit-ticket', function(page) {
               url: 'views/events/event-tickets.html',
               force: true,
               context: selectedEventLocal,
+              reload: true,
+              reloadPrevious: true,
             });
           }
         }
@@ -1116,11 +1303,11 @@ app.onPageInit('add-tickets', function(page) {
   var ticketCategoryPicker = appPickers.ticketCategory();
   var ticketLimitPicker = appPickers.ticketLimit();
   var cropper;
-  $$('input#ticket-category').on('click', function () {
+  $$('#ticket-category').on('focusin click', function () {
     ticketCategoryPicker.open();
   });
 
-  $$('input#ticket-limit').on('click', function () {
+  $$('#ticket-limit').on('focusin click', function () {
     ticketLimitPicker.open();
   });
 
@@ -1156,7 +1343,7 @@ app.onPageInit('add-tickets', function(page) {
         cropper = Images.cropper(image, 27/10);
     }, function (err) {
       cropper.destroy();
-      app.alert("Camera Error: " + err);
+      app.alert(err);
     },
       cameraOptions
     );
@@ -1166,6 +1353,7 @@ app.onPageInit('add-tickets', function(page) {
     cropper.destroy();
   });
 
+  var uploading = false;
   $$('.crop-image').on('click', function() {
     var image = cropper.getCroppedCanvas().toDataURL('image/jpeg')
     var originalImage = $$(document).find('#imageCropper').prop('src');
@@ -1187,12 +1375,15 @@ app.onPageInit('add-tickets', function(page) {
     var ft = new FileTransfer();
     ft.onprogress = function(progressEvent) {
       app.showProgressbar(container, 'yellow');
+      uploading = true;
     };
     ft.upload(originalImage, encodeURI(Server.ticketImageUpload), function(data) {
-      app.hideProgressbar();data = data.response.split(':');
+      //app.hideProgressbar();
+      data = data.response.split(':');
       var imageServerPath = data[1];
       imageServerPath = imageServerPath.substring(1, imageServerPath.length - 2 );
-      $$(document).find('#add-ticket-image-path').val(imageServerPath);
+      //alert(imageServerPath);
+      $$('#add-ticket-image-path').val(imageServerPath);
       var imageData = [];
       var item = {
         cropX: Math.round(cropData.x),
@@ -1202,38 +1393,42 @@ app.onPageInit('add-tickets', function(page) {
       };
       imageData.push(item);
       var request = {
-        ticketId: thisTicket.id,
-        ticketType: thisTicket.tickettype,
+        ticketId: 0,
+        //ticketType: thisTicket.tickettype,
         src: imageServerPath,
         images: imageData,
-        eventId: selectedEventLocal.id
+        //eventId: selectedEventLocal.id
       };
       var nocache = "?t="+moment().unix();
       var result;
       $$.ajax({
         async: true,
-        timeout: 10 * 1000,
+        timeout: 20 * 1000,
         url: config.server + "/api/ticketimages" + nocache,
         method: "POST",
         contentType: "application/x-www-form-urlencoded",
         data: request,
         xhrFields: { withCredentials: true },
         success: function(data, status, xhr) {
-          app.hidePreloader();
+
           if (status == 200 || status == 0 ){
+            app.hideProgressbar();
+            uploading = false;
             result = data;
-          } else {
-            app.alert("There was a problem saving the ticket image");
+            //alert(JSON.stringify(data));
           }
+          //app.hidePreloader();
         },
         error: function(status, xhr) {
-          app.hidePreloader();
+          app.hideProgressbar();
+          uploading = false;
           app.alert("There was a problem saving the ticket image");
         }
 
       });
     }, function (err) {
       app.hideProgressbar();
+      uploading = false;
       cropper.destroy();
       err = JSON.stringify(err);
       if (device.platform.toLowerCase() == "android" && parseFloat(device.version) < 5) {
@@ -1245,6 +1440,11 @@ app.onPageInit('add-tickets', function(page) {
   });
 
   $$('.save-ticket').on('click', function () {
+    if (uploading)  {
+      app.alert(language.OTHER.PLEASE_WAIT_UPLOADING);
+      return;
+    }
+    if ( !eventsService.validateForm('#add-ticket-form') ) {return;}
     var newTicket = app.formToJSON('#add-ticket-form');
     newTicket.eventId = selectedEventLocal.id;
     //alert(JSON.stringify(data));
@@ -1255,7 +1455,7 @@ app.onPageInit('add-tickets', function(page) {
       async: true,
       url: config.server + "/api/addticket/" + nocache,
       method: "POST",
-      timeout: 10 * 1000,
+      timeout: 30 * 1000,
       contentType: "application/x-www-form-urlencoded",
       data: newTicket,
       xhrFields: { withCredentials: true },
@@ -1357,7 +1557,7 @@ app.onPageAfterAnimation('update-venue-details', function(page) {
     });
   }, function (err) {
   alert('geolocation error '+err);
-  }, { enableHighAccuracy: true, timeout: 5000 });
+}, { enableHighAccuracy: true, timeout: 30000 });
 
 
   var venueType = appPickers.venueType('venue-type');
@@ -1390,6 +1590,7 @@ app.onPageAfterAnimation('update-venue-details', function(page) {
   });
 
   $$('.save-event').on('click', function () {
+    if ( !eventsService.validateForm('#update-venue-details-form') ) {return;}
     var newDetails = app.formToJSON('#update-venue-details-form');
     var options = {
       area: "venue",
@@ -1413,7 +1614,7 @@ app.onPageInit('update-event-details', function(page) {
   });
 
 
-  var cropper;
+  var cropper = null;
   var thumbnailCropper;
   var originalImage;
   var croppedImageData
@@ -1451,12 +1652,14 @@ app.onPageInit('update-event-details', function(page) {
         return;
       }
       app.popup('.image-popup');
+      $$('.crop-image').text('Save');
+      $$('.cropper-label').text("Main Image");
       $$('#imageCropper').prop('src', imageURI);
         var image = document.getElementById('imageCropper');
         cropper = Images.cropper(image, 27/10);
     }, function (err) {
       cropper.destroy();
-      app.alert("Camera Error: " + err);
+      app.alert(err);
     },
       cameraOptions
     );
@@ -1466,6 +1669,7 @@ app.onPageInit('update-event-details', function(page) {
     cropper.destroy();
   });
 
+  var uploading = false;
   $$('.crop-image').on('click', function() {
 
       if ($$(this).text() == 'Save') {
@@ -1480,6 +1684,12 @@ app.onPageInit('update-event-details', function(page) {
 
       //$$(document).find('#edit-event-thumbnail').prop('src', thumbnailCropper.getCroppedCanvas().toDataURL('image/jpeg'));
       var croppedThumbnailData = thumbnailCropper.getData();
+      /*var resetCropper = function() {
+        $$(this).text('Save');
+        $$('.cropper-label').text("Main Image");
+      };*/
+      resetCropper();
+      thumbnailCropper.destroy();
       app.closeModal('.image-popup');
 
       var options = new FileUploadOptions();
@@ -1495,9 +1705,10 @@ app.onPageInit('update-event-details', function(page) {
       var ft = new FileTransfer();
       ft.onprogress = function(progressEvent) {
         app.showProgressbar(container, 'yellow');
+        uploading = true;
       };
       ft.upload(originalImage, encodeURI(Server.eventImageUpload), function(data) {
-        app.hideProgressbar();
+        //app.hideProgressbar();
         data = data.response.split(':');
         var imageServerPath = data[1];
         imageServerPath = imageServerPath.substring(1, imageServerPath.length - 2 );
@@ -1523,7 +1734,7 @@ app.onPageInit('update-event-details', function(page) {
         var nocache = "?t="+moment().unix();
         $$.ajax({
           async: true,
-          timeout: 10 * 1000,
+          timeout: 20 * 1000,
           url: config.server + "/api/eventimages" + nocache,
           method: "POST",
           contentType: "application/x-www-form-urlencoded",
@@ -1532,17 +1743,33 @@ app.onPageInit('update-event-details', function(page) {
           success: function(data, status, xhr) {
             if (status == 200 || status == 0 ){
               var result = data;
-            } else {
-              app.alert("There was a problem saving the event images")
+              if (cropper) {
+                cropper.destroy();
+              }
+              if (thumbnailCropper) {
+                thumbnailCropper.destroy();
+              }
+              app.hideProgressbar();
+              uploading = false;
+            //} else {
+            //  app.alert("There was a problem saving the event images")
             }
           },
           error: function(status, xhr) {
+            app.hideProgressbar();
+            uploading = false;
             app.alert("There was a problem saving the event images")
           }
         });
       }, function (err) {
         app.hideProgressbar();
-        cropper.destroy();
+        uploading = false;
+        if (cropper) {
+          cropper.destroy();
+        }
+        if (thumbnailCropper) {
+          thumbnailCropper.destroy();
+        }
         err = JSON.stringify(err);
         if (device.platform.toLowerCase() == "android" && parseFloat(device.version) < 5) {
           app.alert("Oops! Something went wrong. Android v"+device.version+" is not fully supported. Please modify your image using suntixx.com");
@@ -1553,9 +1780,21 @@ app.onPageInit('update-event-details', function(page) {
   });
 
   $$('.save-event').on('click', function () {
+    if (uploading)  {
+      app.alert(language.OTHER.PLEASE_WAIT_UPLOADING);
+      return;
+    }
+    if ( !eventsService.validateForm('#update-event-details-form') ) {return;}
     var newDetails = app.formToJSON('#update-event-details-form');
+    newDetails.description = newDetails.description.replace(/\r?\n/g, '<br />');
     //newDetails.description = $$('#description').text();
     //alert(JSON.stringify(newDetails));
+    if (cropper) {
+      cropper.destroy();
+    }
+    if (thumbnailCropper) {
+      thumbnailCropper.destroy();
+    }
     var options = {
       area: "details",
       data: newDetails,
@@ -1627,11 +1866,13 @@ app.onPageInit('sell-tickets-list', function(page) {
     }
     var tickets = util.getTicketsToSell(selectedTickets, sellerTickets);
     //alert(JSON.stringify(tickets));
+    // = app.addView('.view-store', {});
     mainView.router.load ({
       url: 'views/selltickets/select-quantity.html',
       context: {
         event:selectedEventLocal,
         tickets: tickets,
+        sellerTickets: sellerTickets,
       },
       //ignoreCache: true,
     });
@@ -1658,7 +1899,7 @@ app.onPageInit('purchase-committee-plan', function(page) {
     app.showIndicator();
     var result = {};
     $$.ajax({
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       async: true,
       url: config.server + "/api/addcommitteeplan/"+nocache,
       method: "PUT",
@@ -1741,7 +1982,7 @@ app.onPageInit('committee-tickets-list', function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/deleteticket/" + nocache,
       method: "POST",
       data: request,
@@ -1773,7 +2014,7 @@ app.onPageInit('committee-tickets-list', function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/disableticket/" + nocache,
       method: "POST",
       data: request,
@@ -1807,7 +2048,7 @@ app.onPageInit('edit-committee-ticket', function (page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/editcommitteeticket/" + nocache,
       method: "POST",
       data: request,
@@ -1863,10 +2104,9 @@ app.onPageInit('committee-settings', function(page) {
     app.showPreloader("Deleting Ticket");
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/deleteuserticket/" + userTicketId + nocache,
       method: "GET",
-      data: request,
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var updatedUserTickets = JSON.parse(data);
@@ -1884,6 +2124,13 @@ app.onPageInit('committee-settings', function(page) {
     });
   });
 
+  $$('.back-committee-list').on('click', function () {
+    mainView.router.back({
+      url: 'views/events/update-committee.html',
+      context: selectedEventLocal,
+      force: true,
+    });
+  });
 
   $$('.disable').on('click', function () {
     var status = $$(this).attr("status");
@@ -1901,7 +2148,7 @@ app.onPageInit('committee-settings', function(page) {
     app.showPreloader("Updating Ticket");
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/updateuserticket" + nocache,
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
@@ -1927,16 +2174,18 @@ app.onPageInit('committee-settings', function(page) {
   $$('.save-quantity').on('click', function () {
     var userTicketId = $$(this).attr("userTicketId");
     var newQuantity = $$('#newquantity-'+userTicketId).val();
+    var oldQuantity = $$('#oldquantity-'+userTicketId).val();
     //alert(userTicketId);
     var request = {
       newquantity: newQuantity,
+      oldquantity: oldQuantity,
       userticketid: userTicketId,
     };
     var nocache = "?t="+moment().unix();
     app.showPreloader("Updating Ticket");
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/updateuserticket" + nocache,
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
@@ -1986,7 +2235,7 @@ app.onPageInit('committee-tickets-assignment', function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/assigntickets/"+ request.eventId+ "/"+request.ticketIds+"/"+request.userId + nocache,
       method: "GET",
       //contentType: "application/x-www-form-urlencoded",
@@ -2043,7 +2292,7 @@ app.onPageInit('add-committee-tickets', function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/addcommitteeticket/" + nocache,
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
@@ -2086,6 +2335,7 @@ app.onPageInit('add-committee-tickets', function(page) {
 
 
   $$('.save-ticket').on('click', function() {
+    if(!eventsService.validateForm('#add-ticket-form')) {return;}
     request = app.formToJSON('#add-ticket-form');
     request.eventId = selectedEventLocal.id;
     saveTicket();
@@ -2129,7 +2379,7 @@ app.onPageInit('update-committee',  function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/deletecommittee/"+selectedEventLocal.id+"/"+commUserId + nocache,
       method: "GET",
       xhrFields: { withCredentials: true },
@@ -2146,7 +2396,7 @@ app.onPageInit('update-committee',  function(page) {
     var nocache = "?t="+moment().unix();
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/getusertickets/"+ selectedEventLocal.id+ "/"+commUserId + nocache,
       method: "GET",
       //contentType: "application/x-www-form-urlencoded",
@@ -2185,15 +2435,19 @@ app.onPageInit('update-committee',  function(page) {
                       '<div class="row">' +
                         '<div class="item-content  col-50">' +
                           '<div class="item-inner">' +
+                          '<i class="icon icon-required"></i>'+
+                          '<div class="item-subtitle color-red form-error fname'+ offset+'"></div>'+
                             '<div class="item-input">' +
-                              '<input type="text" placeholder="First Name" class="fname" name="fname'+ offset+'"/>' +
+                              '<input type="text" placeholder="First Name" class="fname" name="fname'+ offset+'" required/>' +
                             '</div>' +
                           '</div>' +
                         '</div>' +
                         '<div class="item-content col-50">' +
                           '<div class="item-inner">'+
+                          '<i class="icon icon-required"></i>'+
+                          '<div class="item-subtitle color-red form-error lname'+ offset+'"></div>'+
                             '<div class="item-input">'+
-                              '<input type="text" placeholder="Last Name" class="lname" name="lname'+ offset+'"/>'+
+                              '<input type="text" placeholder="Last Name" class="lname" name="lname'+ offset+'" required/>'+
                             '</div>'+
                           '</div>'+
                       '  </div>'+
@@ -2201,8 +2455,10 @@ app.onPageInit('update-committee',  function(page) {
                       '<div class="row">'+
                         '<div class="item-content">'+
                           '<div class="item-inner">'+
+                          '<i class="icon icon-required"></i>'+
+                          '<div class="item-subtitle color-red form-error email'+ offset+'"></div>'+
                             '<div class="item-input">'+
-                              '<input type="email" placeholder="Email Address" class="email" name="email'+ offset+'"/>'+
+                              '<input type="email" placeholder="Email Address" class="email" name="email'+ offset+'" required/>'+
                             '</div>'+
                           '</div>'+
                         '</div>'+
@@ -2221,6 +2477,7 @@ app.onPageInit('update-committee',  function(page) {
         }
 
   $$('.save-committee').on('click', function() {
+    if (!eventsService.validateForm('#add-committee-form')) {return;}
     var formData = app.formToJSON('#add-committee-form');
     var request = {
       committeeList: [],
@@ -2234,12 +2491,14 @@ app.onPageInit('update-committee',  function(page) {
       item.email = (formData['email'+ i]);
       request.committeeList.push(item);
     }
+    //alert(JSON.stringify(request.committeeList));
+    //return;
     var nocache = "?t="+moment().unix();
     app.showPreloader("Adding Committee Members");
     var returnEvent;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/addcommittee/" + nocache,
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
@@ -2292,17 +2551,17 @@ app.onPageInit('update-access-list', function(page) {
     var result;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/deletescanner/"+selectedEventLocal.id+"/"+scannerId + nocache,
       method: "GET",
       xhrFields: { withCredentials: true },
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           result = JSON.parse(data);
-          alert(JSON.stringify(result));
+          //alert(JSON.stringify(result));
           if (result && result.id) {
             selectedEventLocal = result;
-            alert(JSON.stringify(selectedEventLocal));
+            //alert(JSON.stringify(selectedEventLocal));
           }
         }
       },
@@ -2330,15 +2589,19 @@ app.onPageInit('add-scanners', function(page) {
                       '<div class="row">' +
                         '<div class="item-content  col-50">' +
                           '<div class="item-inner">' +
+                          '<i class="icon icon-required"></i>'+
+                          '<div class="item-subtitle color-red form-error fname'+ offset+'"></div>'+
                             '<div class="item-input">' +
-                              '<input type="text" placeholder="First Name" class="fname" name="fname'+ offset+'"/>' +
+                              '<input type="text" placeholder="First Name" class="fname" name="fname'+ offset+'" required/>' +
                             '</div>' +
                           '</div>' +
                         '</div>' +
                         '<div class="item-content col-50">' +
                           '<div class="item-inner">'+
+                          '<i class="icon icon-required"></i>'+
+                          '<div class="item-subtitle color-red form-error lname'+ offset+'"></div>'+
                             '<div class="item-input">'+
-                              '<input type="text" placeholder="Last Name" class="lname" name="lname'+ offset+'"/>'+
+                              '<input type="text" placeholder="Last Name" class="lname" name="lname'+ offset+'" required/>'+
                             '</div>'+
                           '</div>'+
                       '  </div>'+
@@ -2346,8 +2609,10 @@ app.onPageInit('add-scanners', function(page) {
                       '<div class="row">'+
                         '<div class="item-content">'+
                           '<div class="item-inner">'+
+                          '<i class="icon icon-required"></i>'+
+                          '<div class="item-subtitle color-red form-error email'+ offset+'"></div>'+
                             '<div class="item-input">'+
-                              '<input type="email" placeholder="Email Address" class="email" name="email'+ offset+'"/>'+
+                              '<input type="email" placeholder="Email Address" class="email" name="email'+ offset+'" required/>'+
                             '</div>'+
                           '</div>'+
                         '</div>'+
@@ -2367,6 +2632,7 @@ app.onPageInit('add-scanners', function(page) {
 
 
   $$('.save-scanners').on('click', function() {
+    if ( !eventsService.validateForm('#add-scanners-form') ) {return;}
     var formData = app.formToJSON('#add-scanners-form');
     var request = {
       scannerList: [],
@@ -2385,13 +2651,13 @@ app.onPageInit('add-scanners', function(page) {
     var returnEvent;
     $$.ajax({
       async: true,
-      timeout: 5 * 1000,
+      timeout: 20 * 1000,
       url: config.server + "/api/addscanners/" + nocache,
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
       //contentType: "application/json; charset=utf-8",
       xhrFields: { withCredentials: true },
-      timeout: 10 * 1000,
+      timeout: 20 * 1000,
       //data: JSON.stringify(request),
       data: request,
       success: function(data, status, xhr) {
@@ -2425,7 +2691,7 @@ app.onPageInit('report', function (page) {
       var result;
       $$.ajax({
         async: true,
-        timeout: 5 * 1000,
+        timeout: 20 * 1000,
         url: config.server + "/api/event/" + selectedEventLocal.id + nocache,
         method: "GET",
         success: function(data, status, xhr) {

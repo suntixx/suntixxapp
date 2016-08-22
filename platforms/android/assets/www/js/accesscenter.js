@@ -77,11 +77,11 @@ app.onPageInit('scanner-result', function (page) {
   ticketList = util.serializeTicketTypes(selectedTickets);
 
   var manualScan = function() {
-    var code = $$('.barcode').val();
+    var code = $$('.barcode').val().trim();
     if (code == "") {
        autoScan();
     } else {
-      var scannedTime = new Date().toISOString();
+      var scannedTime = moment.utc(new Date());
       var nocache = "?t="+moment().unix();
       $$.ajax({
         async: true,
@@ -107,6 +107,20 @@ app.onPageInit('scanner-result', function (page) {
     if(e.which == 13) {
       manualScan();
     }
+  });
+
+  $$('.back-access-home').on('click', function() {
+    for (var i in selectedEventLocal.tickets) {
+      var selectedTicket = ticketList.indexOf(selectedEventLocal.tickets[i].id);
+      if (selectedTicket >= 0) {
+        selectedEventLocal.tickets[i].chosen = true;
+      }
+    }
+    mainView.router.back ({
+      url: 'views/access/assigned-access-home.html',
+      force:true,
+      context: selectedEventLocal,
+    });
   });
 
   $$('.auto-scan').prop('checked', storage.getItem('autoscan'));
@@ -135,9 +149,10 @@ app.onPageInit('scanner-result', function (page) {
 
 app.onPageInit('scan-history', function(page) {
   var loading = false;
-
+  var scanHistory = page.context.scanhistory.data;
   var lastIndex = $$('.list-block li').length;
   var maxItems = scanHistory.length;
+  //var maxItems = scanHistory.length;
   // Append items per load
   var itemsPerLoad = 20;
 
@@ -151,7 +166,7 @@ app.onPageInit('scan-history', function(page) {
       loading = false;
 
       if (lastIndex >= maxItems) {
-        myApp.detachInfiniteScroll($$('.infinite-scroll'));
+        app.detachInfiniteScroll($$('.infinite-scroll'));
         $$('.infinite-scroll-preloader').remove();
         return;
       }
@@ -182,7 +197,7 @@ var autoScan = function() {
   cordova.plugins.barcodeScanner.scan(
     function (result) {
       var code = result.text;
-      var scannedTime = new Date().toISOString();
+      var scannedTime = moment.utc(new Date());
       var nocache = "?t="+moment().unix();
       $$.ajax({
         async: true,
@@ -214,11 +229,12 @@ var updateScanHistory = function(code, scannedTime, scanResult) {
   if (!db) {
     return;
   }
-  var scanDate = new Date(scannedTime).moment('YYYY-MM-DD HH:MM:SS');
+  var scanDate = moment.utc(scannedTime).format('YYYY-MM-DD HH:MM:SS');
   var valid = scanResult.TipColor.toLowerCase() == 'green' ? true : false;
   db.transaction(function(tx) {
     var sql = 'INSERT INTO scanhistory (code, scandate, scanresponse, scancolor, valid) VALUES (?,?,?,?,?)';
     tx.executeSql(sql, [code.toUpperCase(), scanDate, scanResult.TipContent.toLowerCase(), scanResult.TipColor.toLowerCase(),  valid], function(tx, resultSet) {
+      console.log("succcesful scan history save "+code + " at "+scanDate);
     }, function(tx, error) {
       //alert('INSERT error: ' + error.message);
     });
@@ -227,7 +243,7 @@ var updateScanHistory = function(code, scannedTime, scanResult) {
         message: 'Unable to save scan history'
     });
   }, function() {
-    //alert('transaction ok');
+    console.log('transaction ok');
   });
 };
 //update scanner page with recent scan results information

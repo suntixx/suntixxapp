@@ -1,5 +1,5 @@
-var Menus = {
-  event: '<div class="list-block page-content accordion-list custom-accordion">' +
+var Menus = {};
+Menus.event = '<div class="list-block page-content accordion-list custom-accordion">' +
           ' <ul>' +
           '   <li class="accordion-item">'+
           '     <a href="#" class="item-link item-content">'+
@@ -87,9 +87,9 @@ var Menus = {
           '      </a>'+
           '    </li>'+
           '  </ul>'+
-          '</div>',
+          '</div>';
 
-    previousEvent:  '<div class="list-block page-content accordion-list custom-accordion">' +
+Menus.previousEvent = '<div class="list-block page-content accordion-list custom-accordion">' +
                     ' <ul>' +
                     '   <li class="accordion-item">'+
                     '     <a href="#" class="item-link item-content">'+
@@ -113,10 +113,10 @@ var Menus = {
                     '      </a>'+
                     '    </li>'+
                     '  </ul>'+
-                    '</div>',
+                    '</div>';
 
-    user: '<div class="page-content list-block">'+
-          '  <ul>'+
+Menus.user = '<div class="page-content list-block">'+
+          '  <ul id="user-menu">'+
           '    <li>'+
           '      <a href="views/user/update-details.html" class="close-panel item-link item-content user-menu-link" menuItem="details">'+
           '        <div class="item-inner">'+
@@ -145,19 +145,24 @@ var Menus = {
           '        </div>'+
           '      </a>'+
           '    </li>'+
-          //'    <li>'+
+          /*'    <li>'+
           //'      <a href="views/user/update-preferences.html" class="close-panel item-link item-content user-menu-link" menuItem="preferences">'+
-          //'        <div class="item-inner">'+
-          //'          <div class="item-title">Manage Recommended</div>'+
-          //'        </div>'+
-          //'      </a>'+
-          //'    </li>'+
-
-
+          '        <div class="item-inner">'+
+          '          <div class="item-title">Preferences</div>'+
+          '        </div>'+
+          '      </a>'+
+          '    </li>'+*/
+          '     <li>'+
+          '       <a href="#" class="close-panel item-link facebook-menu item-content">'+
+          '        <div class="item-inner">'+
+          '         <div class="item-title"></div>'+
+          '        </div>'+
+          '       </a>'+
+          '    </li>'+
           '  </ul>'+
-          '</div>',
+          '</div>';
 
-  scan: '<div class="page-content list-block">'+
+Menus.scan = '<div class="page-content list-block">'+
         '  <ul>'+
         '    <li>'+
         '      <a href="#" class="close-panel item-link item-content open-scan-history">'+
@@ -180,9 +185,9 @@ var Menus = {
         '      </div>' +
         '    </li>'+
         '  </ul>'+
-        '</div>',
+        '</div>';
 
-  ownerScan: '<div class="page-content list-block">'+
+Menus.ownerScan = '<div class="page-content list-block">'+
         '  <ul>'+
         '    <li>'+
         '      <a href="#" class="close-panel item-link item-content open-scan-history">'+
@@ -213,17 +218,18 @@ var Menus = {
         '      </div>' +
         '    </li>'+
         '  </ul>'+
-        '</div>',
-};
+        '</div>';
 
-var scanHistory =[];
+
+//var scanHistory =[];
 $$(document).on('click', '.open-scan-history', function () {
   if (!db) {
     app.alert("Scan History is unavailable");
     return;
   }
+  var scanHistory = [];
   db.readTransaction(function(tx) {
-    tx.executeSql("SELECT * FROM scanhistory ORDER BY scandate DESC", [], function(tx, resultSet) {
+    tx.executeSql("SELECT * FROM scanhistory ORDER BY created_on DESC", [], function(tx, resultSet) {
       for(var x = 0; x < resultSet.rows.length; x++) {
         scanHistory.push(resultSet.rows.item(x));
       }
@@ -231,14 +237,15 @@ $$(document).on('click', '.open-scan-history', function () {
       //alert('SELECT error: ' + error.message);
     });
   }, function(error) {
-    app.alert("There was a problem retrieving the scan history");
+    console.log(error);
+    app.alert("There was a problem retrieving the scan history.");
   }, function() {
     var scanHistoryDisplay = {
       data: scanHistory,
       scroll: false,
     };
     if (scanHistory.length > 20) {
-      scanHistoryDisplay.data = scanHistory.slice(0,20);
+      //scanHistoryDisplay.data = scanHistory.slice(0,20);
       scanHistoryDisplay.scroll = true;
     }
     mainView.router.load({

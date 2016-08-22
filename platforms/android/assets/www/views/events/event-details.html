@@ -23,9 +23,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Name</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Name</div>
+                <div class="item-subtitle color-red form-error name"></div>
                 <div class="item-input">
-                  <input type="text" name="name" value="{{name}}"/>
+                  <input type="text" name="name" value="{{name}}" required/>
                   <input type="hidden" name="imageLandscapePath" value=" " id="edit-event-image-path"/>
                   <input type="hidden" name="id" value="{{id}}"/>
                 </div>
@@ -58,7 +59,7 @@
                 <div class="item-title label">Private</div>
                 <div class="item-input">
                   <label class="label-switch">
-                    <input type="checkbox" name="private">
+                    <input type="checkbox" name="private" {{#js_compare "this.status_id == 19"}}checked="checked"{{/js_compare}}>
                     <div class="checkbox"></div>
                   </label>
                 </div>
@@ -68,9 +69,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Description</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Description</div>
+                <div class="item-subtitle color-red form-error description"></div>
                   <div class="item-input">
-                   <textarea name="description">{{description}}</textarea>
+                   <textarea type="text" name="description"  required>{{description}}</textarea>
                  </div>
               </div>
             </div>
@@ -78,7 +80,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Currency</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Currency</div>
                 <div class="item-input">
                   <input type="text" name="currency" value="{{currency}}" id="currency">
                 </div>
@@ -88,9 +90,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Start Date</div>
+                <div class="item-title label"><i class="icon icon-required"></i>Start Date</div>
+                <div class="item-subtitle color-red form-error start"></div>
                 <div class="item-input">
-                  <input type="datetime-local" name="start" value="{{js "this.starttime.substring(0,19)"}}"/>
+                  <input type="datetime-local" name="start" value="{{js "this.starttime.substring(0,19)"}}" id="start" required/>
                 </div>
               </div>
             </div>
@@ -98,9 +101,10 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">End Date</div>
+                <div class="item-title label"><i class="icon icon-required"></i>End Date</div>
+                <div class="item-subtitle color-red form-error end"></div>
                 <div class="item-input">
-                  <input type="datetime-local" name="end" value="{{js "this.endtime.substring(0,19)"}}"/>
+                  <input type="datetime-local" name="end" value="{{js "this.endtime.substring(0,19)"}}"  required/>
                 </div>
               </div>
             </div>

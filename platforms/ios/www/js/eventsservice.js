@@ -3,9 +3,9 @@ function formatEventData (serverEvent, condition) {
   //alert("here");
   var start = new Date(serverEvent.starttime);
   var end = new Date(serverEvent.endtime);
-  data.starttime = moment(start).format("HH:mm");
+  data.starttime = moment.utc(start).format("HH:mm");
   data.startdate = moment(start).format("YYYY-MM-DD");
-  data.endtime = moment(end).format("HH:mm");
+  data.endtime = moment.utc(end).format("HH:mm");
   data.enddate = moment(end).format("YYYY-MM-DD");
   data.category_id = serverEvent.category_id;
   data.restrictions_id = serverEvent.restrictions_id;
@@ -35,24 +35,45 @@ function formatEventData (serverEvent, condition) {
   return data;
 }
 
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
 function validateStartTime(dateString) {
-    var today = new Date();
-    var startDate = new Date(dateString);
-    return startDate >= today;
+    var todayString = new Date().toString();
+    //var tz = todayString.indexOf("GMT");
+    //var timezone = todayString.slice(tz+3, tz+8);
+    //console.log(todayString);
+    //console.log(timezone);
+    var today = moment.utc(todayString.slice(0,23));
+    //console.log(today);
+
+    var startDate = moment(new Date(dateString));
+    //console.log(startDate);
+    //console.log(startDate.diff(today));
+    return startDate.diff(today) > 0;
 }
 
 function validateEndTime(dateString) {
-    var startdate = new Date( $$('#starttime').val() );
-    var endDate = new Date(dateString);
-    return endDate > startdate;
+    var startdate = moment.utc(new Date( $$('#start').val() ));
+    console.log(startdate);
+    var endDate = moment.utc(new Date(dateString));
+    console.log(endDate);
+    console.log(endDate.diff(startdate));
+    return endDate.diff(startdate) > 0;
+}
+
+function validateNumber(number) {
+  return !isNaN(parseFloat(number)) && isFinite(number);
 }
 
 var eventsService = {
 
   canScan: function (event) {
-    var now = moment();
+    var now = new Date();
 
-    if (moment(now).add('h', 6).toDate() > moment(event.starttime).toDate()) {
+    if (moment.utc(now).add('h', 6).toDate() > moment.utc(event.starttime).toDate()) {
       return false;
     }
     return true;
@@ -69,15 +90,15 @@ var eventsService = {
       return result;
     } else {
       return null;
-    }  
+    }
   },
 
   addScanCondition: function (events) {
     //alert(JSON.stringify(events));
-    var now = moment();
+    var now = new Date();
     if(events) {
       for (var i in events) {
-        if (moment(now).add('h', 6).toDate() > moment(events[i].starttime).toDate()) {
+        if (moment.utc(now).add('h', 6).toDate() > moment.utc(events[i].starttime).toDate()) {
           events[i].CanScan = 0;
         }
         events[i].CanScan = 1;
@@ -92,7 +113,7 @@ var eventsService = {
       index: 0,
       events: [],
     };
-    var offset = lastIndex + 2;
+    var offset = lastIndex + 5;
     if (offset > list.length) {
       offset = list.length;
     }
@@ -120,39 +141,56 @@ var eventsService = {
           $$('.'+name).text('This Field Is Required');
           invalidFields++;
           //next();
-        } else if (type == "date" && name == "start" && !validateStartTime(value)) {
+        } else if (type == "datetime-local" && name == "start" && !validateStartTime(value)) {
           $$('.'+name).text('Event must start in the future');
           invalidFields++;
           //next();
-        } else if (type == "date" && name == "end" && !validateEndTime(value)) {
+        } else if (type == "datetime-local" && name == "end" && !validateEndTime(value)) {
           $$('.'+name).text('Event must end after it starts');
           invalidFields++;
         //  next();
         } else if (type == "hidden" && name == "imageLandscapePath" && value == " ") {
             $$('.'+name).text('An Image is required');
             invalidFields++;
+        } else if (type == "email" && !validateEmail(value)) {
+          $$('.'+name).text('Error in your email');
+          invalidFields++;
+          //next();
+        } else if (type == "number" && !validateNumber(value)) {
+          $$('.'+name).text('Value must be a number');
+          invalidFields++;
+          //next();
         }
 
      }
    });
-   return invalidFields == 0;
+   if(invalidFields > 0) {
+     app.alert(language.OTHER.FORM_ERRORS, function() {
+       return false;
+     });
+   } else {
+     return true;
+   }
  },
+
 
   generateUpdateEventRequest: function (serverEvent, options) {
     var result;
     var data = options.data;
     if (options.area == "details") { //update event details
       result = data;
-      result.starttime = moment(data.start).format("HH:mm");
+      result.starttime = moment.utc(data.start).format("HH:mm");
       result.startdate = moment(data.start).format("YYYY-MM-DD");
-      result.endtime = moment(data.end).format("HH:mm");
+      result.endtime = moment.utc(data.end).format("HH:mm");
       result.enddate = moment(data.end).format("YYYY-MM-DD");
       result.category_id = util.getCategoryId(data.category);
       result.restrictions_id = util.getRestrictionId(data.restriction);
+      //alert(result.restrictions_id+ " "+ data.restriction);
       result.dresscode_id = util.getDresscodeId(data.dresscode);
-      result.status_id = 19;
-      if (data.private.length == 0) {
-        result.status_id = 18;
+
+      result.status_id = "18";
+      if (data.private == "on") {
+        result.status_id = "19";
       }
       delete result.private;
       delete result.category;
@@ -255,7 +293,7 @@ var eventsService = {
   },
 
   generateNewEventRequest: function(eventInfo, venue) {
-    eventInfo.hostedby = user.name2+' '+user.name4
+    //eventInfo.hostedby = user.name2+' '+user.name4
     eventInfo.VenueSelect = venue.name;
     eventInfo.venue = venue.address;
     eventInfo.city = venue.city;
@@ -272,17 +310,17 @@ var eventsService = {
     eventInfo.featured = " ";
     var start = new Date(eventInfo.start);
     var end = new Date(eventInfo.end);
-    eventInfo.starttime = moment(start).format("HH:mm");
+    eventInfo.starttime = moment.utc(start).format("HH:mm");
     eventInfo.startdate = moment(start).format("YYYY-MM-DD");
-    eventInfo.endtime = moment(end).format("HH:mm");
+    eventInfo.endtime = moment.utc(end).format("HH:mm");
     eventInfo.enddate = moment(end).format("YYYY-MM-DD");
     eventInfo.category_id = util.getCategoryId(eventInfo.category);
     eventInfo.restrictions_id = util.getRestrictionId(eventInfo.restriction);
     eventInfo.dresscode_id = util.getDresscodeId(eventInfo.dresscode);
     eventInfo.venuetype_id = util.getVenueTypeId(venue.venuetype);
-    eventInfo.status_id = 19;
-    if (eventInfo.private.length == 0) {
-      eventInfo.status_id = 18;
+    eventInfo.status_id = "18";
+    if (eventInfo.private == "on") {
+      eventInfo.status_id = "19";
     }
     var repeatsTimeArray =[{
       starttime: eventInfo.startdate+ ' '+eventInfo.starttime,

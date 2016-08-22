@@ -1,61 +1,51 @@
 var app;
-
-storage = window.localStorage;
-var autoScan = storage.getItem('autoscan');
-if (!autoScan) {
-  storage.setItem('autoscan', false);
+var $$ = Dom7;
+var storage = window.localStorage;
+var user = JSON.parse(storage.getItem('userData'));
+if (user) {
+  user.password = storage.getItem('userPassword');
 }
-
-var config = {
-  server: "https://www.suntixx.com",
-  version: "1.1.6",
-  Developer: "Jason Cox",
-  appName: "Sun Tixx",
-  secret: "SunT1xxPhon#AppAPISecret",
-  owner: "Sun Tixx Caribbean",
-  settings: {
-    autoScan :storage.getItem('autoscan'),
-  },
-  paypalIds: {
-      "PayPalEnvironmentProduction": "AcrD2hBfccAOZ5yjNum7YtVjhGSEd-G3fExIUHy-1_EpFYwARcG8SGkK5U0N",
-      "PayPalEnvironmentSandbox" :"AfbXNxAP7tf-teLj2t8S4gP2eVyTAznqr2tIRC-u79hS6KLjB7cYtOzGML-0"
-  },
-};
-moment().format();
-
-var user = null;
 var selectedEventLocal;
 var allUserEvents;
-var storage;
-var storedUser;
 var camera;
 var geolocation;
 var connection;
 var fileTransfer;
 var fileSystem;
 var db;
-var immersiveMode;
+var language;
+var socket;
+var push;
+var config;
+var storeView = null;
+var autoScan = storage.getItem('autoscan');
+if (!autoScan) {
+  storage.setItem('autoscan', false);
+}
 
-
-config.settings.autoScan = autoScan;
-
-
-user = {
-  id: storage.getItem('userId'),
-  email: storage.getItem('userEmail'),
-  password: storage.getItem('userPassword'),
-};
-
-
+$$.ajax ({
+  method: "GET",
+  async: false,
+  url: "config/config.json",
+  success: function(data, status, xhr) {
+    config = JSON.parse(data);
+    config.settings.autoScan = autoScan;
+  },
+  error: function(status, xhr) {
+    alert("Application Failure. Re-install may be required");
+  }
+});
+moment().format();
+//moment().utcOffset(-7////);
 
 // Initialize your app
 app = new Framework7({
       //cache: true,
       modalTitle: config.appName,
-      modalTemplate: '<div class="modal {{#unless buttons}}modal-no-buttons{{/unless}}">'+
-                        '<div class="modal-inner">'+
+      modalTemplate: '<div class="modal bg-indigo color-white {{#unless buttons}}modal-no-buttons{{/unless}}">'+
+                        '<div class="modal-inner" style="text-align:center">'+
                           '{{#if title}}'+
-                            '<div class="modal-title">{{title}}</div>'+
+                            '<div class="modal-title"><i class="icon icon-suntixx"></i></div>'+
                           '{{/if}}'+
                           '{{#if text}}'+
                             '<div class="modal-text">{{text}}</div>'+
@@ -65,27 +55,31 @@ app = new Framework7({
                           '{{/if}}'+
                         '</div>'+
                         '{{#if buttons}}'+
-                          '<div class="modal-buttons">'+
+                          '<div class="modal-buttons bg-white {{#if verticalButtons}}modal-buttons-vertical{{/if}}">'+
                             '{{#each buttons}}'+
                               '<span class="modal-button {{#if bold}}modal-button-bold{{/if}}">{{text}}</span>'+
                             '{{/each}}'+
                           '</div>'+
                         '{{/if}}'+
                         '</div>',
-      uniqueHistory: true,
+      //uniqueHistory: true,
+      //cache: true,
+      //cacheDuration: 1000*60*5,
+      //cacheIgnore: ['home.html'],
       notificationHold: 1750,
       init: false,
       material: true,
       swipePanelOnlyClose: true,
       sortable: false,
       smartSelectOpenIn:'popup',
-      preloadPreviousPage: true,
+      preloadPreviousPage: false,
       template7Pages: true,
       precompileTemplates: true,
       imagesLazyLoadSequential: true,
       hideNavbarOnPageScroll: true,
       hideToolbarOnPageScroll: true,
       notificationCloseOnClick: true,
+      fastClicksDelayBetweenClicks: 500,
       preroute: function (view, options) {
           if (!navigator.onLine) {
             app.addNotification({
@@ -104,7 +98,7 @@ app = new Framework7({
         },
 });
 
-var $$ = Dom7;
+
 
 var eventPartial =  '<div class="card event-details">' +
 
@@ -115,14 +109,36 @@ var eventPartial =  '<div class="card event-details">' +
                     '<div class="card-content">'+
                     '  <div class="card-content-inner">'+
                     '   <div class="event-name">{{name}}</div>'+
-                    '   <div class="color-gray hosted-by"><span class="small">by</span>&nbsp;{{#if user.organization}}{{user.organization.name}}{{else}}{{hostedby}}{{/if}}</div>'+
-                    '    <span class="color-black">{{EnglishTime}}</span><br>'+
+                    '   <div class="color-gray hosted-by"><span class="small">by</span>&nbsp;{{#js_compare "this.hostedby == 0"}}'+
+                      '{{user.fullname}}'+
+                  '  {{else}}'+
+                        '{{#js_compare "this.hostedby == 1"}}'+
+                        '{{user.organization.name}}'+
+                        '{{else}}'+
+                        '  {{hostedby}}'+
+                        '{{/js_compare}}'+
+                    '{{/js_compare}}</div>'+
+                    '    <span class="color-black">{{englishtime starttime}}</span><br>'+
                     '    <span class="color-gray">{{venue}}</span>'+
                     '  </div>'+
                     '</div>'+
                   '</div>';
 
 Template7.registerPartial('eventPartial', eventPartial);
+Template7.registerHelper('count', function (arr, options) {
+  if (typeof arr === 'function') arr = arr.call(this);
+  return arr.length;
+});
+Template7.registerHelper('englishtime', function (arr, options) {
+  if (typeof arr === 'function') arr = arr.call(this);
+  //moment().utcOffset(-7);
+  //var serverTime = moment.utc(arr).utcOffset(-3).format('ddd MMM Do YYYY, h:mm A')
+  return moment.utc(arr).utcOffset(-7).format('ddd MMM Do YYYY, h:mm A');
+});
+Template7.registerHelper('nocache', function (arr, options) {
+  if (typeof arr === 'function') arr = arr.call(this);
+  return '?'+moment().unix();
+});
 
 Template7.global = {
   config: config,
@@ -131,6 +147,7 @@ Template7.global = {
 
 app.init();
 
+$$('.app-version').html("Sun Tixx v"+config.version);
 document.addEventListener('deviceready', onDeviceReady, false);
 document.addEventListener('backbutton', onBackKey, false);
 
@@ -141,29 +158,81 @@ function onDeviceReady() {
   window.open = cordova.InAppBrowser.open;
   connection= navigator.connection;
   db = window.sqlitePlugin.openDatabase({name: 'suntixx.db', location: 'default',  androidLockWorkaround: 1}, onDatabaseCreate, onDatabaseCreateError);
+  navigator.globalization.getPreferredLanguage(getLanguageSuccess, getLanguageError);
+  push = PushNotification.init({
+    android: {
+        senderID: "326258679945"
+    },
+    browser: {
+        pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+    },
+    ios: {
+        alert: "true",
+        badge: true,
+        sound: 'false'
+    },
+  });
 }
 
+var getLanguageSuccess = function(lang) {
+  if(lang.value == "en-US"  || lang.value == "en-UK" || lang.value =="en" || lang.value == "UK" || lang.value == "US") {
+    $$.getJSON('lang/en.json', function(data, status, xhr) {
+      language = data;
+      Template7.global.language = language;
+    });
+  }
+};
 
+$$.getJSON('lang/en.json', function(data) {
+  language = data;
+  Template7.global.language = language;
+});
+
+var getLanguageError = function () {
+  $$.getJSON('lang/en.json', function(data, status, xhr) {
+    language = data;
+    Template7.global.language = language;
+  });
+};
 
 var onDatabaseCreate = function () {
   db.sqlBatch([
   'DROP TABLE IF EXISTS scanhistory',
   'CREATE TABLE scanhistory ('+
-    'code varchar(255),'+
-    'scandate datetime,'+
-    'scanresponse varchar(255),'+
-    'scancolor varchar(255),'+
-    'valid boolean )',
+    //'id integer PRIMARY KEY AUTOINCREMENT NOT NULL,'+
+    'code text,'+
+    'scandate text,'+
+    'created_on timestamp DEFAULT CURRENT_TIMESTAMP,'+
+    'scanresponse text,'+
+    'scancolor text,'+
+    'valid boolean' +
+    ')',
   ], function() {
-    //alert("Scan history table created");
+    console.log("Configuration tables created");
   }, function(error) {
-    app.alert("There was a problem configuring the application database. You won't have access to scanning history");
+    //console.log(error);
+    app.alert(language.SYSTEM.DATABASE_CONFIGURATION_ERROR);
     db = null;
   });
+
+  /*db.sqlBatch([
+  'CREATE TABLE IF NOT EXISTS user ('+
+    'id int NOT NULL PRIMARY KEY AUTO_INCREMENT,'+
+    'serverId varchar(255) NOT NULL UNIQUE,'+
+    'created_on datetime,'+
+    'modified_on datetime,'+
+    'data varchar(5000), )',
+  ], function() {
+    console.log("User table created");
+  }, function(error) {
+    app.alert(config.language.SYSTEM.FATAL_CONFIGURATION_ERROR);
+    db = null;
+  });*/
 };
 
 var onDatabaseCreateError = function (err) {
-  app.alert("There was a problem configuring the application database. You won't have access to scanning history");
+  console.log(err);
+  app.alert(language.SYSTEM.FATAL_CONFIGURATION_ERROR);
   db = null;
 };
 
@@ -182,9 +251,9 @@ var promptForRating = function() {
           var target = "_system";
           var url;
           if (device.platform.toLowerCase() == "ios") {
-              url = 'itms-apps://itunes.apple.com/app/id1128174731';
+              url = config.mobileAppLinks.ios;
           } else if (device.platform.toLowerCase() == "android") {
-              url = 'market://details?id=com.suntixx.application';
+              url = config.mobileAppLinks.android;
           }
           window.open(url, target, options);
         }
@@ -218,9 +287,9 @@ var checkInternet = function() {
 var appUsage = storage.getItem('appusage');
 var appRateInterval = storage.getItem('rateinterval');
 if (!appUsage) { appUsage = 0; }
-if (!appRateInterval) {appRateInterval = 20;}
+if (!appRateInterval) {appRateInterval = 1;}
 
-if (appUsage == appRateInterval) {
+if (appUsage >= appRateInterval) {
   appUsage = 0;
   promptForRating;
 } else {
@@ -228,16 +297,16 @@ if (appUsage == appRateInterval) {
 }
 storage.setItem('appusage', appUsage);
 
+var mainView = app.addView('.view-main', {
+  //domCache: true,
+});
+
 function onBackKey() {
   if ( $$(document).find('.back-button').length > 0 ) {
     $$('.back-button').click();
-  } else if ( $$('.page').attr('data-page') == "homepage") {
+  } else if ( mainView.activePage.name == "homepage") {
     navigator.app.exitApp();
   } else {
     window.history.back(-1);
   }
 }
-
-var mainView = app.addView('.view-main', {
-  domCache: true,
-});

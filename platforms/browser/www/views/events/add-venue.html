@@ -85,7 +85,7 @@
                <div class="item-title label"><i class="icon icon-required"></i>Venue Type</div>
                <div class="item-subtitle color-red form-error venuetype"></div>
                <div class="item-input">
-                 <input type="text" placeholder="" name="venuetype" id="venue-type" value={{maplink}} required/>
+                 <input type="text" placeholder="" name="venuetype" id="venue-type" value="{{#if venuetype}}{{venuetype.name}}{{/if}}" required/>
                </div>
              </div>
            </div>

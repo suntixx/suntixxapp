@@ -1,21 +1,34 @@
 app.onPageInit('purchase-quantity', function(page) {
   var thisEvent = page.context;
   //var ticketLimitPicker = null;
-  $$('.ticket-limit').on('click', function () {
+
+  $$('.back-main').on('click', function() {
+    app.showTab('#homepage-tab');
+    //storeView.destroy();
+    //storeView = null;
+  });
+
+  $$('.ticket-limit').on('focusin click', function () {
+    //alert("clicked");
     var id = $$(this).attr('id');
     var ticketLimit = $$(this).attr('ticketLimit');
     var available = $$(this).attr('quantity');
-    if (available < ticketLimit) {
+    if (Number(available) < Number(ticketLimit)) {
       ticketLimit = available;
     }
     //if (!ticketLimitPicker) {
+    //app.alert(ticketLimit+ " "+ id);
     var ticketLimitPicker = appPickers.limitPicker(id, ticketLimit);
-    //}
+  //  }
     ticketLimitPicker.open();
   });
 
+  var processing = false;
   $$('.save-ticket-quantity').on('click', function() {
-
+    if(processing) {
+      return;
+    }
+    processing = true;
     var data = app.formToJSON('#ticket-quantity-form');
 
     var eventTickets = thisEvent.tickets;
@@ -34,6 +47,7 @@ app.onPageInit('purchase-quantity', function(page) {
         name: "",
       };
       var quantity = Number(data[i].quantity);
+
       thisTicket[0].requestedqty = quantity;
       if (quantity > 0 ) {
         tickets.push(thisTicket[0]);
@@ -45,17 +59,18 @@ app.onPageInit('purchase-quantity', function(page) {
       }
     }
     if (ticketList.length == 0) {
-      app.alert("You must enter a quantity to continue");
+      app.alert("You must enter a ticket quantity to continue");
+      processing = false;
       return;
     }
 
-    mainView.router.load ({
+    storeView.router.load ({
       url: 'views/purchase/purchase-ticket-names.html',
       context: {
         cart: ticketList,
         total: totalPrice,
         tickets: tickets,
-        thisEvent: thisEvent,
+        event: thisEvent,
       },
     });
   });
@@ -66,7 +81,22 @@ app.onPageInit('purchase-quantity', function(page) {
 app.onPageInit('purchase-ticket-names', function(page) {
   var context = page.context;
   var tickets = page.context.tickets;
-  //var thisEvent = page.contenxt.thisEvent;
+  var thisEvent = page.context.event;
+  var processing = false;
+  $$(".step-one").on('click', function() {
+    var thisEvent = context.event;
+    for (var x in thisEvent.tickets) {
+      var thisTicket = SEARCHJS.matchArray(tickets, {id: Number(thisEvent.tickets[x].id)});
+      if (thisTicket.length > 0) {
+        thisEvent.tickets[x].requestedqty = thisTicket[0].requestedqty;
+      }
+    }
+    storeView.router.back({
+      url: 'views/purchase/select-quantity.html',
+      force: true,
+      context: thisEvent,
+    });
+  });
 
   $$('.swipeout-delete').on('click', function () {
     var ticketId = $$(this).attr('ticketid');
@@ -89,6 +119,10 @@ app.onPageInit('purchase-ticket-names', function(page) {
 
 
   $$('.save-ticket-names').on('click', function() {
+    if (processing) {
+      return;
+    }
+    processing = true;
     var tickets = context.tickets;
     var cartInfo = app.formToJSON("#ticket-names-form");
     cartInfo = util.getCartSummary(cartInfo);
@@ -116,19 +150,22 @@ app.onPageInit('purchase-ticket-names', function(page) {
         ticketQuantity += cartItem.length;
         //var n;
         for (var n=0;n<cartItem.length;n++) {
+          var tmpTicket = JSON.parse(JSON.stringify(tickets[i]));
           //lineNames.push(cartItem[n].nameonticket);
           if (cartItem[n].nameonticket.trim() == "") {
             lineNames.push("Admit One");
-            tickets[i].nameonticket = "Admit One";
+            tmpTicket.nameonticket = "Admit One";
             //ticket.userticketid = userTickets[i].id;
-            theseTickets.push(tickets[i]);
+            //theseTickets.push(tickets[i]);
           } else {
             lineNames.push(cartItem[n].nameonticket);
-            tickets[i].nameonticket = cartItem[n].nameonticket;
+            tmpTicket.nameonticket = cartItem[n].nameonticket;
             //ticket.userticketid = userTickets[i].id;
             //tickets.push(ticket);
-            theseTickets.push(tickets[i]);
+
           }
+          theseTickets.push(tmpTicket);
+          console.log(theseTickets);
         }
         var cartLineItem = {
           price: linePrice,
@@ -143,12 +180,12 @@ app.onPageInit('purchase-ticket-names', function(page) {
       }
       //alert(JSON.stringify(checkoutCart));
     }
-    var calculateServiceCharge = function(feeInfo) {
+    var calculateServiceCharge = function(feeInfo, qty) {
       var totalServiceFee;
       for (var curr in feeInfo.transactionFeeFixed) {
         if (selectedEventLocal.currency == curr) {
           totalServiceFee = context.total * feeInfo.transactionFeeRate;
-          totalServiceFee+=feeInfo.transactionFeeFixed[curr];
+          totalServiceFee+=(feeInfo.transactionFeeFixed[curr] * qty);
           break;
         }
       }
@@ -165,21 +202,25 @@ app.onPageInit('purchase-ticket-names', function(page) {
           exchngRate = data;
           $$.ajax({
             async: true,
+            timeout: 30 *1000,
             url: config.server + "/api/paymentconfig/"+ nocache,
             method: "GET",
             success: function(data, status, xhr) {
               if (status == 200){
-                var serviceFee = calculateServiceCharge(JSON.parse(data));
-                var totalWithFee = serviceFee + context.total;
-                var totalUSD = Number(context.total) / Number(exchngRate);
+                var serviceFee = 0;
+                var totalWithFee = 0;
+                var totalUSD = (Number(context.total) / Number(exchngRate)).toFixed(2);
                 var url = 'views/purchase/reservation-checkout.html';
-                if(totalWithFee > 0 ) {
+                if( Number(context.total) > 0 ) {
+                  serviceFee = calculateServiceCharge(JSON.parse(data), theseTickets.length);
+                  totalWithFee = serviceFee + context.total;
                   url = 'views/purchase/checkout.html';
                 }
-                mainView.router.load({
+                processing = false;
+                storeView.router.load({
                   url: url,
                   context: {
-                    event: context.thisEvent,
+                    event: thisEvent,
                     subTotal: context.total,
                     totalUSD: totalUSD,
                     exchangeRate: exchngRate,
@@ -192,22 +233,25 @@ app.onPageInit('purchase-ticket-names', function(page) {
                 });
               }
             },
-            error: function(status, xhr) {
-              app.alert("There was a problem generating your cart");
-            },
           });
         }
       },
       error: function(status, xhr) {
         app.alert("There was a problem generating your cart");
+        processing = false;
       }
     });
   });
 });
 
 app.onPageInit('reservation-checkout', function(page) {
-
+  var processing = false;
   $$('.confirm-reservation').on('click', function() {
+    if (processing) {
+      return;
+    }
+    app.showPreloader("Please Wait...");
+    processing = true;
     var cartTotal = page.context.total;
     var ticketQuantity = page.context.ticketQuantity;
     var thisEvent = page.context.event;
@@ -231,7 +275,7 @@ app.onPageInit('reservation-checkout', function(page) {
       totalprice: cartTotal,
       tickets: tickets,
     };
-
+    console.log(JSON.stringify(request));
     var nocache = "?t="+moment().unix();
     var result = [];
     $$.ajax({
@@ -244,25 +288,36 @@ app.onPageInit('reservation-checkout', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           result = JSON.parse(data);
+
           app.hidePreloader();
           if (result) {
+            processing = false;
+            app.showTab('#homepage-tab');
             mainView.router.back({
               url: 'home.html',
               force: true,
             });
+
           }
         }
       },
       error: function(status, xhr) {
         app.hidePreloader();
-        app.alert("Oops! Something went wrong");
+        processing = false;
+        app.showTab('#homepage-tab');
+        app.alert(language.STORE.CHECKOUT_PURCHASE_ERROR, function() {
+          mainView.router.back({
+            url: 'home.html',
+            force: true,
+          });
+        });
       }
     });
   });
 });
 
 app.onPageAfterAnimation('purchase-checkout', function (page) {
-
+  var processing = false;
   var cartTotal = page.context.total;
   var cartTotalUSD = page.context.totalUSD;
   var ticketQuantity = page.context.ticketQuantity;
@@ -294,6 +349,7 @@ app.onPageAfterAnimation('purchase-checkout', function (page) {
         totalprice: cartTotal,
         totalUSD: cartTotalUSD,
         tickets: tickets,
+        usPaypalAccount: true,
      };
      var nocache = "?t="+moment().unix();
      var result = [];
@@ -309,8 +365,11 @@ app.onPageAfterAnimation('purchase-checkout', function (page) {
            result = JSON.parse(data);
            app.hidePreloader();
            if (result) {
-             mainView.router.load({
+             app.showTab('#homepage-tab');
+             processing = false;
+             mainView.router.back({
                url: 'views/tickets/tickets.html',
+               force: true,
                context: {
                  tickets: result,
                  event: thisEvent,
@@ -321,12 +380,20 @@ app.onPageAfterAnimation('purchase-checkout', function (page) {
        },
        error: function(status, xhr) {
          app.hidePreloader();
-         app.alert("Oops! Something went wrong");
+         app.alert(language.STORE.CHECKOUT_PURCHASE_ERROR, function() {
+           processing = false;
+           app.showTab('#homepage-tab');
+           mainView.router.back({
+             url: 'home.html',
+             force:true,
+           });
+         });
        }
      });
    };
 
    var onUserPaymentCancelled = function (result) {
+     console.log(JSON.stringify(result));
      app.hidePreloader();
    };
 
@@ -340,7 +407,11 @@ app.onPageAfterAnimation('purchase-checkout', function (page) {
      PayPalMobile.prepareToRender("PayPalEnvironmentProduction", paypalConfig, function() {
        var buyNowBtn = document.getElementById("paypal-pay-button");
        buyNowBtn.onclick = function (e) {
+         if (processing) {
+           return;
+         }
          app.showPreloader("Please Wait...");
+         processing = true;
          var paymentDetails = new PayPalPaymentDetails(cartTotalUSD, "0.00", "0.00");
          var payment = new PayPalPayment(cartTotalUSD, "USD", thisEvent.name + " - " + ticketQuantity + " Tickets", "Sale", paymentDetails);
          PayPalMobile.renderSinglePaymentUI(payment, onSuccessfulPayment, onUserPaymentCancelled);
@@ -351,15 +422,15 @@ app.onPageAfterAnimation('purchase-checkout', function (page) {
   PayPalMobile.init(config.paypalIds, onPayPalMobileInit);
 
 
-  $$('.payment-credit').on('click', function() {
+  /*$$('.payment-credit').on('click', function() {
     mainView.router.load({
       url: 'views/purchase/card-info.html',
       context: page.context,
     });
-  });
+  });*/
 });
 
-app.onPageInit('card-form', function(page) {
+/*app.onPageInit('card-form', function(page) {
   var countries = appPickers.countries('card-country');
   $$('#card-country').on('click', function() {
     countries.open();
@@ -380,4 +451,4 @@ app.onPageInit('card-form', function(page) {
     purchaseInfo.totalprice = cartInfo.total;
     purchaseInfo.ticketquantity = cartInfo.ticketQuantity;
   });
-});
+});*/

@@ -1,0 +1,84 @@
+{
+	"OTHER": {
+		"COUNTRY_FIELD": "Country",
+		"CANCEL": "Cancel",
+		"CITY_FIELD": "City",
+		"PHONE_FIELD": "Phone",
+		"TRY_AGAIN": "Try Again",
+    "DETAILS": "Details",
+    "ACTIVITY": "Activity",
+		"AGE_FIELD": "Age",
+		"LOCATION": "Location",
+		"CLICK_HERE": "here",
+		"FORM_ERRORS" : "Please correct the errors in the form",
+		"RELOAD": "Retry",
+		"PLEASE_WAIT_UPLOADING": "Please Wait.  Still Uploading Image"
+	},
+	"HOMEPAGE": {
+		"FEED_ERROR": "There was a problem loading this feed.<br> Pull down to try again"
+	},
+	"USER_AREA": {
+		"PROFILE": "Profile",
+		"FORGOT_PASSWORD": "Forgot Password",
+		"INCLUDE_COUNTRY_CODE": "Include country code",
+		"USER_PROFILE": "User Profile",
+		"SYNCHRONIZE_USER": "If you already have a user account from purchased tickets or events services, we recommend that you link this account by clicking ",
+		"FORGOT_PASSWORD_FAILED": "Sorry, we could not find a user that matches those credentials",
+		"FRIENDS": "Friends",
+    "DETAILS": "Details",
+    "ACTIVITY": "Activity",
+		"CHAT": "Chat",
+		"ONLINE": "Online",
+		"OFFLINE": "Offline",
+    "MESSAGE": "Message",
+		"ORGANIZATION": "Organization",
+		"PERSONAL": "Personal",
+    "USER_NOT_FOUND": "User not found",
+    "NO_FACEBOOK_INTEGRATION": "Your account is not linked to Facebook.  Integration is required to use this feature.",
+		"FACEBOOK_LOGIN": "Continue with Facebook",
+		"NO_FACEBOOK_FRIENDS": "None of your Facebook Friends are using this app.",
+		"FACEBOOK_ERROR": "There was a problem connecting with facebook.  Please try again!",
+		"FACEBOOK_ALREADY_AUTHORIZED" : " You have already authorized facebook on this device",
+		"SHARE_APP": "Share with your friends",
+    "CHATS": {
+      "MESSAGE": "Message",
+      "CHAT": "Chat",
+      "CHATS": "Chats",
+      "SEND": "Send"
+    },
+		"MENU": {
+			"ADD_FACEBOOK": "Add Facebook",
+			"REMOVE_FACEBOOK": "Remove Facebook",
+			"SETTINGS": "Settings"
+		}
+	},
+  "CHATS": {
+    "MESSAGE": "Message",
+    "CHAT": "Chat",
+    "CHATS": "Chats",
+    "SEND": "Send"
+  },
+  "EVENTS": {
+		"PROMOTER": "Promoter",
+		"ADD_ANOTHER_SELLER": "Add Another Box Office Seller",
+    "ATTENDING": "Attending",
+		"NOT_ATTENDING": "Not Attending",
+    "INTERESTED": "Interested",
+		"NOT_INTERESTED": "Not Interested",
+    "SELLERS": "Sellers",
+		"NO_TICKETS": "No Tickets",
+    "DETAILS": "Event Details"
+  },
+	"STORE": {
+		"CHECKOUT_PURCHASE_ERROR": "There was an error.  Please verify your purchased tickets before trying again",
+		"CHECKOUT_SELL_ERROR": "There was an error.  Please verify your sold tickets before trying again"
+	},
+	"SYSTEM" : {
+		"LOADING": "Loading",
+		"FATAL_CONFIGURATION_ERROR": "Fatal Configuration Error",
+		"DATABASE_CONFIGURATION_ERROR": "Database Configuration Error",
+		"SERVER_ERROR": "Failed to sycronize with Sun Tixx Server! You may need to login again",
+		"GENERAL_SERVER_ERROR": "Oops, Something went wrong!",
+		"CONFIGURATION_ERROR": "Configuration Error. Some features may not be available"
+	}
+}

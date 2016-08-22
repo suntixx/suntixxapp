@@ -130,7 +130,7 @@ var appPickers = {
          {
            textAlign: 'center',
            //values: [28,29,30],
-           values: ['All Ages', '12yrs & Over', '18yrs & Over' ],
+           values: ['All Ages', '12 & Over', '18 & Over' ],
          },
        ]
      });

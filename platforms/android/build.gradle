@@ -88,6 +88,7 @@ ext {
 // PLUGIN GRADLE EXTENSIONS START
 apply from: "card.io.cordova.mobilesdk/application-build.gradle"
 apply from: "com.paypal.cordova.mobilesdk/application-build.gradle"
+apply from: "phonegap-plugin-push/application-push.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras = file('build-extras.gradle').exists()
@@ -243,6 +244,11 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES START
     debugCompile project(path: "CordovaLib", configuration: "debug")
     releaseCompile project(path: "CordovaLib", configuration: "release")
+    compile "com.facebook.android:facebook-android-sdk:4.13.+"
+    compile "com.android.support:support-v4:+"
+    compile "com.android.support:support-v13:23+"
+    compile "com.google.android.gms:play-services-gcm:9.0.2+"
+    compile "me.leolin:ShortcutBadger:1.1.4@aar"
     // SUB-PROJECT DEPENDENCIES END
 }
 

@@ -55,7 +55,7 @@ public class MainActivity extends CordovaActivity
             });
     }
 
-    @Override
+  /*  @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
@@ -67,5 +67,5 @@ public class MainActivity extends CordovaActivity
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
-    }
+    }*/
 }

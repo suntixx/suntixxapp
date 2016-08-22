@@ -12,10 +12,21 @@
     </a>
     <div class="page-content">
       <div class="card event-details">
-        <div class="header">
-          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
+        <div class="card-header">
+          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png{{nocache}}')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
         </div>
         <div class="card-content">
+          <p></p>
+          <div class="buttons-row">
+            <a href="#" class="button no-ripple">{{@global.language.EVENTS.ATTENDING}}</a>
+            <a href="#" class="button no-ripple">{{@global.language.EVENTS.INTERESTED}}</a>
+            <!--<a href="#" class="button button-raised show-chat">{{@global.language.CHATS.CHATS}}</a>-->
+          </div>
+          <div class="buttons-row">
+            <a href="#" class="button attending-count no-ripple">{{count attending}}</a>
+            <a href="#" class="button interested-count no-ripple">{{count interested}}</a>
+            <!--<a href="#" class="button chat-count no-ripple">?</a>-->
+          </div>
           <div class="card-content-inner">
             <div class="event-name">{{name}}</div>
             <div class="color-gray hosted-by"><span class="small">by</span>&nbsp;
@@ -29,8 +40,8 @@
                 {{/js_compare}}
             {{/js_compare}}</div>
 
-            <span class="color-black">Starts: {{StartTime}}</span><br><span class="color-black">Ends: {{EndTime}}</span><br>
-            <span class="color-gray">{{venue}}</span><br><span class="color-gray">{{city}}, {{country}}</span>
+            <span class="color-black">Starts: {{englishtime starttime}}</span><br><span class="color-black">Ends: {{englishtime endtime}}</span><br>
+            <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
             <div class="divider"></div>
             <h4>Description</h4>
           {{description}}
@@ -65,12 +76,12 @@
         </div>
         <div class="card-footer">
           <a href="#" class="share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
-          {{#js_compare "this.facebook != ''"}}
+          {{#if facebook}}
           <a href="#" onclick='window.open("{{facebook}}", "_system")' class="link icon-only"><i class="icon icon-facebook-event"></i></a>
-          {{/js_compare}}
-          {{#js_compare "this.twitter != ''"}}
+          {{/if}}
+          {{#if twitter}}
           <a href="#" onclick='window.open("{{twitter}}", "_system")' class="link icon-only"><i class="icon icon-twitter-event"></i></a>
-          {{/js_compare}}
+          {{/if}}
         </div>
       </div>
       <div class="floating-button-space"></div>

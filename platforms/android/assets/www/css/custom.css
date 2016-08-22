@@ -7,6 +7,15 @@
   height:30vh;
 }
 
+#barcode-verified {
+  background-color: #f9a11b;
+  padding-left: 40px;
+  margin-top: 20px;
+  height: 25px;
+  background-image: url("../img/suntixx-verified.svg");
+  background-repeat: repeat-x;
+}
+
 #ticket-report-header {
   border-bottom: double 1px #000;
 }
@@ -20,13 +29,25 @@
 #ticket-report-header  div{
   text-align: center;
   font-weight: bold;
-  text-transform: capitalize;;
+  text-transform: capitalize;
 }
 
 .user-announcement {
   color: red;
   font-size: 0.8em;
   text-align: center;
+}
+
+.facebook-button {
+  color: #3b5998;
+}
+
+.button .color-gray .ripple-wave {
+    background-color: #9e9e9e;
+}
+
+.login-buttons a {
+  margin-top:7px;
 }
 
 #page-loading {
@@ -42,6 +63,10 @@
   vertical-align: middle;
 }
 
+.someone-typing {
+  font-style: italic;
+}
+
 .premium, .premium div {
   background-color:#fff;
 }
@@ -53,6 +78,11 @@
   background-color: #fff;
   color:#f9a11b;
   font-size: 18px;
+}
+
+.full-screen-width {
+  width:100vw;
+  margin:0px;
 }
 
 div.infinite-scroll-preloader {
@@ -213,23 +243,95 @@ div.oops-image-load, div.oops-image {
   text-transform: uppercase;
 }
 
+
 .user-profile .card-content{
   padding-left: 5px
 }
+.profile {
+  text-align: left;
+  padding: 0px;
+  margin: 0px;
+}
 
+.profile .card-header .buttons {
+  position:absolute;
+  bottom:15px;
+  right:5px;
+  border: 1px solid #3f51b5;
+}
+
+.buttons {
+  border: 1px solid #3f51b5;
+}
+
+.profile .card-content .row span {
+  text-align: left;
+  padding:0;
+  margin:0;
+}
+
+.profile .user-profile {
+  /*background: rgba(249,161,27, 0.4);*/
+  height: 50vh;
+  background: url('../img/orange-background.png');
+  background-size: 100vw 180px;
+  background-repeat: no-repeat;
+}
+
+.profile .user-profile .user-image {
+  float: left;
+  margin: 1em 0;
+}
 .user-profile .user-image {
-  display: block;
+  /*float: left;*/
   width: 150px;
-  height:150px;
-  margin: 1em auto;
+  /*height:150px;
+  margin: 1em 0;*/
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   -webkit-border-radius: 99em;
   -moz-border-radius: 99em;
   border-radius: 99em;
-  border: 5px solid #eee;
+  border: 1px solid #eee;
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+}
+
+.user-image-edit {
+  display:block;
+  margin: 1em auto;
+}
+.profile .card-content {
+  padding: 20px;
+}
+
+.profile .fullname {
+  font-weight: 400;
+  font-size: 1.3em;
+  color: #000;
+}
+
+.profile .email {
+  color: #bbb;
+}
+
+.profile .user-profile-field .user-country {
+  font-weight: 200;
+}
+
+.user-avatar {
+  /*background: rgba(249,161,27, 0.4);*/
+  background: url('../img/orange-background.png');
+  background-size: 100% 54px;
+  background-repeat: no-repeat;
+}
+
+.user-avatar .item-content .item-inner {
+  padding-top: 60px;
+}
+
+.user-avatar .item-content .item-inner .item-title-row .item-title{
+  font-weight: 400;
 }
 
 .user-avatar .user-image {
@@ -243,8 +345,16 @@ div.oops-image-load, div.oops-image {
   -webkit-border-radius: 99em;
   -moz-border-radius: 99em;
   border-radius: 99em;
-  border: 5px solid #eee;
+  border: 1px solid #eee;
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+}
+
+.user-image-square {
+  width: 50px;
+  height:50px;
+  box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.3);
+  margin:0;
+  padding:0;
 }
 
 div.new-user-image-container {
@@ -291,6 +401,33 @@ div.instagram {
 a.social-icon {
   margin-left:7px;
 }
+i.icon.icon-phone {
+  width: 12px;
+  height: 12px;
+  background-image: url("../img/phone.svg");
+  margin-right:3px;
+}
+
+i.icon.icon-email {
+  width: 12px;
+  height: 12px;
+  background-image: url("../img/email.svg");
+  margin-right:3px;
+}
+
+i.icon.icon-location {
+  width: 12px;
+  height: 12px;
+  background-image: url("../img/location.svg");
+  margin-right:3px;
+}
+
+i.icon.icon-link {
+  width: 12px;
+  height: 12px;
+  background-image: url("../img/link.svg");
+  margin-right:3px;
+}
 
 i.icon.icon-home {
   width: 29px;
@@ -325,6 +462,48 @@ i.icon.icon-sell {
   width:24px;
   height: 24px;
   background-image: url("../img/sell.svg");
+}
+
+i.icon.icon-events {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/events.svg");
+}
+
+i.icon.icon-profile {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/profile.svg");
+}
+
+i.icon.icon-chats {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/chats.svg");
+}
+
+i.icon.icon-sellers {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/ticket-seller.svg");
+}
+
+i.icon.icon-information {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/information.svg");
+}
+
+i.icon.icon-chats-orange {
+  width:50px;
+  height: 50px;
+  background-image: url("../img/chat-orange.svg");
+}
+
+i.icon.icon-friends {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/friends.svg");
 }
 
 i.icon.icon-submenu {
@@ -687,7 +866,9 @@ div.thumbnail-preview {
   font-size: 20px
   display:block;
 }
-
+.capitalize {
+  text-transform: capitalize;
+}
 .small {
   font-size: small;
   text-transform: lowercase;

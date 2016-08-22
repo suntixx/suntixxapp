@@ -25,7 +25,7 @@ var requestedArea = null;
 
 var eventsMenuClick = function (e, area) {
   checkInternet();
-  if (!user || !user.id ) {
+  if (!user || !user.id || !user.birth) {
     requestedPage = "events";
     requestedArea = area;
     app.loginScreen();
@@ -37,6 +37,7 @@ var eventsMenuClick = function (e, area) {
   var result;
   $$.ajax({
     async: true,
+    timeout: 1000 * 30,
     url: config.server + "/api/getprofileevents/" + user.id + nocache,
     method: "GET",
     success: function(data, status, xhr) {
@@ -51,6 +52,10 @@ var eventsMenuClick = function (e, area) {
         });
         app.hidePreloader();
       }
+    },
+    error: function (status, xhr) {
+      app.hidePreloader();
+      app.alert(language.SYSTEM.GENERAL_SERVER_ERROR);
     }
   });
 };
@@ -59,7 +64,7 @@ $$(document).on('click', '.events-menulink', eventsMenuClick);
 $$(document).on('click', '.tickets-menulink', ticketsMenuClick);
 function ticketsMenuClick() {
   checkInternet();
-  if (!user || !user.id) {
+  if (!user || !user.id || !user.birth) {
     requestedPage = "tickets";
     app.loginScreen();
     return;
@@ -72,40 +77,28 @@ function ticketsMenuClick() {
 $$(document).on('click', '.user-menulink', userMenuClick);
 function userMenuClick() {
   checkInternet();
-  if (!user || !user.id) {
+  if (!user || !user.id || !user.birth) {
     requestedPage = "user";
     app.loginScreen();
     return;
   }
+  user.me = true;
   mainView.router.load ({
-    url: 'views/user/update-details.html',
+    url: 'views/user/profile.html',
     context: user,
   });
 }
 
-$$(document).on('click', '.facebook-login', facebookLogin);
-function facebookLogin() {
-  /*if (!facebookConnectPlugin) {
-    app.alert("Not Ready Yet");
-    return;
-  }*/
-  app.alert("Still Working Things Out");
-  /*facebookConnectPlugin.login ( ['email'],
-    function(response) {
-      alert(JSON.stringify(response));
-    }, function(err) {
-      alert(JSON.stringify(err));
-    });*/
-}
 
-var purchaseTickets = function () {
-  if (!user && !user.admin) {
+/*var purchaseTickets = function (eventId) {
+  if (!user && !user.birth) {
     app.loginScreen();
     return;
   }
-  var eventId = $$(this).attr('event-id');
+  alert("hello");
+  //var eventId = $$(this).attr('event-id');
   var nocache = "?t="+moment().unix();
-  app.showPreloader("Loading Event");
+  app.showPreloader("Loading Store");
   var result;
   $$.ajax({
     async: true,
@@ -117,13 +110,15 @@ var purchaseTickets = function () {
         app.hidePreloader();
         if (result && result.id) {
           selectedEventLocal = result;
-          mainView.router.load({
+          storeView = app.addView('.view-store', {
+            allowDuplicateUrls:true,
+          });
+          storeView.router.load({
             url: 'views/purchase/select-quantity.html',
             context: selectedEventLocal,
+            reload:true,
           });
-        } else {
-          app.hidePreloader();
-          app.alert("Oops! Something went wrong");
+          app.showTab('#store-tab');
         }
       }
     },
@@ -134,66 +129,26 @@ var purchaseTickets = function () {
   });
 };
 
+$$(document).find('.purchase-online-tickets').on('click', function() {
+  //purchaseTickets($$(this).attr('event-id'));
+  alert("hello world");
+});*/
+
 //=============================================================
 
 app.onPageInit('homepage', function(page) {
-  /*var instagramListLastIndex = 0;
-  var loadingFeed = false;
-  var infiniteScrollFeed = true;
-  checkInternet();
-  var instafeed;
-  var feed = new Instafeed({
-    target: "homeFeed",
-    clientId: "b6bb4ba1d6454f41aabd985b9a1a3d1b",
-    accessToken: "1316008879.b6bb4ba.fe2e946a2856480da96095a5679d993f",
-    get: "user",
-    userId: '1316008879',
-    sortBy: 'most-recent',
-    mock:true,
-    filter: function(thisImage) {
-              return image.tags.indexOf("suntixxapp") >= 0;
-            },
-    error: function(err) {
-              app.alert("There was an error fetching feed: "+ err);
-            },
-    success: function (data) {
-              instafeed = data.data;
-              var feedSet = eventsService.getMoreEvents(instafeed, instagramListLastIndex);
-              $$('#homeFeed').html(Template7.templates.feedTemplate(feedSet.events));
-              instagramListLastIndex = feedSet.index;
-              $$("#page-loading").hide();
-              $$('.infinite-scroll-preloader').show();
-            },
-  });
-  feed.run();*/
-
-  /*$$('.home-refresh').on('refresh', homeFeedRefresh);
-
-  $$('.home-refresh').on('infinite', function () {
-    if (loadingFeed) return;
-    loadingFeed = true;
-    setTimeout(function () {
-      loadingFeed = false;
-      if (instagramListLastIndex >= instafeed.length) {
-        app.detachInfiniteScroll($$('.home-refresh'));
-        infiniteScrollFeed = false;
-        $$('.infinite-scroll-preloader').hide();
-        return;
-      }
-      var feedSet = eventsService.getMoreEvents(instafeed, instagramListLastIndex);
-      $$('#homeFeed').append(Template7.templates.feedTemplate(feedSet.events));
-      instagramListLastIndex = feedSet.index;
-    }, 1500);
-  });*/
 
 
+  var refreshButton = '<div style="width:75vw;text-align:center;margin:40vh auto 0 auto">'+
+                      '<p>'+language.HOMEPAGE.FEED_ERROR+'</p>' +
+                      '</div>';
 
 $$('#homeFeedTab').on('show', function() {
   var instafeed;
   var instagramListLastIndex = 0;
   var loading = false;
   var infiniteScroll = true;
-  checkInternet();
+  //checkInternet();
   var feed = new Instafeed({
     clientId: "b6bb4ba1d6454f41aabd985b9a1a3d1b",
     accessToken: "1316008879.b6bb4ba.fe2e946a2856480da96095a5679d993f",
@@ -205,12 +160,12 @@ $$('#homeFeedTab').on('show', function() {
     sortBy: 'most-recent',
     mock:true,
     error: function(err) {
-              app.alert("There was an error fetching feed: "+ err);
+              $$(document).find('#homeFeed').html(refreshButton);
             },
     success: function (data) {
               instafeed = data.data;
               var feedSet = eventsService.getMoreEvents(instafeed, instagramListLastIndex);
-              $$(document).find('#homeFeed').html(Template7.templates.feedTemplate(feedSet.events));
+              $$('#homeFeed').html(Template7.templates.feedTemplate(feedSet.events));
               instagramListLastIndex = feedSet.index;
               $$('.infinite-preloader').show();
             },
@@ -218,7 +173,7 @@ $$('#homeFeedTab').on('show', function() {
     feed.run();
 
     $$('.home-refresh').on('refresh', function() {
-      checkInternet();
+      //checkInternet();
       setTimeout(function() {
         feed = new Instafeed({
           clientId: "b6bb4ba1d6454f41aabd985b9a1a3d1b",
@@ -231,7 +186,8 @@ $$('#homeFeedTab').on('show', function() {
           sortBy: 'most-recent',
           mock:true,
           error: function(err) {
-                    app.alert("There was an error fetching feed: "+ err);
+                    $$(document).find('#homeFeed').html(refreshButton);
+                    app.pullToRefreshDone('.home-refresh');
                   },
           success: function (data) {
                     instafeed = data.data;
@@ -239,7 +195,7 @@ $$('#homeFeedTab').on('show', function() {
                     $$('#homeFeed').append(Template7.templates.feedTemplate(feedSet.events));
                     instagramListLastIndex = feedSet.index;
                     $$("#page-loading").hide();
-                    app.pullToRefreshDone();
+                    app.pullToRefreshDone('.home-refresh');
                     if (!infiniteScroll) {
                       app.attachInfiniteScroll($$('.home-refresh'));
                       infiniteScroll = true;
@@ -270,10 +226,12 @@ $$('#homeFeedTab').on('show', function() {
     });
   });
 
-  $$('#homeFeedTab').trigger('show');
 
-  $$(document).find('#featuredEventsTab').on('show', function() {
-    checkInternet();
+  //app.showTab('#homeFeedTab');
+
+
+  $$('#featuredEventsTab').on('show', function() {
+    //checkInternet();
     var featuredEvents;
     var featuredEventsLastIndex = 0;
     var loading = false;
@@ -281,6 +239,7 @@ $$('#homeFeedTab').on('show', function() {
     var nocache = "?t="+moment().unix();
     $$.ajax({
       async: true,
+      timeout: 1000 * 30,
       url: config.server + "/api/eventswidget/1"+ nocache,
       method: "GET",
       success: function(data, status, xhr) {
@@ -296,21 +255,26 @@ $$('#homeFeedTab').on('show', function() {
             $$('.infinite-scroll-preloader').show();
           }
         }
-      }
+      },
+      error: function (status, xhr) {
+        $$(document).find('#featuredEvents').html(refreshButton);
+      },
 
     });
 
+
     $$('.featured-scroll').on('refresh', function () {
-      if (!navigator.onLine) {
+      /*if (!navigator.onLine) {
         app.addNotification({
           message: "There was a problem connecting to the Internet.  Please check your connection",
         });
         return false;
-      }
+      }*/
       setTimeout(function() {
         var nocache = "?t="+moment().unix();
         $$.ajax({
           async: true,
+          timeout: 1000 * 30,
           url: config.server + "/api/eventswidget/1"+ nocache,
           method: "GET",
           success: function(data, status, xhr) {
@@ -327,7 +291,11 @@ $$('#homeFeedTab').on('show', function() {
               featuredEventsLastIndex = eventSet.index;
               app.pullToRefreshDone($$('.featured-scroll'));
             }
-          }
+          },
+          error: function (status, xhr) {
+            $$(document).find('#featuredEvents').html(refreshButton);
+            app.pullToRefreshDone($$('.featured-scroll'));
+          },
         });
       }, 1000);
     });
@@ -352,8 +320,9 @@ $$('#homeFeedTab').on('show', function() {
 
   });
 
-  $$(document).find('#upcomingEventsTab').on('show', function() {
-    checkInternet();
+  $$('#upcomingEventsTab').on('show', function() {
+     $$('.infinite-scroll-preloader').hide();
+    //checkInternet();
     var upcomingEvents;
     var upcomingEventsLastIndex = 0;
     var infiniteScroll = true;
@@ -361,6 +330,7 @@ $$('#homeFeedTab').on('show', function() {
     var nocache = "?t="+moment().unix();
     $$.ajax({
       async: true,
+      timeout: 1000 * 30,
       url: config.server + "/api/eventswidget/3"+ nocache,
       method: "GET",
       success: function(data, status, xhr) {
@@ -376,15 +346,23 @@ $$('#homeFeedTab').on('show', function() {
            $$('.infinite-scroll-preloader').show();
          }
         }
-      }
-    });
+      },
+      error: function (status, xhr) {
+        $$(document).find('#upcomingEvents').html(refreshButton);
+      },
+});
+
+    /*$$('.purchase-tickets').on('click', function() {
+      purchaseTickets($$(this).attr('event-id'));
+    });*/
 
     $$('.upcoming-scroll').on('refresh', function () {
-      checkInternet();
+      //checkInternet();
       setTimeout( function () {
         var nocache = "?t="+moment().unix();
         $$.ajax({
           async: true,
+          timeout: 1000 * 30,
           url: config.server + "/api/eventswidget/3"+ nocache,
           method: "GET",
           success: function(data, status, xhr) {
@@ -401,7 +379,11 @@ $$('#homeFeedTab').on('show', function() {
               upcomingEventsLastIndex = eventSet.index;
               app.pullToRefreshDone($$('.upcoming-scroll'));
             }
-          }
+          },
+          error: function (status, xhr) {
+            $$(document).find('#upcomingEvents').html(refreshButton);
+            app.pullToRefreshDone($$('.upcoming-scroll'));
+          },
         });
       }, 1500);
     });
@@ -424,6 +406,7 @@ $$('#homeFeedTab').on('show', function() {
 
     });
   });
+  $$('#featuredEventsTab').trigger('show');
 });
 
 
@@ -448,6 +431,7 @@ app.onPageInit('search-events', function (page) {
       var result;
       $$.ajax({
         async: true,
+        timeout: 1000 * 30,
         url: config.server + "/api/searcheventlist/" + category +"/"+ country +"/"+ sort +"/"+ keywords + nocache,
         method: "GET",
         success: function(data, status, xhr) {
@@ -513,6 +497,7 @@ app.onPageInit('categories', function(page) {
   var result;
   $$.ajax({
     async: true,
+    timeout: 1000 * 30,
     url: config.server + "/api/searcheventlist/" + request.category +"/"+ request.country +"/"+ request.sort +"/"+ request.keywords + nocache,
     method: "GET",
     success: function(data, status, xhr) {
@@ -540,6 +525,7 @@ app.onPageInit('categories', function(page) {
       var nocache = "?t="+moment().unix();
       $$.ajax({
         async: true,
+        timeout: 1000 * 30,
         url: config.server + "/api/searcheventlist/" + request.category +"/"+ request.country +"/"+ request.sort +"/"+ request.keywords + nocache,
         method: "GET",
         success: function(data, status, xhr) {
@@ -581,7 +567,6 @@ app.onPageInit('categories', function(page) {
 
   });
 
-  $$('.purchase-tickets').on('click',  purchaseTickets);
 });
 
 mainView.router.loadPage('home.html');
@@ -600,19 +585,25 @@ $$(document).on('click','.social-icon',  function () {
   } else if (social == "twitter") {
     url = 'https://twitter.com/suntixx';
   } else if (social == "instagram") {
-    url = 'tps://www.instagram.com/suntixx';
+    url = 'https://www.instagram.com/suntixx';
   }
 
   window.open(url, target);
 });
 
+$$(document).on('click', '.external-link', function() {
+  var url = $$(this).attr('url');
+  var target = "_system";
+  window.open(url, target);
+});
+
 $$(document).on('click', '.share-app', function() {
-  var message = 'Check out this app tickets app. Android:https://play.google.com/store/apps/details?id=com.suntixx.application, iOS:https://itunes.apple.com/app/id1128174731';
+  var message = 'Check out the Sun Tixx Tickets app.';
   var onSuccess = function(result) {}
   var onError = function(msg) {
     app.alert("There was a problem sharing the app. Please try again!");
   }
-  window.plugins.socialsharing.share(message, null, null, null, onSuccess, onError);
+  window.plugins.socialsharing.share(message, null, null,  config.mobileAppLinks.shortlink, onSuccess, onError);
 });
 
 $$(document).on('click', '.rate-app', function () {
@@ -621,11 +612,10 @@ $$(document).on('click', '.rate-app', function () {
   var target = "_system";
   var url;
   if (device.platform.toLowerCase() == "ios") {
-      url ='itms-apps://itunes.apple.com/app/id1128174731';
+      url = config.mobileAppLinks.ios;
   } else if (device.platform.toLowerCase() == "android") {
-      url = 'market://details?id=com.suntixx.application';
+      url = config.mobileAppLinks.android;
   }
-
   window.open(url, target);
 });
 
@@ -645,17 +635,18 @@ $$(document).on('click','.open-search', function () {
   });
 });
 
-$$(document).on('click','.purchase-tickets',  function () {
+$$(document).on('click','.purchase-online-tickets',  function () {
   if (!user) {
     app.loginScreen();
     return;
   }
   var eventId = $$(this).attr('event-id');
   var nocache = "?t="+moment().unix();
-  app.showPreloader("Loading Event");
+  app.showPreloader("Loading Store");
   var result;
   $$.ajax({
     async: true,
+    timeout: 1000 * 30,
     url: config.server + "/api/event/" + eventId + nocache,
     method: "GET",
     success: function(data, status, xhr) {
@@ -664,13 +655,15 @@ $$(document).on('click','.purchase-tickets',  function () {
         app.hidePreloader();
         if (result && result.id) {
           selectedEventLocal = result;
-          mainView.router.load({
+          storeView = app.addView('.view-store', {
+            //domCache: true,
+          });
+          storeView.router.load({
             url: 'views/purchase/select-quantity.html',
             context: selectedEventLocal,
+            reload: true,
           });
-        } else {
-          app.hidePreloader();
-          app.alert("Oops! Something went wrong");
+          app.showTab('#store-tab');
         }
       }
     },
@@ -688,6 +681,7 @@ $$(document).on('click', '.event-link', function () {
   var result;
   $$.ajax({
     async: true,
+    timeout: 1000 * 30,
     url: config.server + "/api/event/" + eventId + nocache,
     method: "GET",
     success: function(data, status, xhr) {
@@ -726,6 +720,7 @@ $$(document).on('click', '.search-event-link', function () {
   var result;
   $$.ajax({
     async: true,
+    timeout: 1000 * 30,
     url: config.server + "/api/event/" + eventId + nocache,
     method: "GET",
     success: function(data, status, xhr) {
@@ -765,6 +760,7 @@ $$(document).on('click','.homepage', function () {
     reload: true,
   });
 });
+
 
 
 $$(document).on('click', '.share-event', function () {

@@ -1,10 +1,29 @@
-
-<div class="pages ">
-  <div class="page navbar-fixed" data-page="event-details">
+<div class="pages">
+  <div class="page navbar-fixed tabbar-labels-fixed" data-page="event-details">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="back link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center">Event Details</div>
+        <div class="left"><a href="#" class="back link icon-only back-button"> <i class="icon icon-back"></i></a></div>
+        <div class="center">{{@global.language.EVENTS.DETAILS}}</div>
+      </div>
+    </div>
+
+    <div class="toolbar tabbar tabbar-labels">
+      <div class="toolbar-inner">
+        <a href="#eventDetailsTab" class="tab-link show-details active"><i class="icon icon-information"></i><span class="tabbar-label">{{@global.language.OTHER.DETAILS}}</span></a>
+        <a href="#eventPromoterTab" class="tab-link show-promoter"
+        {{#js_compare "this.hostedby == 0"}}
+          profile="0"
+        {{else}}
+            {{#js_compare "this.hostedby == 1"}}
+                profile="1"
+            {{else}}
+                profile="0"
+            {{/js_compare}}
+        {{/js_compare}}><i class="icon icon-profile"></i><span class="tabbar-label">{{@global.language.EVENTS.PROMOTER}}</span></a>
+        <!--<a href="#eventActivityTab" class="tab-link show-activity"><i class="icon icon-events"></i><span class="tabbar-label">{{@global.language.OTHER.ACTIVITY}}</span></a>-->
+        {{#js_compare "this.commuser.length > 0"}}
+        <a href="#eventSellersTab" class="tab-link show-sellers" event-id="{{id}}"><i class="icon icon-sellers"></i><span class="tabbar-label">{{@global.language.EVENTS.SELLERS}}</span></a>
+        {{/js_compare}}
       </div>
     </div>
     {{#if hasOnlineTickets}}
@@ -12,66 +31,87 @@
       <i class="icon icon-purchase"></i>
     </a>
     {{/if}}
-    <div class="page-content">
-      <div class="card event-details">
+    <div class="tabs-swipeable-wrap">
 
-        <div class="header">
-          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
-        </div>
-        <div class="card-content">
-          <div class="card-content-inner">
-            <div class="event-name">{{name}}</div>
-            <div class="color-gray hosted-by">
-              <span class="small">by</span>
-              <a href="#" class="link show-promoter">
-                {{#js_compare "this.hostedby == 0"}}
-                  {{user.fullname}}
-                {{else}}
-                    {{#js_compare "this.hostedby == 1"}}
-                      {{user.organization.name}}
+      <div class="tabs">
+        <div class="page-content tab active" id="eventDetailsTab">
+          <div class="card event-details">
+            <div class="header">
+              <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
+            </div>
+            <div class="card-content">
+              <p></p>
+              <div class="buttons-row">
+                <a href="#" class="button buttons attending color-gray" attending="false">{{@global.language.EVENTS.ATTENDING}}</a>
+                <a href="#" class="button buttons interested color-gray" interested="false">{{@global.language.EVENTS.INTERESTED}}</a>
+                <!--<a href="#" class="button button-raised show-chat">{{@global.language.CHATS.CHATS}}</a>-->
+              </div>
+              <div class="buttons-row">
+                <a href="#" class="button attending-count no-ripple">{{count attending}}</a>
+                <a href="#" class="button interested-count no-ripple">{{count interested}}</a>
+                <!--<a href="#" class="button chat-count no-ripple">?</a>-->
+              </div>
+              <div class="card-content-inner">
+                <div class="event-name">{{name}}</div>
+                <div class="color-gray hosted-by">
+                  <span class="small">by</span>
+                    {{#js_compare "this.hostedby == 0"}}
+                      <a href="#" profile="0" class="user-profile link" user-id="{{user.id}}">{{user.fullname}}</a>
                     {{else}}
-                      {{hostedby}}
+                        {{#js_compare "this.hostedby == 1"}}
+                            <a href="#" profile="1" class="user-profile link" user-id="{{user.id}}">{{user.organization.name}}</a>
+                        {{else}}
+                            <a href="#" profile="0" class="user-profile link" user-id="{{user.id}}">{{hostedby}}</a>
+                        {{/js_compare}}
                     {{/js_compare}}
+                </div>
+                <span class="color-black">Starts: {{StartTime}}</span><br><span class="color-black">Ends: {{EndTime}}</span><br>
+                <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+                <div id="event-map"></div>
+                <div class="divider"></div>
+                  <h4>Description</h4>
+              <div>{{description}}</div>
+
+              {{#if hasOnlineTickets}}
+              <div class="divider"></div>
+
+              <h4>Ticket Information</h4>
+              <div class="row">
+                <div class="col-50">Ticket Type</div>
+                <div class="col-50">Price</div>
+              </div>
+              {{#each tickets}}
+                {{#js_compare "this.origin == 0"}}
+                <div class="row">
+                  <div class="col-50">{{tickettype}}</div>
+                  <div class="col-50">{{js "this.price.toFixed(2)"}} {{@root.currency}}</div>
+                </div>
                 {{/js_compare}}
-              </a>
+              {{/each}}
+
+              {{/if}}
+              </div>
             </div>
-            <span class="color-black">Starts: {{StartTime}}</span><br><span class="color-black">Ends: {{EndTime}}</span><br>
-            <span class="color-gray">{{venue}}</span><br><span class="color-gray">{{city}}, {{country}}</span>
-            <div id="event-map"></div>
-            <div class="divider"></div>
-              <h4>Description</h4>
-          <div>{{description}}</div>
-
-          {{#if hasOnlineTickets}}
-          <div class="divider"></div>
-
-          <h4>Ticket Information</h4>
-          <div class="row">
-            <div class="col-50">Ticket Type</div>
-            <div class="col-50">Price</div>
-          </div>
-          {{#each tickets}}
-            {{#js_compare "this.origin == 0"}}
-            <div class="row">
-              <div class="col-50">{{tickettype}}</div>
-              <div class="col-50">{{js "this.price.toFixed(2)"}} {{@root.currency}}</div>
+            <div class="card-footer">
+              {{#if facebook}}
+              <a href="#" class="link icon-only facebook-link"><i class="icon icon-facebook-event"></i></a>
+              {{/if}}
+              {{#if twitter}}
+              <a href="#" class="link twitter-link icon-only"><i class="icon icon-twitter-event"></i></a>
+              {{/if}}
+              <a href="#" class="link icon-only share-event" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
             </div>
-            {{/js_compare}}
-          {{/each}}
-
-          {{/if}}
           </div>
         </div>
-        <div class="card-footer">
-
-          {{#if facebook}}
-          <a href="#" class="link icon-only facebook-link"><i class="icon icon-facebook-event"></i></a>
-          {{/if}}
-          {{#if twitter}}
-          <a href="#" class="link twitter-link icon-only"><i class="icon icon-twitter-event"></i></a>
-          {{/if}}
-          <a href="#" class="link icon-only share-event" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
+        <div class="page-content tab" id="eventPromoterTab">
+          <div class="card profile"><div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div></div>
         </div>
+       <!--<div class="page-content tab" id="eventActivityTab">
+       </div>-->
+       {{#js_compare "this.commuser.length > 0"}}
+        <div class="page-content tab" id="eventSellersTab">
+        </div>
+        {{/js_compare}}
       </div>
     </div>
   </div>

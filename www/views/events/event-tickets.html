@@ -21,7 +21,7 @@
       <div class="card ticket-details">
         <a href="#" class="link edit-ticket" ticket-id="{{id}}">
           <div class="header">
-            <img src="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png" valign="bottom" class="ticket-image card-header color-white no-border">
+            <img src="{{@global.config.server}}/thumbnails/tickets/{{id}}/ticket.png{{nocache}}" valign="bottom" class="ticket-image card-header color-white no-border">
           </div>
           <div class="card-content">
             <div class="content-block-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}}&nbsp;{{../currency}}</div>

@@ -7,22 +7,13 @@
         "files": {}
     },
     "installed_plugins": {
-        "card.io.cordova.mobilesdk": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
         "com.paypal.cordova.mobilesdk": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
-        "cordova-plugin-camera": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
-        "cordova-plugin-file": {
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-file-transfer": {
@@ -32,6 +23,9 @@
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-network-information": {
@@ -46,15 +40,37 @@
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
-        "cordova-plugin-inappbrowser": {
+        "cordova-plugin-facebook4": {
+            "APP_ID": "535092483348628",
+            "APP_NAME": "Sun Tixx",
             "PACKAGE_NAME": "com.suntixx.application"
         },
-        "cordova-plugin-device": {
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "326258679945",
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.suntixx.application"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "card.io.cordova.mobilesdk": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        }
+    }
 }

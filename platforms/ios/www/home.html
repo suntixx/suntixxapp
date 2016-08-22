@@ -12,34 +12,25 @@
     </div>
     <div class="toolbar tabbar" style="background:#eee">
       <div class="toolbar-inner" style="background:#eee">
-        <a href="#homeFeedTab" class="button active tab-link" style="color:#F9A11B">Feed</a>
-        <a href="#featuredEventsTab" class="button tab-link" style="color:#F9A11B">Featured</a>
+
+        <a href="#featuredEventsTab" class="button active tab-link" style="color:#F9A11B">Featured</a>
         <a href="#upcomingEventsTab" class="button tab-link" style="color:#F9A11B">Upcoming</a>
+        <a href="#homeFeedTab" class="button tab-link" style="color:#F9A11B">Feed</a>
         <!--<a href="#justAddedEventsTab" class="button tab-link">Recommended</a>-->
       </div>
     </div>
     <div class="toolbar toolbar-bottom">
       <div class="toolbar-inner">
-        <a href="#" class="link create-event"><i class="icon icon-new"></i><span class="tabbar-label">New</span></a>
+
         <a href="#" class="link open-search"><i class="icon icon-purchase"></i><span class="tabbar-label">Buy</span></a>
         <a href="#" class="link goto-sell"><i class="icon icon-sell"></i><span class="tabbar-label">Sell</span></a>
         <a href="#" class="link goto-scan"><i class="icon icon-start-scan"></i><span class="tabbar-label">Scan</span></a>
+        <a href="#" class="link create-event"><i class="icon icon-new"></i><span class="tabbar-label">New</span></a>
       </div>
     </div>
     <div class="tabs-swipeable-wrap">
       <div class="tabs">
-        <div class="page-content tab active pull-to-refresh-content home-refresh infinite-scroll " id="homeFeedTab" data-distance="100">
-          <div class="pull-to-refresh-layer">
-            <div class="preloader"></div>
-            <div class="pull-to-refresh-arrow"></div>
-          </div>
-          <div id="homeFeed">
-            <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
-          </div>
-          <div class="infinite-scroll-preloader">
-            <div class="preloader"></div>
-          </div>
-        </div>
+
         <div class="page-content tab infinite-scroll featured-scroll pull-to-refresh-content" id="featuredEventsTab" data-distance="100">
           <div class="pull-to-refresh-layer">
             <div class="preloader"></div>
@@ -62,6 +53,18 @@
           </div>
           <div class="infinite-scroll-preloader">
             <div class="preloader infinite-preloader"></div>
+          </div>
+        </div>
+        <div class="page-content tab active pull-to-refresh-content home-refresh infinite-scroll " id="homeFeedTab" data-distance="100">
+          <div class="pull-to-refresh-layer">
+            <div class="preloader"></div>
+            <div class="pull-to-refresh-arrow"></div>
+          </div>
+          <div id="homeFeed">
+            <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
+          </div>
+          <div class="infinite-scroll-preloader">
+            <div class="preloader"></div>
           </div>
         </div>
         <!--<div class="page-content tab" id="justAddedEventsTab">
