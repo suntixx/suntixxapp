@@ -344,44 +344,29 @@ app.onPageInit('event-details', function(page) {
     //thisEvent.user.notMe = true;
     //if (user && thisEvent.user.id == user.id) {
       thisEvent.user.notMe = true;
+      if (user && thisEvent.user.id == user.id) {
+        thisEvent.user.noMessage = true;
+      }
       //alert("here");
       if (thisEvent.user.organization && thisEvent.hostedby == "1" || (thisEvent.user.organization && thisEvent.hostedby.trim() == thisEvent.user.organization.name.trim() ) ) {
         $$('#eventPromoterTab .profile').html(Template7.templates.userOrganizationTemplate(thisEvent.user));
       } else  {
         $$('#eventPromoterTab .profile').html(Template7.templates.userProfileTemplate(thisEvent.user));
       }
-    //  delete user.notMe;
-  /*  } else {
-      var nocache = "?t="+moment().unix();
-      $$.ajax({
-        async: true,
-        timeout: 20 * 1000,
-        url: config.server + "/api/userinfo/"+thisEvent.user.id + nocache,
-        method: "GET",
-        success: function(data, status, xhr) {
-          if (status == 200 || status == 0 ){
-            var thisProfile = JSON.parse(data);
-            thisProfile.notMe = true;
-            //alert("here");
-            if (thisProfile.organization && thisEvent.hostedby == "1" || (thisProfile.organization && thisEvent.hostedby.trim() == thisProfile.organization.name.trim() ) ) {
-              $$('#eventPromoterTab .profile').html(Template7.templates.userOrganizationTemplate(thisProfile));
-            } else  {
-              $$('#eventPromoterTab .profile').html(Template7.templates.userProfileTemplate(thisProfile));
-            }
-          }
-        },
-        error: function(status, xhr) {
-          //app.hidePreloader();
-          app.alert(language.SYSTEM.GENERAL_SERVER_ERROR, function() {
-            app.showTab('#eventDetailsTab');
-          });
-        },
+      delete thisEvent.user.noMessage;
+      
+      $$('.message-user').on('click', function() {
+        if (!user) {
+          app.loginScreen();
+          return;
+        }
+        //var eventId = $$(this).attr('event-id');
+        chatService.openChat(thisEvent.user.id, thisEvent.user.name2+" "+thisEvent.user.name4, false);
+        /*mainView.router.load({
+          url: 'views/user/chat.html',
+          context : {receiver: thisEvent.user.id},
+        });*/
       });
-    }*/
-   //alert(thisEvent.hostedby);
-  // else {
-    //  $$('#eventPromoterTab .profile').html(Template7.templates.userProfileTemplate(thisEvent.user));
-  //  }
   });
 
   $$('.page-content').on('scroll', function() {
@@ -437,6 +422,19 @@ app.onPageInit('event-details', function(page) {
     });
   });
 
+  $$('.chatroom').on('click', function() {
+    if (!user) {
+      app.loginScreen();
+      return;
+    }
+    chatService.openChat(thisEvent.id, thisEvent.name, true);
+    //var eventId = $$(this).attr('event-id');
+    //mainView.router.load({
+    //  url: 'views/user/chat.html',
+    //  context : {eventId: thisEvent.id},
+    //});
+  });
+
   if(user && SEARCHJS.matchObject(thisEvent.interested, {id: Number(user.id)})) {
     $$('.interested').removeClass("color-gray");
     $$('.interested').attr("interested", "true");
@@ -485,23 +483,16 @@ app.onPageInit('event-details', function(page) {
     });
   }
 
-  $$('.show-chat').on('click', function() {
-    if (!user) {
-      app.loginScreen();
-      return;
-    }
-    //var eventId = $$(this).attr('event-id');
-    mainView.router.load({
-      url: 'views/user/chat.html',
-      context : {eventId: thisEvent.id},
-    });
-  });
+
 
   $$('#eventDetailsTab').on('show', function() {
     //app.showTab('#eventDetailsTab');
     $$('.center').text(language.OTHER.DETAILS);
     $$('.floating-button').show();
+
+
   });
+
 
   $$('#eventSellersTab').on('show', function() {
     //app.showTab('#eventSellersTab');
@@ -514,13 +505,9 @@ app.onPageInit('event-details', function(page) {
         app.loginScreen();
         return;
       }
-      var seller = $$(this).attr('user-id');
-      mainView.router.load({
-        url: 'views/user/chat.html',
-        context : {
-          receiver: seller
-        },
-      });
+      var sellerId = $$(this).attr('user-id');
+      var sellerName = $$(this).attr("user-name");
+      chatService.openChat(sellerId, sellerName);
     });
 
     $$('.show-seller-profile').on('click', function() {

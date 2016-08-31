@@ -32,6 +32,12 @@
   text-transform: capitalize;
 }
 
+.message {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .user-announcement {
   color: red;
   font-size: 0.8em;

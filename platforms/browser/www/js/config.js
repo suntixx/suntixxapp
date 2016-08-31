@@ -80,6 +80,7 @@ app = new Framework7({
       hideToolbarOnPageScroll: true,
       notificationCloseOnClick: true,
       fastClicksDelayBetweenClicks: 500,
+      tapHold:true,
       preroute: function (view, options) {
           if (!navigator.onLine) {
             app.addNotification({
@@ -139,6 +140,15 @@ Template7.registerHelper('nocache', function (arr, options) {
   if (typeof arr === 'function') arr = arr.call(this);
   return '?'+moment().unix();
 });
+Template7.registerHelper('isLoggedInUser', function(condition, options) {
+  if (typeof condition === 'function') condition = condition.call(this);
+  //console.log(condition);
+  if (user && user.id == condition) {
+    options.fn(this, options.data);
+  } else {
+    options.inverse(this, options.data);
+  }
+});
 
 Template7.global = {
   config: config,
@@ -149,7 +159,7 @@ app.init();
 
 $$('.app-version').html("Sun Tixx v"+config.version);
 document.addEventListener('deviceready', onDeviceReady, false);
-document.addEventListener('backbutton', onBackKey, false);
+
 
 function onDeviceReady() {
   camera = navigator.camera;
@@ -159,9 +169,21 @@ function onDeviceReady() {
   connection= navigator.connection;
   db = window.sqlitePlugin.openDatabase({name: 'suntixx.db', location: 'default',  androidLockWorkaround: 1}, onDatabaseCreate, onDatabaseCreateError);
   navigator.globalization.getPreferredLanguage(getLanguageSuccess, getLanguageError);
+  initializePushMessaging();
+  document.addEventListener("pause", onPauseApp, false);
+  document.addEventListener("resume", checkLogin, false);
+  document.addEventListener('backbutton', onBackKey, false);
+  //document.addEventListener('online', , false);
+}
+
+var initializePushMessaging = function() {
   push = PushNotification.init({
     android: {
-        senderID: "326258679945"
+        senderID: config.push.androidId,
+        sound:true,
+        icon:icon,
+        iconColor: "white",
+        forceShow: true,
     },
     browser: {
         pushServiceURL: 'http://push.api.phonegap.com/v1/push'
@@ -172,7 +194,13 @@ function onDeviceReady() {
         sound: 'false'
     },
   });
-}
+  PushNotification.hasPermission(pushHandlers);
+};
+
+var onPauseApp = function () {
+  io.disconnect();
+  initializePushMessaging();
+};
 
 var getLanguageSuccess = function(lang) {
   if(lang.value == "en-US"  || lang.value == "en-UK" || lang.value =="en" || lang.value == "UK" || lang.value == "US") {
@@ -198,15 +226,32 @@ var getLanguageError = function () {
 var onDatabaseCreate = function () {
   db.sqlBatch([
   'DROP TABLE IF EXISTS scanhistory',
+  //'DROP TABLE IF EXISTS chatrooms',
+  //'DROP TABLE IF EXISTS messages',
   'CREATE TABLE scanhistory ('+
-    //'id integer PRIMARY KEY AUTOINCREMENT NOT NULL,'+
     'code text,'+
     'scandate text,'+
     'created_on timestamp DEFAULT CURRENT_TIMESTAMP,'+
     'scanresponse text,'+
     'scancolor text,'+
     'valid boolean' +
-    ')',
+  ')',
+  'CREATE TABLE IF NOT EXISTS chatrooms ('+
+    'roomid text PRIMARY KEY,'+
+    'isevent boolean DEFAULT 0,'+
+    'receiver_name text,'+
+    'created_on timestamp DEFAULT CURRENT_TIMESTAMP,'+
+    'modified_on timestamp DEFAULT CURRENT_TIMESTAMP'+
+  ')',
+  'CREATE TABLE IF NOT EXISTS messages ('+
+    'message_id text,'+
+    'roomid text,'+
+    'message text,'+
+    'receiver_name text,'+
+    'issent boolean,'+
+    'isread boolean DEFAULT 0,'+
+    'created_on timestamp DEFAULT CURRENT_TIMESTAMP'+
+  ')',
   ], function() {
     console.log("Configuration tables created");
   }, function(error) {
@@ -214,20 +259,6 @@ var onDatabaseCreate = function () {
     app.alert(language.SYSTEM.DATABASE_CONFIGURATION_ERROR);
     db = null;
   });
-
-  /*db.sqlBatch([
-  'CREATE TABLE IF NOT EXISTS user ('+
-    'id int NOT NULL PRIMARY KEY AUTO_INCREMENT,'+
-    'serverId varchar(255) NOT NULL UNIQUE,'+
-    'created_on datetime,'+
-    'modified_on datetime,'+
-    'data varchar(5000), )',
-  ], function() {
-    console.log("User table created");
-  }, function(error) {
-    app.alert(config.language.SYSTEM.FATAL_CONFIGURATION_ERROR);
-    db = null;
-  });*/
 };
 
 var onDatabaseCreateError = function (err) {

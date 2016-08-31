@@ -15,5 +15,8 @@
     "android": "market://details?id=com.suntixx.application",
     "universal": "/api/downloadapp",
     "shortlink" : "https://goo.gl/dpVKwK"
+  },
+  "push" : {
+    "androidId" : "326258679945"
   }
 }

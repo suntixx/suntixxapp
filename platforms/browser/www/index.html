@@ -23,7 +23,7 @@
             <div class="navbar">
               <div class="navbar-inner">
                 <div class="left"><a href="#" class="close-login-screen link icon-only back-button"> <i class="icon icon-back"></i></a></div>
-                <div class="center">Sign In</div>
+                <div class="center login-screen-title">Sign In</div>
               </div>
             </div>
             <div class="page-content login-screen-content">
@@ -180,6 +180,10 @@
           <img class="link user-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png{{nocache}}">
           {{#unless notMe}}
           {{#if organization_id}}{{#if organization}}<a href="#" class="buttons user-organization button">{{@global.language.USER_AREA.ORGANIZATION}}</a>{{/if}}{{/if}}
+          {{else}}
+            {{#unless noMessage}}
+              <a href="#" class="buttons message-user button" user-id="{{id}}" user-name="{{name2}} {{name4}}">{{@global.language.CHATS.MESSAGE}}</a>
+            {{/unless}}
           {{/unless}}
       </div>
       <div class="card-content">
@@ -212,6 +216,10 @@
           <img class="link user-image" src="{{@global.config.server}}/thumbnails/organizations/{{organization.id}}/portrait.png{{nocache}}">
           {{#unless notMe}}
           <a href="#" class="buttons user-personal button">{{@global.language.USER_AREA.PERSONAL}}</a>
+          {{else}}
+            {{#unless noMessage}}
+              <a href="#" class="buttons message-user button" user-id="{{id}}" user-name="{{name2}} {{name4}}">{{@global.language.CHATS.MESSAGE}}</a>
+            {{/unless}}
           {{/unless}}
       </div>
       <div class="card-content">
@@ -265,7 +273,7 @@
 
                   </div>
                   <div class="col-20 item-media">
-                    <!--<a href="#" class="link message-friend" friend-id="{{id}}"><i class="icon icon-chats-orange"></i></a>-->
+                    <a href="#" class="link message-friend" friend-id="{{id}}" friend-name="{{name2}} {{name4}}"><i class="icon icon-chats-orange"></i></a>
                   </div>
                 </div>
               </li>
@@ -288,21 +296,32 @@
       {{/if}}
     </script>
     <script type="text/template7" id="userChatsTemplate">
-      {{#js_compare "this.chats.length > 0"}}
+      {{#js_compare "this.length > 0"}}
       <div class="card">
         <div class="card-content">
           <div class="list-block media-list">
             <ul>
-              {{#each chats}}
-              <li class="item-content link start-chat" friend-id="{{id}}">
-                <div class="item-media">
-                  <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+              {{#each this}}
+              <li class="swipeout">
+                <div class="swipeout-content">
+                  <a href="#" class="item-content link start-chat" room="{{roomid}}" isevent="{{isevent}}" receiver-name="{{receiver_name}}">
+                    <div class="item-media">
+                      {{#if isevent}}
+                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/events/{{roomid}}/portrait.png"/>
+                      {{else}}
+                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{roomid}}/portrait.png"/>
+                      {{/if}}
+                    </div>
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">{{receiver_name}}</div>
+                        <div class="item-after"><span class="badge">{{#if unread}}{{unread}}{{/if}}</span></div>
+                      </div>
+                    </div>
+                  </a>
                 </div>
-                <div class="item-inner">
-                  <div class="item-title-row">
-                    <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
-                    <div class="item-after"><span class="badge">{{unread}}</span></div>
-                  </div>
+                <div class="swipeout-actions-right">
+                  <a href="#" class="swipeout-delete">{{@global.language.OTHER.DELETE}}</a>
                 </div>
               </li>
               {{/each}}
@@ -311,8 +330,7 @@
         </div>
       </div>
       {{else}}
-      <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.USER_AREA.NO_FACEBOOK_INTEGRATION}}</div>
-      <div style="text-align:center;width:50vw;margin: 0 auto"><a href="#" class="button button-fill color-green add-facebook-integration">Continue</a></div>
+      <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.CHATS.NO_CHATS}}</div>
       {{/js_compare}}
     </script>
     <script type="text/template7" id="eventSellersTemplate">
@@ -339,7 +357,7 @@
                     </div>
                   </div>
                   <div class="col-20 item-media">
-                    <!--<a href="#" class="link message-seller" user-id="{{id}}"><i class="icon icon-chats-orange"></i></a>-->
+                      <a href="#" class="link message-seller" user-id="{{id}}" user-name="{{name2}} {{name4}}"><i class="icon icon-chats-orange"></i></a>
                   </div>
                 </div>
               </li>
@@ -797,7 +815,8 @@
     <script type="text/javascript" src="js/eventcenter.js"></script>
     <script type="text/javascript" src="js/usercenter.js"></script>
     <script type="text/javascript" src="js/chatcenter.js"></script>
+    <script type="text/javascript" src="js/chatservice.js"></script>
     <script type="text/javascript" src="js/sellcenter.js"></script>
-    <!--<script type="text/javascript" src="js/pushcenter.js"></script>-->
+    <script type="text/javascript" src="js/pushcenter.js"></script>
   </body>
 </html>

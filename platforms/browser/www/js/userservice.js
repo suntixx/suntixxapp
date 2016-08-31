@@ -167,6 +167,8 @@ var userService = {
            user = returnUser;
            Template7.global.user = user;
            storage.setItem('userData', JSON.stringify(user));
+           socket = io.connect(config.server);
+           socket.on('connect', socketManager);
            showAvatar();
            if(!response.background) {
              mainView.router.load({

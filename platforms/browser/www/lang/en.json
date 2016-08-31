@@ -4,6 +4,7 @@
 		"CANCEL": "Cancel",
 		"CITY_FIELD": "City",
 		"PHONE_FIELD": "Phone",
+		"DELETE": "Delete",
 		"TRY_AGAIN": "Try Again",
     "DETAILS": "Details",
     "ACTIVITY": "Activity",
@@ -19,7 +20,9 @@
 	},
 	"USER_AREA": {
 		"PROFILE": "Profile",
+		"SIGN_IN": "Sign In",
 		"FORGOT_PASSWORD": "Forgot Password",
+		"LOGIN_FAILED": "User Login Failed! Please check your email and/or password",
 		"INCLUDE_COUNTRY_CODE": "Include country code",
 		"USER_PROFILE": "User Profile",
 		"SYNCHRONIZE_USER": "If you already have a user account from purchased tickets or events services, we recommend that you link this account by clicking ",
@@ -55,7 +58,13 @@
   "CHATS": {
     "MESSAGE": "Message",
     "CHAT": "Chat",
+		"NO_CHATS": "No chats found",
     "CHATS": "Chats",
+		"TODAY": "Today",
+		"YESTERDAY": "Yesterday",
+		"CHAT_HISTORY_ERROR" : "There was a problem retrieving the chat history",
+		"CHAT_ERROR": "There was a problem connecting to the chat server",
+		"READ": "Read",
     "SEND": "Send"
   },
   "EVENTS": {
@@ -76,6 +85,9 @@
 	"SYSTEM" : {
 		"LOADING": "Loading",
 		"FATAL_CONFIGURATION_ERROR": "Fatal Configuration Error",
+		"INTERNET_ERROR": "There was a problem connecting to the Internet.  Please check your connection",
+		"PUSH_REGISTRATION_ERROR": "Failed to sycronize with Sun Tixx Push Notification Server!",
+		"CHAT_CONFIGURATION_ERROR": "Failed to sycronize with Sun Tixx Messaging Server!",
 		"DATABASE_CONFIGURATION_ERROR": "Database Configuration Error",
 		"SERVER_ERROR": "Failed to sycronize with Sun Tixx Server! You may need to login again",
 		"GENERAL_SERVER_ERROR": "Oops, Something went wrong!",

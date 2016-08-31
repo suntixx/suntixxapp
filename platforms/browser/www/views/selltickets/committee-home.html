@@ -25,13 +25,13 @@
               <li>
                 <label class="label-checkbox item-content">
                   <!-- Checked by default -->
-                  <input type="checkbox" name="commticket-{{id}}" value="{{id}}" {{#if enable}}{{else}}disabled{{/if}} {{#js_compare "this.ticket.soldquantity >= this.quantity"}}disabled{{/js_compare}} {{#if chosen}}checked="checked"{{/if}}>
+                  <input type="checkbox" name="commticket-{{id}}" value="{{id}}" {{#if enable}}{{else}}disabled{{/if}} {{#js_compare "this.soldquantity >= this.quantity"}}disabled{{/js_compare}} {{#if chosen}}checked="checked"{{/if}}>
                   <div class="item-media">
                     <i class="icon icon-form-checkbox"></i>
                   </div>
                   <div class="item-inner">
                     <div class="item-title">{{ticket.tickettype}} - ${{js "this.ticket.price.toFixed(2)"}} {{@root.event.currency}}</div>
-                    <div class="item-subtitle">{{ticket.soldquantity}}/{{quantity}} Tickets Sold</div>
+                    <div class="item-subtitle">{{soldquantity}}/{{quantity}} Tickets Sold</div>
                     {{#if enable}}{{else}}<div class="item-text color-red">Disabled by Event Administrator</div>{{/if}}
                   </div>
 

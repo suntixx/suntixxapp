@@ -52,13 +52,13 @@ if(user) {
   showLoginOrCreate();
 }
 
-document.addEventListener('online', checkLogin, false);
-function checkLogin () {
 
+function checkLogin () {
+  var facebookConnectPlugin = false;
   console.log("loggin in");
   if (user && Number(user.id) > 0) {
     var nocache = "?t="+moment().unix();
-    if(user.social_id && user.social && facebookConnectPlugin) {
+    if(user.social_id && user.social  && facebookConnectPlugin) {
       //getLoginStatus
       app.showIndicator();
       facebookConnectPlugin.getLoginStatus(function(success) {
@@ -103,8 +103,8 @@ function checkLogin () {
               showAvatar();
               storage.setItem('userData', JSON.stringify(user));
               Template7.global.user = user;
-              //socket = io.connect(config.server);
-              //socket.on('connect', socketManager);
+              socket = io.connect(config.server);
+              socket.on('connect', socketManager);
             }
           }
 
@@ -348,12 +348,20 @@ app.onPageInit('update-preferences', function (page) {
 app.onPageInit('user-profile', function(page) {
   var thisProfile = page.context;
   thisProfile.notMe = true;
-
+  if (user && user.id == thisProfile.id) {
+    thisProfile.noMessage = true;
+  }
   if(thisProfile.isOrg) {
     $$('.profile').html(Template7.templates.userOrganizationTemplate(thisProfile));
   } else {
     $$('.profile').html(Template7.templates.userProfileTemplate(thisProfile));
   }
+
+  $$('.message-user').on('click', function() {
+    var receiverId = $$(this).attr("user-id");
+    var receiverName = $$(this).attr("user-name");
+    chatService.openChat(receiverId, receiverName);
+  });
 });
 
 app.onPageInit('profile', function(page) {
@@ -400,12 +408,11 @@ app.onPageInit('profile', function(page) {
 
 
 
-  $$('.open-chat').on('click', function() {
+
+  $$('.message-user').on('click', function() {
     var receiverId = $$(this).attr("user-id");
-    mainView.router.load({
-      url: 'views/user/chat.html',
-      context : {receiver: receiverId},
-    });
+    var receiverName = $$(this).attr("user-name");
+    chatService.openChat(receiverId, receiverName);
   });
 
   var loadUser = function() {
@@ -447,10 +454,8 @@ app.onPageInit('profile', function(page) {
 
     $$('.message-friend').on('click', function() {
       var receiverId = $$(this).attr("friend-id");
-      mainView.router.load({
-        url: 'views/user/chat.html',
-        context : {receiver: receiverId},
-      });
+      var receiverName = $$(this).attr("friend-name");
+      chatService.openChat(receiverId, receiverName);
     });
 
     $$('.show-friend-profile').on('click', function() {
@@ -471,7 +476,36 @@ app.onPageInit('profile', function(page) {
 
   $$('#userChatsTab').on('show', function() {
     $$('.profile-page-title').text(language.USER_AREA.CHATS.CHATS);
-    $$('#userChatsTab').html(Template7.templates.userChatsTemplate(user));
+    var chatRoomList = [];
+    db.readTransaction(function(tx) {
+      tx.executeSql("SELECT c.roomid, c.receiver_name, c.modified_on, c.isevent,  "+
+                    "(SELECT COUNT(m2.isread) FROM  messages as m2 WHERE m2.isread=0 AND m2.roomid=c.roomid) as unread  "+
+                    "FROM chatrooms AS c "+
+                    "LEFT JOIN messages AS m ON c.roomid = m.roomid "+
+                    "ORDER BY c.modified_on DESC",
+                    [], function(tx, resultSet) {
+        for(var x = 0; x < resultSet.rows.length; x++) {
+          chatRoomList.push(resultSet.rows.item(x));
+        }
+      }, function(tx, error) {
+        console.log('SELECT error: ' + error.message);
+      });
+    }, function(error) {
+      console.log(error);
+      app.alert(language.CHATS.CHAT_HISTORY_ERROR);
+    }, function() {
+        console.log(chatRoomList);
+        $$('#userChatsTab').html(Template7.templates.userChatsTemplate(chatRoomList));
+      }
+    );
+
+    $$('.start-chat').on('click', function() {
+      var receiverId = $$(this).attr("room");
+      var receiverName = $$(this).attr("receiver_name");
+      var isEvent = $$(this).attr("isevent") == '1' ? true: false;
+      chatService.openChat(receiverId, receiverName, isEvent);
+    });
+
   });
 });
 
@@ -1504,8 +1538,9 @@ var doLogin = function() {
           //storage.setItem('userEmail', user.email);
           showAvatar();
           Template7.global.user = user;
-          //socket = io.connect(config.server);
-          //socket.on('connect', socketManager);
+          socket = io.connect(config.server);
+          socket.on('connect', socketManager);
+
           $$(document).find('.logout-menu').show();
           if (user.mobilephone == "" || user.mobilephone == "null" || user.mobilephone == null) {
             mainView.router.load({
@@ -1522,14 +1557,12 @@ var doLogin = function() {
           }
         }
 
-      } else {
-        app.alert("Oops! Something went wrong");
       }
     },
     error: function (xhr, status){
       app.hidePreloader();
       storage.removeItem("userPassword");
-      app.alert("User Login Failed! Please check your email and/or password");
+      app.alert(language.USER_AREA.LOGIN_FAILED);
       return;
     },
   });
@@ -1541,7 +1574,7 @@ $$('.login-screen').on('keydown', function (e) {
     app.closeModal('.login-screen');
     if (!navigator.onLine) {
       app.addNotification({
-        message: "There was a problem connecting to the Internet.  Please check your connection",
+        message: language.SYSTEM.INTERNET_ERROR,
       });
       return;
     }
@@ -1550,10 +1583,14 @@ $$('.login-screen').on('keydown', function (e) {
   //});
 });
 
+$$('.login-screen').on('open', function (e) {
+  $$('.login-screen-title').text = language.USER_AREA.SIGN_IN;
+});
+
 $$('.login-submit').on('click', function(){
   if (!navigator.onLine) {
     app.addNotification({
-      message: "There was a problem connecting to the Internet.  Please check your connection",
+      message: language.SYSTEM.INTERNET_ERROR,
     });
     return;
   }

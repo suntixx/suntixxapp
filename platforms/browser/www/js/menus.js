@@ -265,6 +265,7 @@ $$(document).on('click', '.open-event-report', function() {
     async: true,
     url: config.server + "/api/event/" + selectedEventLocal.id + nocache,
     method: "GET",
+    timeout: 20 * 1000,
     success: function(data, status, xhr) {
       if (status == 200 || status == 0 ){
         result = JSON.parse(data);
