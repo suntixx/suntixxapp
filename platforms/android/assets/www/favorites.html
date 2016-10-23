@@ -1,0 +1,42 @@
+<div class="pages">
+  <div data-page="favorites" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
+          <a href="#" data-popover=".event-categories" class="link open-popover icon-only"><i class="icon icon-suntixx"></i><i class="icon icon-down"></i></a>
+        </div>
+        <div class="right">
+          <a href="#" class="link icon-only open-favorites"> <i class="icon icon-favorites"></i></a>
+          <a href="#" class="link icon-only open-search"> <i class="icon icon-search"></i></a>
+          <a href="#" class="link icon-only home-submenu"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+      <div class="toolbar premium">
+        <div class="toolbar-inner">
+          <div class="premium-service">{{@global.language.HOMEPAGE.FAVORITES}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar toolbar-bottom">
+      <div class="toolbar-inner">
+
+        <a href="#" class="link open-search"><i class="icon icon-purchase"></i><span class="tabbar-label">Buy</span></a>
+        <a href="#" class="link goto-sell"><i class="icon icon-sell"></i><span class="tabbar-label">Sell</span></a>
+        <a href="#" class="link goto-scan"><i class="icon icon-start-scan"></i><span class="tabbar-label">Scan</span></a>
+        <a href="#" class="link create-event" data-view=".view-form"><i class="icon icon-new"></i><span class="tabbar-label">New</span></a>
+      </div>
+    </div>
+    <div class="page-content pull-to-refresh-content infinite-scroll favorite-scroll">
+      <div class="pull-to-refresh-layer">
+        <div class="preloader"></div>
+        <div class="pull-to-refresh-arrow"></div>
+      </div>
+      <div id="favorites">
+        <div>
+          <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

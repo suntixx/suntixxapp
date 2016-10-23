@@ -79,8 +79,11 @@ app = new Framework7({
       hideNavbarOnPageScroll: true,
       hideToolbarOnPageScroll: true,
       notificationCloseOnClick: true,
+      fastClicks:true,
       fastClicksDelayBetweenClicks: 500,
       tapHold:true,
+      tapHoldDelay: 1000,
+      tapHoldPreventClicks: true,
       preroute: function (view, options) {
           if (!navigator.onLine) {
             app.addNotification({
@@ -125,6 +128,7 @@ var eventPartial =  '<div class="card event-details">' +
                     '</div>'+
                   '</div>';
 
+
 Template7.registerPartial('eventPartial', eventPartial);
 Template7.registerHelper('count', function (arr, options) {
   if (typeof arr === 'function') arr = arr.call(this);
@@ -140,14 +144,12 @@ Template7.registerHelper('nocache', function (arr, options) {
   if (typeof arr === 'function') arr = arr.call(this);
   return '?'+moment().unix();
 });
-Template7.registerHelper('isLoggedInUser', function(condition, options) {
-  if (typeof condition === 'function') condition = condition.call(this);
-  //console.log(condition);
-  if (user && user.id == condition) {
-    options.fn(this, options.data);
-  } else {
-    options.inverse(this, options.data);
-  }
+Template7.registerHelper('sellerChat', function (sellerId, userId, name2, name4) {
+  var ret = '<a href="#" class="link message-seller" user-id="'+sellerId+'" user-name="'+ name2 +'&nbsp;'+ name4+'"><i class="icon icon-chats-orange"></i></a>';
+  if (sellerId != userId)
+    return ret;
+  else
+    return '';
 });
 
 Template7.global = {
@@ -169,6 +171,8 @@ function onDeviceReady() {
   connection= navigator.connection;
   db = window.sqlitePlugin.openDatabase({name: 'suntixx.db', location: 'default',  androidLockWorkaround: 1}, onDatabaseCreate, onDatabaseCreateError);
   navigator.globalization.getPreferredLanguage(getLanguageSuccess, getLanguageError);
+  StatusBar.backgroundColorByHexString("#3f51b5");
+  StatusBar.styleBlackTranslucent();
   initializePushMessaging();
   document.addEventListener("pause", onPauseApp, false);
   document.addEventListener("resume", checkLogin, false);
@@ -181,7 +185,7 @@ var initializePushMessaging = function() {
     android: {
         senderID: config.push.androidId,
         sound:true,
-        icon:icon,
+        //icon:icon,
         iconColor: "white",
         forceShow: true,
     },
@@ -198,7 +202,7 @@ var initializePushMessaging = function() {
 };
 
 var onPauseApp = function () {
-  io.disconnect();
+  if (socket) socket.disconnect();
   initializePushMessaging();
 };
 
@@ -244,12 +248,17 @@ var onDatabaseCreate = function () {
     'modified_on timestamp DEFAULT CURRENT_TIMESTAMP'+
   ')',
   'CREATE TABLE IF NOT EXISTS messages ('+
-    'message_id text,'+
-    'roomid text,'+
+    'message_id text PRIMARY KEY,'+
+    /*'roomid text,'+
     'message text,'+
+    'sender_id text,'+
+    'sender_name text,'+
+    'receiver_id text'+
     'receiver_name text,'+
-    'issent boolean,'+
-    'isread boolean DEFAULT 0,'+
+    'isdelivered boolean DEFAULT 0,'+
+    'isread boolean DEFAULT 0,'+*/
+    'isdelivered boolean DEFAULT 0,'+
+    'messageJSON text,'+
     'created_on timestamp DEFAULT CURRENT_TIMESTAMP'+
   ')',
   ], function() {

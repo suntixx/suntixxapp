@@ -57,6 +57,9 @@
         },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.suntixx.application"
         }
     },
     "dependent_plugins": {

@@ -1,26 +1,32 @@
 var messages;
-var conversationStarted = false;
+//var conversationStarted = false;
 app.onPageInit('chat-window', function(page) {
   var receiverId = page.context.receiver;
   var isEvent = page.context.isevent;
-  //var chatServerReady = false;
+
   var messageBar = app.messagebar('.messagebar', {maxHeight:200});
   messages = app.messages('.messages', {
     autoLayout: true,
+    messages: page.context.messages,
     messageTemplate: '{{#if day}}'+
                         '<div class="messages-date">{{day}}</div>'+
                       '{{/if}}'+
-                      '<div id="message-{{id}}" class="message {{#js_compare "this.sender.id == '+user.id+'"}}message-sent{{else}}message-received{/js_compare} {{#if hasImage}}message-pic{{/if}} {{#if avatar}}message-with-avatar{{/if}} message-appear-">'+
-                      '{{#if name}}<div class="message-name">{{sender.name2}}</div>{{/if}}'+
-                      '<div class="message-text">{{message}}</div>'+
-                      '{{#if avatar}}<div class="message-avatar" style="background-image:url({{avatar}})"></div>{{/if}}'+
-                      '{{#if label}}<div class="message-label">{{Time}}</div>{{/if}}'+
-                      '</div>',
+                      '<a href="#" class="message-link" id="message-link-{{id}}">'+
+                        '<div class="message {{#if type}}message-sent{{else}}message-received{{/if}}">'+
+                        ' <div class="message-name">{{name}}</div>'+
+                        ' <div class="message-text">{{text}}</div>'+
+                        ' <div class="message-failed"></div>'+
+                        ' <div class="message-label">{{Time}}</div>'+
+                        '</div>'+
+                      '</a>',
+
   });
-  var request = {
-    isevent: isEvent,
-    roomid: receiver
-  };
+
+
+
+
+  //app.hideToolbar('.message-toolbar');
+  //app.showToolbar('.messagebar');
   mainView.activePage.todayAlreadyShowed = false;
   var nocache = "?t="+moment().unix();
   $$.ajax({
@@ -29,54 +35,205 @@ app.onPageInit('chat-window', function(page) {
     url: config.server + "/chat/getmessages/" +nocache,
     method: "POST",
     contentType: "application/x-www-form-urlencoded",
-    data: request,
+    data: {
+      isevent: isEvent,
+      receiverid: receiverId
+    },
     xhrFields: { withCredentials: true },
     success: function(data, status, xhr) {
       if (status == 200 || status == 0 ){
         var messageData = JSON.parse(data);
+        //var dateShowed = false;
         for (var day in messageData) {
-          var dateShowed = false;
-          if (!dateShowed) {
-            var messageDay = momment(day, "DD-MMM-YYYY");
-            if (messageDay.isSame(new Date(), "day")) { //is it today
-              messageData.day = language.CHATS.TODAY;
-              todayAlreadyShowed = true;
-            } else if (messageDay.isSame(moment(new Date()).add('days', -1), "day")) { //is it yesterday
-              messageData.day = language.CHATS.YESTERDAY;
-            } else if (messageDay.isSame(new Date(), "year")) { //is it this yaer
-              messageData.day = messageData[message].DaOfWeek+ " "+ messageData[message].Day+ ", "+ messageData[message].Month;
+          //if (!dateShowed) {
+            var messageDay = moment(day, "DD-MMM-YYYY");
+            var today = new Date();
+            var firstMessage = messageData[day][0];
+            if (messageDay.isSame(today, "day")) { //is it today
+              firstMessage.day = language.CHATS.TODAY;
+              mainView.activePage.todayAlreadyShowed = true;
+            } else if (messageDay.isSame(moment(today).add('days', -1), "day")) { //is it yesterday
+              firstMessage.day = language.CHATS.YESTERDAY;
+            } else if (messageDay.isSame(today, "year")) { //is it this yaer
+              firstMessage.day = firstMessage.DayOfWeek+ " "+ firstMessage.Day+ ", "+ firstMessage.Month;
             } else { //is it not this year
-              messageData.day = messageData[message].Day+ " "+messageData[message].Month+ ", "+messageData[message].Year;
+              firstMessage.day = firstMessage.Day+ " "+firstMessage.Month+ ", "+firstMessage.Year;
             }
-          }
-          messages.addMessage(messageData[message]);
-          dateShowed = true;
+          //}
+          messages.addMessages(messageData[day]);
+          //dateShowed = true;
+          //mainView.activePage.todayAlreadyShowed = true;
         }
       }
     },
     error: function (xhr, status){
-      app.Notification({
+      app.addNotification({
         message:language.CHATS.CHAT_HISTORY_ERROR,
         hold: 2000,
       });
     },
   });
-  if(eventId  && socket.serverConnected) {
-    //join roomid
-    joinRoom(eventId);
+
+  if (!socket.serverConnected) {
+    var checkServerConnected = function () {
+      if (socket.serverConnected == true) {
+        clearInterval(checkConnection);
+        chatService.updateChat(page.context);
+      }
+    };
+    var checkConnection = setInterval( checkServerConnected, 1500);
+
   } else {
-    //hide loader
-    $$('.chat-connecting').hide();
+    chatService.updateChat(page.context);
   }
 
-  $$('.message').on('taphold', function() {
 
+  $$(page.container).on('taphold', '.message-link', function() {
+    var messageLinkId = $$(this).attr("id");
+    $$('#'+messageLinkId).toggleClass("bg-lightblue");
+    if ($$(page.container).find('.bg-lightblue').length > 0) {
+      chatService.showTools();
+    } else {
+      chatService.hideTools();
+    }
+  });
+
+
+  $$(document).on('click', '.close-message-toolbar', function() {
+    $$('.message-link').removeClass('bg-lightblue');
+    chatService.hideTools();
+  });
+
+  $$(document).on('click', '.delete-messages', function () {
+    messages.removeMessages($$(page.container).find('.bg-lightblue'));
+    chatService.hideTools();
+  });
+
+  $$(document).on('click', '.forward-messages', function() {
+    if (user.friends.length == 0) {
+      var html = Template7.templates.noFriendsTemplate(user);
+      app.popup(html);
+    } else {
+      var html = Template7.templates.forwardMessageToFriendTemplate(user);
+      app.popup(html);
+      var search = app.searchbar('.forward-to-friend-searchbar', {
+        searchList: '.forward-message-friend-list',
+      });
+      search.enable();
+    }
+  });
+
+  $$(document).on('click', '.get-members', function() {
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      timeout: 20 * 1000,
+      url: config.server + "/chat/getmembers/" + nocache,
+      method: "POST",
+      contentType: "application/x-www-form-urlencoded",
+      data: {
+        roomid: receiverId,
+      },
+      xhrFields: { withCredentials: true },
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+        //ar result = JSON.parse(data);
+        console.log(JSON.parse(data));
+          var html = Template7.templates.chatRoomMembersTemplate(JSON.parse(data));
+          app.popup(html);
+        }
+      },
+      error: function (xhr, status) {
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
+
+    });
+  });
+
+  $$('.clear-chat').on('click', function() {
+    messages.clean();
+    //delete local and remote database messages
+  });
+
+  $$(document).on('click', '.leave-room', function() {
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      timeout: 20 * 1000,
+      url: config.server + "/chat/leaveroom/" + nocache,
+      method: "POST",
+      contentType: "application/x-www-form-urlencoded",
+      data: {
+        roomid: receiverId,
+      },
+      xhrFields: { withCredentials: true },
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          mainView.router.back();
+        }
+      },
+      error: function (xhr, status) {
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
+
+    });
+  });
+
+  $$('.open-user-profile').on('click', function () {
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      timeout: 20 * 1000,
+      url: config.server + "/api/userinfo/" + receiverId + nocache,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          var result = JSON.parse(data);
+          if (result && result.id>0) {
+            mainView.router.load({
+              url: 'views/user/user-profile.html',
+              context: result,
+            });
+          }
+        }
+      },
+      error: function (xhr, status) {
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
+
+    });
+  });
+
+  $$('.open-event').on('click', function () {
+    var nocache = "?t="+moment().unix();
+    $$.ajax({
+      async: true,
+      timeout: 20 * 1000,
+      url: config.server + "/api/event/" + receiverId + nocache,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          var result = JSON.parse(data);
+          if (result && result.id>0) {
+            selectedEventLocal = result;
+            mainView.router.load({
+              url: 'event.html',
+              context: selectedEventLocal,
+            });
+          }
+        }
+      },
+      error: function (xhr, status) {
+        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
+      },
+
+    });
   });
 
   $$('.message-box').on('keyup keydown', function() {
       socket.emit('typing', {
-       room: eventId,
-       senderid: user.id,
+       isevent: isEvent,
+       from: user.id,
        name: user.name2,
        receiverid: receiverId
      });
@@ -89,18 +246,33 @@ app.onPageInit('chat-window', function(page) {
     if (messageText.length === 0) return;
        // Empty messagebar
     messageBar.clear();
-    var request = {
+    var messageId = 'local-'+moment();
+    messages.addMessage({
+      id : messageId,
+      text: messageText,
+      //sender_id: user.id,
+      name: user.name2+" "+user.name4,
+      day: mainView.activePage.todayAlreadyShowed ? false : 'Today',
+      type: true,
+      Time: moment(new Date()).format("h:mm a")
+    });
+    mainView.activePage.todayAlreadyShowed = true;
+    chatService.sendMessage(messageId, messageText, receiverId, isEvent);
+    /*var request = {
       senderid: user.id,
-      receiverid: receiverId,
-      roomid: eventId,
       message: messageText,
       socketid: user.socketId
     };
+    if (isEvent) {
+      request.roomid = receiverId;
+    } else {
+      request.receiverid = receiverId
+    }
     var nocache = "?t="+moment().unix();
     $$.ajax({
       timeout: 30 * 1000,
       async: true,
-      url: config.server + "/chat/sendmessage/" +nocache,
+      url: config.server + "/chat/sendmessag/" +nocache,
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
       data: request,
@@ -108,20 +280,21 @@ app.onPageInit('chat-window', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var messageData = JSON.parse(data);
-          messageData.day = mainView.activePage.todayAlreadyShowed ? 'Today' : false;
-          messages.addMessage(messageData);
+          //messageData.message.sent = true;
+          //messages.addMessage(messageData.message);
         }
       },
       error: function (xhr, status){
-        app.Notification({
-          message: language.CHATS.CHAT_ERROR,
-          hold: 2000
-        });
+        $$(document).find('#message-link-' +messageId+ ' .message').addClass('message-with-avatar');
+        $$(document).find('#message-link-' +messageId+ ' .message .message-failed').addClass('message-avatar').html('<i class="icon icon-chat-undelivered resend-message" message-id="'+ messageId+ '"></i>');
       },
-    });
+    });*/
+  });
 
-
-     //socket.emit('new-message', {msg: messageText});
+  $$(document).on('click', '.resend-message', function() {
+    var messageId = $$(this).attr("message-id");
+    var messageText = $$(document).find('#message-link-'+messageId+ ' .message .message-text').text();
+    chatService.sendMessage(messageId, messageText, receiverId, isEvent, true);
   });
 });
 
@@ -132,6 +305,7 @@ var socketManager = function() {
       socketid: socketid,
       userid: user.id
     };
+    //console.log(request);
     var nocache = "?t="+moment().unix();
     $$.ajax({
       timeout: 30 * 1000,
@@ -145,12 +319,7 @@ var socketManager = function() {
         if (status == 200 || status == 0 ){
           //alert(socketid);
           socket.serverConnected = true;
-           if (mainView.activePage.name == "chat-window") {
-             if(mainView.activePage.context.eventId) {
-               //join room
-               joinRoom(mainView.activePage.context.eventId);
-             }
-           }
+
         }
       },
       error: function (xhr, status){
@@ -165,58 +334,78 @@ var socketManager = function() {
 
    socket.on('joined-room', function(data) {
      var thisPage = mainView.activePage;
-     if (thisPage.name == "chat-window"  && data.room == 'room-'+thisPage.context.eventId ) {
+     if (thisPage.name == "chat-window"  && data.room == 'room-'+thisPage.context.receiver ) {
        $$('.amount-in-room').text(data.quantity+ " Persons in this room");
        $$('.someone-typing').html("&nbsp;");
-       $$('.chat-connecting').hide();
+       $$('.chat-loading').hide();
+       $$('.chat-name').html(thisPage.context.name).css('font-size', '0.7em');
      }
    });
 
    socket.on('typing', function(data) {
      var thisPage = mainView.activePage;
-     if (data.senderid === user.id) { return; }
-     if (thisPage.name == "chat-window") {
-       if (data.room == thisPage.context.eventId || data.receiverid == thisPage.context.receiver) {
-         $$('.someone-typing').html(data.name+ " is typing");
-         setTimeout(function() {
-           $$('.someone-typing').html("&nbsp;");
-         }, 1000);
-       }
+     //data = JSON.parse(data);
+     if (data.from === user.id) { return; }
+     if (thisPage.name == "chat-window" && data.from == thisPage.context.receiver && data.isevent == thisPage.context.isevent) {
+
+       $$('.someone-typing').html(data.name+ language.CHATS.SOMEONE_TYPING);
+       setTimeout(function() {
+         $$('.someone-typing').html("&nbsp;");
+       }, 1000);
      }
    });
 
    socket.on('new-message', function(data) {
      var thisPage = mainView.activePage;
+     //var messageData = JSON.parse(data);
      if (data.sender_id === user.id) { return; }
-     var messageData = JSON.parse(data);
-     if (thisPage.name == "chat-window" && (data.room == thisPage.context.eventId || data.sender_id == thisPage.context.receiver)) {
-       //add message
 
-       messages.addMessage(messageData);
+     console.log(data);
+     //console.log(thisPage);
+     if (thisPage.name == "chat-window" && data.from == thisPage.context.receiver && data.isevent == thisPage.context.isevent) {
+       //add message
+       //console.log(data.message);
+       messages.addMessage(data.message);
      } else {
-         myApp.addNotification({
-         message: 'New message from' + data.sender_firstname,
-         hold: 1500,
+       var msg = language.CHATS.NEW_MESSAGE_FROM + data.fromName;
+       if (data.isevent == true) {
+         msg = msg + language.CHATS.IN + data.eventName;
+       }
+      app.addNotification({
+         message: msg,
+         hold: 4000,
          button: {
              text: language.CHATS.READ,
              color: 'lightgreen',
              close:true
          },
          onClick: function () {
-           var isEvent = true
-           if (messageData.sender && messageData.sender.id) {
-             isEvent = false;
-             chatService.openChat(data.sender_id, data.sender_firstname, isEvent);
-           } else  {
-             chatService.openChat(data.room, data.sender_firstname, isEvent);
-           }
-         }
+           //app.alert();
+           chatService.openChat(data.from, data.fromName, data.isevent, data.eventName ? data.eventName: null);
+         },
        });
      }
+     var nocache = "?t="+moment().unix();
+     $$.ajax({
+       timeout: 30 * 1000,
+       async: true,
+       url: config.server + "/chat/messagedelivered/" +nocache,
+       method: "POST",
+       contentType: "application/x-www-form-urlencoded",
+       data: {messageid: data.id},
+       xhrFields: { withCredentials: true },
+       success: function(data, status, xhr) {
+         if (status == 200 || status == 0 ) {
+           //do nothing
+         }
+       },
+       error: function (xhr, status){
+       },
+     });
      socket.emit('message-delivered', {
       messageid: data.id
     });
-   });
+  });
 };
 
 var joinRoom = function(eventId) {

@@ -103,6 +103,7 @@
 		EA5CAA8830124BBFA506DF35 /* libPayPalMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E291B8C15E4BF89C75F415 /* libPayPalMobile.a */; };
 		F0B5C5585C31482C83DDF85B /* libGTM_NSStringHTML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7A1B9B4698942808245F2FB /* libGTM_NSStringHTML.a */; };
 		FDA9F43D1A54489D977036D5 /* zxing-all-in-one.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8977CC196B634B3DA8710D24 /* zxing-all-in-one.cpp */; };
+		B05481E32EB0425E88925612 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 869BC7CC24F7442BA41988B1 /* CDVStatusBar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,6 +297,8 @@
 		FCC213E6B331491E9876C26F /* libGTMSessionFetcher_full.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGTMSessionFetcher_full.a; path = "Sun Tixx/Plugins/phonegap-plugin-push/GCM/Libraries/libGTMSessionFetcher_full.a"; sourceTree = "<group>"; };
 		FEA5AD18CA1D413386B3D3FB /* CDVDevice.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVDevice.h; path = "cordova-plugin-device/CDVDevice.h"; sourceTree = "<group>"; };
 		FF091BADA8AD49F49A7BC48A /* CDVInAppBrowser.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVInAppBrowser.m; path = "cordova-plugin-inappbrowser/CDVInAppBrowser.m"; sourceTree = "<group>"; };
+		869BC7CC24F7442BA41988B1 /* CDVStatusBar.m */ = {isa = PBXFileReference; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		7708A20A438F4D0DB435EC2D /* CDVStatusBar.h */ = {isa = PBXFileReference; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -610,6 +613,8 @@
 				0BFDF6C7A9A2477CB0C90F5E /* CDVCamera.h */,
 				AE7C45B397DD49308D56A95E /* CDVJpegHeaderWriter.h */,
 				F5DF0E0D5F7D4F1AA1974AF8 /* CDVExif.h */,
+				869BC7CC24F7442BA41988B1 /* CDVStatusBar.m */,
+				7708A20A438F4D0DB435EC2D /* CDVStatusBar.h */,
 			);
 			name = Plugins;
 			path = "Sun Tixx/Plugins";
@@ -763,6 +768,7 @@
 				C534625553E74B49B65FD381 /* UIImage+CropScaleOrientation.m in Sources */,
 				37C93D28F2774B34A192E0BF /* CDVCamera.m in Sources */,
 				352D30A83BC444DE86F49E27 /* CDVJpegHeaderWriter.m in Sources */,
+				B05481E32EB0425E88925612 /* CDVStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

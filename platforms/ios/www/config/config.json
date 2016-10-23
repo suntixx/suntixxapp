@@ -1,6 +1,6 @@
 {
-  "server": "https://www.suntixx.com",
-  "version": "1.5.0",
+  "server": "https://dev.suntixx.com",
+  "version": "2.0.0",
   "Developer": "Jason Cox",
   "appName": "Sun Tixx",
   "secret": "SunT1xxPhon#AppAPISecret",

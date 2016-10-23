@@ -1,3 +1,45 @@
+//=================Committee Members Actions==================================
+app.onPageInit('sell-tickets-list', function(page) {
+  var sellerTickets = page.context.tickets;
+  $$('.start-selling').on('click', function () {
+    var selectedTickets = app.formToJSON('#select-tickets-form');
+    var selected = 0;
+    for (var i in selectedTickets) {
+      if (selectedTickets[i].length > 0) {
+        selected++;
+      }
+    }
+    if (selected == 0) {
+      app.alert("Plese select ticket(s)");
+      return;
+    }
+    var tickets = util.getTicketsToSell(selectedTickets, sellerTickets);
+    mainView.router.load ({
+      url: 'views/selltickets/select-quantity.html',
+      context: {
+        event:selectedEventLocal,
+        tickets: tickets,
+        sellerTickets: sellerTickets,
+      },
+    });
+  });
+
+  $$('.reports').on('click', function() {
+    mainView.router.load ({
+      url: 'views/selltickets/sales-reports.html',
+    });
+  });
+
+  $$('.back-events').on('click', function () {
+    mainView.router.back ({
+      url: 'views/events/myevents.html',
+      context: allUserEvents,
+      force: true,
+    });
+  });
+});
+
+
 var sellerTickets;
 app.onPageInit('sell-quantity', function(page) {
   var userTickets = page.context.tickets;
@@ -5,14 +47,15 @@ app.onPageInit('sell-quantity', function(page) {
     sellerTickets = page.context.sellerTickets;
   }
   var ticketLimit = null;
-  $$('#ticket-limit').on('focusin click', function() {
+  $$('.ticket-limit').on('focusin click', function() {
+    var id = $$(this).attr('id');
     var available = $$(this).attr('quantity');
     if (available > 10) {
       available = 10;
     }
-    if (!ticketLimit) {
-      ticketLimit = appPickers.limitPicker('ticket-limit', available );
-    }
+    //if (!ticketLimit) {
+      ticketLimit = appPickers.limitPicker(id, available );
+    //}
     ticketLimit.open();
   });
   var processing = false;
@@ -177,6 +220,8 @@ app.onPageInit('sell-ticket-names', function(page) {
         cart: checkoutCart,
         event: selectedEventLocal,
         tickets: tickets,
+        userTickets: userTickets,
+        ticketList : page.context.cart,
       },
     });
   });
@@ -216,6 +261,17 @@ app.onPageInit('sell-checkout', function (page) {
      }
    };
 
+   var paymentTypeSelected = function (radio) {
+     if  (radio == 1 || radio == 2) {
+       return true;
+     } else {
+       $$('.error-message').html("Please correct errors");
+       $$('.paymentoption').html(errorIcon);
+       return false;
+     }
+
+   }
+
    var emailsMatch = function (formData) {
      if (formData.email != formData.confirmemail) {
        $$('.confirmemail').html(errorIcon);
@@ -223,35 +279,178 @@ app.onPageInit('sell-checkout', function (page) {
        return false;
      }
      return true;
-   }
+   };
 
-   var processing = false;
-  $$('.confirm-sale').on('click', function() {
-    if (processing) {
-      return;
+   $$(".step-two").on('click', function() {
+
+     mainView.router.back({
+       url: 'views/selltickets/ticket-names.html',
+       force: true,
+       context: {
+         userTickets: page.context.userTickets,
+         total:page.context.total,
+         event: selectedEventLocal,
+         cart: page.context.ticketList
+       }
+     });
+   });
+
+  var purchaser = {};
+  $$(document).on('click', '.add-new-purchaser', function() {
+    app.popup(Template7.templates.addPurchaserTemplate(purchaser));
+  });
+
+  $$(document).on('change', 'input[type=radio]', function() {
+    //alert("here");
+    var form = app.formToJSON("#add-purchaser-form");
+    if (form.paymentoption == 1) {
+      $$('.sell-cashout').removeClass("color-gray");
+      $$('input[type="checkbox"]').prop('disabled', false);
+    } else if (form.paymentoption == 2) {
+      $$('.sell-cashout').addClass("color-gray");
+      $$('input[type="checkbox"]').prop('disabled', true).prop('checked', false);
     }
-    processing = true;
-    var purchaser = app.formToJSON('#add-purchaser-form');
-    if (!validatePurchaser('#add-purchaser-form') || !emailsMatch(purchaser)) {
+  });
+
+  var processing = false;
+
+  $$(document).on('click', '.confirm-purchaser', function() {
+
+    purchaser = app.formToJSON('#add-purchaser-form');
+    console.log(JSON.stringify(purchaser))
+    if (!validatePurchaser('#add-purchaser-form') || !paymentTypeSelected(purchaser.paymentoption)) {
       processing = false;
       return;
     }
-    app.closeModal('.add-purchaser');
+    app.closeModal();
     $$('.purchaser-info').val(' ');
     var capitalize = function(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    var firstname = capitalize(purchaser.fname);
-    var lastname = capitalize(purchaser.lname);
+    purchaser.firstname = capitalize(purchaser.fname);
+    purchaser.lastname = capitalize(purchaser.lname);
+    var paymentType = language.STORE.PAYPAL;
+    if (purchaser.paymentoption == 1) {
+      paymentType = language.STORE.CASH;
+      if (purchaser.cashout.length > 0) {
+        paymentType += " - " + language.STORE.PAID;   //=================Committee Members Actions==================================
+        app.onPageInit('sell-tickets-list', function(page) {
+          var sellerTickets = page.context.tickets;
+            //alert(JSON.stringify(sellerTickets));
+          $$('.start-selling').on('click', function () {
+            var selectedTickets = app.formToJSON('#select-tickets-form');
+            var selected = 0;
+            for (var i in selectedTickets) {
+              if (selectedTickets[i].length > 0) {
+                selected++;
+              }
+            }
+            if (selected == 0) {
+              app.alert("Plese select ticket(s)");
+              return;
+            }
+            var tickets = util.getTicketsToSell(selectedTickets, sellerTickets);
+            //alert(JSON.stringify(tickets));
+            // = app.addView('.view-store', {});
+            mainView.router.load ({
+              url: 'views/selltickets/select-quantity.html',
+              context: {
+                event:selectedEventLocal,
+                tickets: tickets,
+                sellerTickets: sellerTickets,
+              },
+              //ignoreCache: true,
+            });
+          });
+
+          $$('.back-events').on('click', function () {
+            mainView.router.back ({
+              url: 'views/events/myevents.html',
+              context: allUserEvents,
+              force: true,
+            });
+          });
+        });
+
+
+
+      }
+    }
+    var nocache = "?t="+moment().unix();
+    app.showIndicator();
+    var result;
+    $$.ajax({
+      async: true,
+      timeout: 30 * 1000,
+      url: config.server + "/api/getuserbyemail" + nocache,
+      method: "POST",
+      contentType: "application/x-www-form-urlencoded",
+      data: {email: purchaser.email},
+      xhrFields: { withCredentials: true },
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          result = JSON.parse(data);
+          $$('.purchaser-user-info').html(
+            '<li class="item-content">'+
+              '<div class="item-media">'+
+                '<img class="user-image-square" src="'+config.server+'/thumbnails/users/'+result.id+'/portrait.png">'+
+              '</div>'+
+              '<div class="item-inner">'+
+                '<div class="item-title-row">'+
+                  '<div class="item-title">'+ result.fullName+'</div>'+
+                '</div>'+
+                '<div class="item-subtitle">'+result.email+'<br/><span class="small">'+paymentType+'</span></div>'+
+              '</div>'+
+            '</li>'
+          );
+          $$('.edit-purchaser').html(
+            '<a href="#" class="add-new-purchaser">'+language.STORE.EDIT_PURCHASER+'</a>'
+          );
+          $$('.floating-button').html(
+            '<i class="icon icon-pay"></i>'
+          ).toggleClass('complete-sale').toggleClass('add-new-purchaser');
+          app.hideIndicator();
+        }
+      },
+      error: function(status, xhr) {
+        $$('.purchaser-user-info').html(
+          '<li class="item-content">'+
+            '<div class="item-media">'+
+              '<img class="user-image-square" src="'+config.server+'/thumbnails/users/0/portrait.png">'+
+            '</div>'+
+            '<div class="item-inner">'+
+              '<div class="item-title-row">'+
+                '<div class="item-title">'+ purchaser.firstname +' '+ purchaser.lastname +'</div>'+
+              '</div>'+
+              '<div class="item-subtitle">'+purchaser.email+'<br/><span class="small">'+paymentType+'</span></div>'+
+            '</div>'+
+          '</li>'
+        );
+        $$('.edit-purchaser').html(
+          '<a href="#" class="add-new-purchaser">'+language.STORE.EDIT_PURCHASER+'</a>'
+        );
+        $$('.floating-button').html(
+          '<i class="icon icon-pay"></i>'
+        ).toggleClass('complete-sale').toggleClass('add-new-purchaser');
+        app.hideIndicator();
+      },
+    });
+  });
+
+  $$(document).on('click', '.complete-sale', function() {
+    if (processing) {
+      return;
+    }
+    processing = true;
     var request = {
       user_id: 0,
       event_id: selectedEventLocal.id,
 		  pos_user_id: user.id,
 		  cardtype: "Committee-Mobile",
-		  nameoncard: firstname +" "+lastname,
+		  nameoncard: purchaser.firstname +" "+ purchaser.lastname,
       email: purchaser.email,
-  		fname: firstname,
-  		lname: lastname,
+  		fname: purchaser.firstname,
+  		lname: purchaser.lastname,
   		ticketsquantity: checkoutCart.tickets.length,
   		totalprice: checkoutCart.total,
       currency: selectedEventLocal.currency,

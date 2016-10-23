@@ -5,21 +5,33 @@
         <div class="left">
           <a href="#" class="back link icon-only back-button" > <i class="icon icon-back"></i></a>
         </div>
-        <div class="center">
+        <div class="center chat-name capitalize">
           {{@global.language.USER_AREA.CHATS.CHAT}}
+        </div>
+        <div class="right">
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
         </div>
       </div>
       <div class="subnavbar">
         <div>&nbsp;</div>
-        <div class="small" style="text-align:center"><span class="preloader chat-connecting"></span><span class="amount-in-room"></span><br><span class="someone-typing"></span></div>
+        <div class="small" style="text-align:center"><span class="preloader chat-loading"></span><span class="amount-in-room small"></span><br><span class="someone-typing small"></span></div>
         <div>&nbsp;</div>
       </div>
     </div>
-    <div class="toolbar messagebar">
+    <!--<div class="toolbar toolbar-bottom message-toolbar">
+      <div class="toolbar-inner">
+        <a href="#" class="link icon-only close-message-toolbar"><i class="icon icon-back"></i></a>
+        <a href="#" class="link delete-messages icon-only"><i class="icon icon-delete-message"></i></a>
+        <a href="#" class="link forward-messages icon-only"><i class="icon icon-forward-message"></i></a>
+      </div>
+    </div>-->
+    <div class="toolbar toolbar-bottom messagebar" id="message-bar">
       <div class="toolbar-inner">
         <textarea class="message-box" placeholder="{{@global.language.USER_AREA.CHATS.MESSAGE}}"></textarea><a href="#" class="link send-message">{{@global.language.USER_AREA.CHATS.SEND}}</a>
       </div>
     </div>
+
+
     <div class="page-content messages-content">
       <div style="margin-top:10vh" class="messages"></div>
     </div>

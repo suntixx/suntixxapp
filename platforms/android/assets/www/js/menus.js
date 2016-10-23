@@ -220,6 +220,50 @@ Menus.ownerScan = '<div class="page-content list-block">'+
         '  </ul>'+
         '</div>';
 
+Menus.chatRoom = '<div class="page-content list-block">'+
+        '  <ul>'+
+        '    <li>'+
+        '      <a href="#" class="close-panel item-link item-content get-members">'+
+        '        <div class="item-inner">'+
+        '          <div class="item-title">Members</div>'+
+        '        </div>'+
+        '      </a>'+
+        '    </li>'+
+        '    <li>'+
+        '      <a href="#" class="close-panel item-link item-content leave-room">'+
+        '        <div class="item-inner">'+
+        '          <div class="item-title">Leave Room</div>'+
+        '        </div>'+
+        '      </a>'+
+        '    </li>'+
+        '    <li>'+
+        '      <a href="#" class="close-panel item-link item-content clear-chat">'+
+        '        <div class="item-inner">'+
+        '          <div class="item-title">Clear Chat</div>'+
+        '        </div>'+
+        '      </a>'+
+        '    </li>'+
+        '  </ul>'+
+        '</div>';
+
+Menus.privateChat = '<div class="page-content list-block">'+
+        '  <ul>'+
+        /*'    <li>'+
+        '      <a href="#" class="close-panel item-link item-content open-user-profile">'+
+        '        <div class="item-inner">'+
+        '          <div class="item-title">User Profile</div>'+
+        '        </div>'+
+        '      </a>'+
+        '    </li>'+*/
+        '    <li>'+
+        '      <a href="#" class="close-panel item-link item-content clear-chat">'+
+        '        <div class="item-inner">'+
+        '          <div class="item-title">Clear Chat</div>'+
+        '        </div>'+
+        '      </a>'+
+        '    </li>'+
+        '  </ul>'+
+        '</div>';
 
 //var scanHistory =[];
 $$(document).on('click', '.open-scan-history', function () {

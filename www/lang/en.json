@@ -1,6 +1,10 @@
 {
 	"OTHER": {
 		"COUNTRY_FIELD": "Country",
+		"FIRST_NAME": "First Name",
+		"LAST_NAME": "Last Name",
+		"EMAIL": "Email",
+		"CONFIRM_EMAIL":  "Confirm Email",
 		"CANCEL": "Cancel",
 		"CITY_FIELD": "City",
 		"PHONE_FIELD": "Phone",
@@ -16,7 +20,8 @@
 		"PLEASE_WAIT_UPLOADING": "Please Wait.  Still Uploading Image"
 	},
 	"HOMEPAGE": {
-		"FEED_ERROR": "There was a problem loading this feed.<br> Pull down to try again"
+		"FEED_ERROR": "There was a problem loading this feed.<br> Pull down to try again",
+		"FAVORITES": "Favorites"
 	},
 	"USER_AREA": {
 		"PROFILE": "Profile",
@@ -59,14 +64,23 @@
     "MESSAGE": "Message",
     "CHAT": "Chat",
 		"NO_CHATS": "No chats found",
+		"NEW_MESSAGE_FROM": "New message from ",
+		"IN": " in ",
     "CHATS": "Chats",
+		"FRIEND_NOT_FOUND": "Friend not found",
 		"TODAY": "Today",
 		"YESTERDAY": "Yesterday",
 		"CHAT_HISTORY_ERROR" : "There was a problem retrieving the chat history",
 		"CHAT_ERROR": "There was a problem connecting to the chat server",
 		"READ": "Read",
+		"SOMEONE_TYPING": " is typing",
     "SEND": "Send"
   },
+	"TICKETS": {
+		"ORDERS": "Orders",
+		"MY_TICKETS": "My Tickets",
+		"UPCOMING_EVENTS": "Upcoming Events"
+	},
   "EVENTS": {
 		"PROMOTER": "Promoter",
 		"ADD_ANOTHER_SELLER": "Add Another Box Office Seller",
@@ -79,6 +93,25 @@
     "DETAILS": "Event Details"
   },
 	"STORE": {
+		"CHECKOUT": "Checkout",
+		"QUANTITY_ABBR": "Qty",
+		"TICKETTYPE": "Ticket Type",
+		"PRICE": "Price",
+		"TOTAL": "Total",
+		"CASH" : "Cash",
+		"PAID": "Paid",
+		"PAYPAL" : "Paypal/Credit",
+		"MARK_PAID":  "Mark As Paid",
+		"CANCEL": "Cancel",
+		"CONFIRM": "Confirm",
+		"SELL": "Sell",
+		"SALES_REPORTS": "Sales Reports",
+		"ALL_SALES_REPORTS": "All",
+		"CASH_SALES_REPORTS": "Cash",
+		"PAYPAL_SALES_REPORTS": "Paypal",
+		"NO_PURCHASER": "No Purchaser Added",
+		"EDIT_PURCHASER": "Edit Purchaser",
+		"ENTER_PURCHASER": "Enter Purchaser's Information",
 		"CHECKOUT_PURCHASE_ERROR": "There was an error.  Please verify your purchased tickets before trying again",
 		"CHECKOUT_SELL_ERROR": "There was an error.  Please verify your sold tickets before trying again"
 	},

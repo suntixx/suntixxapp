@@ -354,7 +354,7 @@ app.onPageInit('event-details', function(page) {
         $$('#eventPromoterTab .profile').html(Template7.templates.userProfileTemplate(thisEvent.user));
       }
       delete thisEvent.user.noMessage;
-      
+
       $$('.message-user').on('click', function() {
         if (!user) {
           app.loginScreen();
@@ -427,7 +427,7 @@ app.onPageInit('event-details', function(page) {
       app.loginScreen();
       return;
     }
-    chatService.openChat(thisEvent.id, thisEvent.name, true);
+    chatService.openChat(thisEvent.id, thisEvent.name, true, thisEvent.name);
     //var eventId = $$(this).attr('event-id');
     //mainView.router.load({
     //  url: 'views/user/chat.html',
@@ -1835,44 +1835,7 @@ app.onPageInit('update-pos-list', function(page) {
 });
 //==============================================================
 
-//=================Committee Members Actions==================================
-app.onPageInit('sell-tickets-list', function(page) {
-  var sellerTickets = page.context.tickets;
-    //alert(JSON.stringify(sellerTickets));
-  $$('.start-selling').on('click', function () {
-    var selectedTickets = app.formToJSON('#select-tickets-form');
-    var selected = 0;
-    for (var i in selectedTickets) {
-      if (selectedTickets[i].length > 0) {
-        selected++;
-      }
-    }
-    if (selected == 0) {
-      app.alert("Plese select ticket(s)");
-      return;
-    }
-    var tickets = util.getTicketsToSell(selectedTickets, sellerTickets);
-    //alert(JSON.stringify(tickets));
-    // = app.addView('.view-store', {});
-    mainView.router.load ({
-      url: 'views/selltickets/select-quantity.html',
-      context: {
-        event:selectedEventLocal,
-        tickets: tickets,
-        sellerTickets: sellerTickets,
-      },
-      //ignoreCache: true,
-    });
-  });
 
-  $$('.back-events').on('click', function () {
-    mainView.router.back ({
-      url: 'views/events/myevents.html',
-      context: allUserEvents,
-      force: true,
-    });
-  });
-});
 
 app.onPageInit('purchase-committee-plan', function(page) {
   $$('.add-committee-plan').on('click', function() {

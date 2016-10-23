@@ -13,6 +13,17 @@
         "cordova-plugin-barcodescanner": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-facebook4": {
+            "APP_ID": "535092483348628",
+            "APP_NAME": "Sun Tixx",
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
@@ -20,6 +31,9 @@
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-network-information": {
@@ -34,15 +48,7 @@
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
-        "cordova-plugin-facebook4": {
-            "APP_ID": "535092483348628",
-            "APP_NAME": "Sun Tixx",
+        "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "de.appplant.cordova.plugin.local-notification": {
@@ -52,10 +58,7 @@
             "SENDER_ID": "326258679945",
             "PACKAGE_NAME": "com.suntixx.application"
         },
-        "cordova-sqlite-storage": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
-        "cordova-plugin-camera": {
+        "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.suntixx.application"
         }
     },
@@ -63,13 +66,13 @@
         "card.io.cordova.mobilesdk": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
         "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
-        "cordova-plugin-app-event": {
             "PACKAGE_NAME": "com.suntixx.application"
         }
     }

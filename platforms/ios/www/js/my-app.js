@@ -460,6 +460,9 @@ $$(document).find('.categories').on('click', function () {
   var query = "?mytab="+myTab;
   mainView.router.load ({
     url: 'categories.html'+query,
+    context: {
+      categoryName: $$(this).html()
+    },
     reload: true,
   });
 });
@@ -743,6 +746,12 @@ $$(document).on('click', '.search-event-link', function () {
       app.hidePreloader();
       app.alert("Oops! Something went wrong");
     }
+  });
+});
+
+$$(document).on('click', '.open-favorites', function () {
+  mainView.router.load({
+    url: 'favorites.html'
   });
 });
 

@@ -357,7 +357,7 @@
                     </div>
                   </div>
                   <div class="col-20 item-media">
-                      <a href="#" class="link message-seller" user-id="{{id}}" user-name="{{name2}} {{name4}}"><i class="icon icon-chats-orange"></i></a>
+                    {{sellerChat id @global.user.id name2 name4}}
                   </div>
                 </div>
               </li>
@@ -650,7 +650,109 @@
         </div>
       </div>
     </script>
-    <!--Popups-->
+    <script type="text/template7" id="forwardMessageToFriendTemplate">
+      <div class="popup forward-messages-to">
+        <div class="pages no-navbar">
+          <div class="page" data-page="select-friend-to-forward" >
+            <form class="forward-to-friend-searchbar">
+              <a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a>
+                <div class="searchbar-input">
+                  <input type="search" placeholder="Search Friend" id="search-friend-input">
+                  <a href="#" class="searchbar-clear"></a>
+                </div>
+              <a href="#" class="searchbar-cancel">Cancel</a>
+            </form>
+            <div class="searchbar-overlay"></div>
+            <div class="page-content">
+              <div class="content-block searchbar-not-found">
+                {{@global.language.CHATS.FRIEND_NOT_FOUND}}
+              </div>
+              <div class="list-block list-block-search searchbar-found forward-message-friend-list">
+                <ul>
+                  {{#each friends}}
+                    <div class="item-content" friend-id="{{id}}">
+                      <div class="item-media">
+                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                      </div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="noFriendsTemplate">
+      <div class="popup">
+        <div class="pages">
+          <div class="page" data-page="no-facebook-friends" >
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+              </div>
+            </div>
+            <div class="page-content">
+              {{#if social_id}}
+                {{js_compare "this.friends.length == 0"}}
+                <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.USER_AREA.NO_FACEBOOK_FRIENDS}}</div>
+                <div style="text-align:center;width:90vw;margin: 0 auto">
+                  <a href="#" class="button button-big button-fill facebook-button link close-login-screen share-app">{{@global.language.USER_AREA.SHARE_APP}}</a>
+                </div>
+                {{/js_compare}}
+                {{else}}
+                <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.USER_AREA.NO_FACEBOOK_INTEGRATION}}</div>
+                <div style="text-align:center;width:90vw;margin: 0 auto">
+                  <a href="#" class="button button-big button-fill facebook-button link close-login-screen add-facebook-integration">{{@global.language.USER_AREA.FACEBOOK_LOGIN}}</a>
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="chatRoomMembersTemplate">
+      <div class="popup">
+        <div class="pages">
+          <div class="page" data-page="chatroom-members" >
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+              </div>
+            </div>
+            <div class="page-content">
+              {{#with event}}
+                {{> "eventPartial"}}
+              {{/with}}
+              {{js_compare "this.members.length == 0"}}
+              {{else}}
+              <div class="list-block">
+                <ul>
+                  {{#each members}}
+                    <div class="item-content">
+                      <div class="item-media">
+                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                      </div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">{{fullname}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  {{/each}}
+                </ul>
+              </div>
+              {{/js_compare}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
     <div class="popup barcodes">
       <div class="tabs-swipeable-wrap">
         <div class="tabs">
@@ -675,11 +777,11 @@
         </div>
       </div>
     </div>
-    <div class="popup add-purchaser">
-      <div class="content-block-title">
-        <p>Enter the purchaser's name and email to continue</p>
-      </div>
-
+    <script type="text/template7" id="addPurchaserTemplate">
+      <div class="popup add-purchaser">
+        <div class="content-block-title">
+          <p>{{@global.language.STORE.ENTER_PURCHASER}}</p>
+        </div>
         <form class="list-block inset" id="add-purchaser-form">
           <div class="error-message color-red"></div>
           <ul>
@@ -688,7 +790,7 @@
                 <div class="item-inner">
                   <div class="form-error fname"></div>
                   <div class="item-input">
-                    <input type="text" placeholder="First Name" name="fname" class="purchaser-info" required/>
+                    <input type="text" placeholder="{{@global.language.OTHER.FIRST_NAME}}" name="fname" class="purchaser-info" value="{{#if fname}}{{fname}}{{/if}}" required/>
                   </div>
                 </div>
               </div>
@@ -698,7 +800,7 @@
                 <div class="item-inner">
                   <div class="form-error lname"></div>
                   <div class="item-input">
-                    <input type="text" placeholder="Last Name" name="lname" class="purchaser-info"  required/>
+                    <input type="text" placeholder="{{@global.language.OTHER.LAST_NAME}}" name="lname" class="purchaser-info" value="{{#if lname}}{{lname}}{{/if}}" required/>
                   </div>
                 </div>
               </div>
@@ -708,28 +810,85 @@
                 <div class="item-inner">
                   <div class="form-error email"></div>
                   <div class="item-input">
-                    <input type="email" placeholder="E-mail" name="email" class="purchaser-info" required/>
+                    <input type="email" placeholder="{{@global.language.OTHER.EMAIL}}" name="email" class="purchaser-info" value="{{#if email}}{{email}}{{/if}}" required/>
                   </div>
                 </div>
               </div>
             </li>
-            <li>
+            <!--<li>
               <div class="item-content">
                 <div class="item-inner">
                   <div class="form-error confirmemail"></div>
                   <div class="item-input">
-                    <input type="email" placeholder="Confirm E-mail" name="confirmemail" class="purchaser-info" required/>
+                    <input type="email" placeholder="{{@global.language.OTHER.CONFIRM_EMAIL}}" name="confirmemail" class="purchaser-info" required/>
                   </div>
                 </div>
               </div>
-            </li>
+            </li>-->
+            <li>
+             <label class="label-radio item-content">
+               <div class="form-error paymentoption"></div>
+               <input type="radio" name="paymentoption" value="1" class="paymentoption" required
+                {{#if paymentoption}}
+                  {{#js_compare "this.paymentoption == 1"}}checked{{/js_compare}}
+                {{/if}}
+                >
+               <div class="item-media">
+                 <i class="icon icon-form-radio"></i>
+               </div>
+               <div class="item-inner">
+                 <div class="item-title">{{@global.language.STORE.CASH}}</div>
+               </div>
+             </label>
+             <ul>
+               <li>
+                <label class="label-checkbox item-content color-gray sell-cashout">
+                  <input type="checkbox" name="cashout" value="1"
+                    {{#if paymentoption}}
+                      {{#js_compare "this.paymentoption == 1"}}
+                        {{#js_compare "this.cashout.length > 0"}}
+                          checked
+                        {{/js_compare}}
+                      {{else}}
+                        disabled
+                      {{/js_compare}}
+                    {{/if}}
+                  >
+                  <div class="item-media">
+                    <i class="icon icon-form-checkbox"></i>
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title">{{@global.language.STORE.MARK_PAID}}</div>
+                  </div>
+                </label>
+              </li>
+            </ul>
+           </li>
+           <li>
+             <label class="label-radio item-content">
+               <input type="radio" name="paymentoption" value="2" class="paymentoption" required
+                {{#if paymentoption}}
+                  {{#js_compare "this.paymentoption == 2"}}
+                    checked
+                  {{/js_compare}}
+                {{/if}}
+              >
+               <div class="item-media">
+                 <i class="icon icon-form-radio"></i>
+               </div>
+               <div class="item-inner">
+                 <div class="item-title">{{@global.language.STORE.PAYPAL}}</div>
+               </div>
+             </label>
+           </li>
           </ul>
         </form>
-          <div class="buttons-row">
-            <a href="#" class="button button-big button-fill color-red close-popup back-button">Cancel</a>
-            <a href="#" class="button button-big button-fill color-green confirm-sale">Sell</a>
-          </div>
-    </div>
+        <div class="buttons-row">
+          <a href="#" class="button button-big button-fill color-red close-popup back-button">{{@global.language.STORE.CANCEL}}</a>
+          <a href="#" class="button button-big button-fill color-green confirm-purchaser">{{@global.language.STORE.CONFIRM}}</a>
+        </div>
+      </div>
+    </script>
     <div class="popup form-popup">
       <div class="view view-popup"></div>
     </div>
@@ -769,17 +928,6 @@
         </div>
       </div>
     </div>
-    <div class="popover checkout-options">
-      <div class="popover-angle"><i class="icon icon-back"></i></div>
-      <div class="popover-inner">
-        <div class="list-block">
-          <ul>
-            <li><a href="#" class="list-button item-link close-popover payment-credit">Credit Card</a></li>
-            <li><a href="#" class="list-button item-link close-popover payment-paypal">PayPal</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/libs/moment.js"></script>
     <script type="text/javascript" src="js/libs/searchjs.js"></script>
@@ -788,12 +936,9 @@
     <script type="text/javascript" src="js/libs/qrcode.min.js"></script>
     <script type="text/javascript" src="js/paypal-mobile-js-helper.js"></script>
     <script type="text/javascript" src="https://dev.suntixx.com/socket.io/socket.io.js"></script>
-    <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDB79qDTV8MRbfZUFQH1pp7AclMbkQrd8Q"></script>-->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript" src="js/libs/gmaps.min.js"></script>
-    <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="js/framework7.min.js"></script>
-    <!-- Path to your app js-->
 
 
 
