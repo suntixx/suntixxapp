@@ -10,48 +10,41 @@
       <div class="toolbar-inner" style="background:#eee">
 
         <a href="#allSalesTab" class="button active tab-link" style="color:#F9A11B">{{@global.language.STORE.ALL_SALES_REPORTS}}</a>
-        <a href="#cashSalesTab" class="button tab-link" style="color:#F9A11B">{{@global.language.STORE.CASH}}</a>
-        <a href="#paypalSalesTab" class="button tab-link" style="color:#F9A11B">{{@global.language.STORE.PAYPAL}}</a>
+        <a href="#ordersTab" class="button tab-link" style="color:#F9A11B">{{@global.language.STORE.ORDERS}}</a>
       </div>
     </div>
     <div class="tabs-swipeable-wrap">
       <div class="tabs">
-
         <div class="page-content tab" id="allSalesTab">
-          <div class="list-block">
-            <ul>
-              {{#each report}}
-              <li class="accordion-item">
-                <a href="#" class="item-content item-link">
-                  <div class="item-inner">
-                    <div class="item-title">{{fullName}}</div>
-                  </div>
-                  <div class="item-subtitle">{{email}}</div>
-                </a>
-                <div class="accordion-item-content">
-                  <div class="content-block">
-                    <p>Item 1 content. Lorem ipsum dolor sit amet...</p>
-                  </div>
-                </div>
-              </li>
-              {{/each}}
-            </ul>
+          <div class="card event-details">
+            <div class="header">
+              <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{event.id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border"></div>
+            </div>
+            <div class="card-content">
+              <div class="list-block media-list">
+                <ul>
+                  {{#each reports.sales}}
+                  <li>
+                    <a href="#" class="item-link item-content purchase-details" purchase="{{id}}">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">{{fullName}}</div>
+                          <div class="item-after">{{ticketsquantity}}</div>
+                        </div>
+                        <div class="item-subtitle color-gray">{{email}}</div>
+                        <div class="item-text">{{purchasedate}}</div>
+                      </div>
+                    </a>
+                  </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="page-content tab infinite-scroll upcoming-scroll" id="cashSalesTab">
-          <div  id="cashSales">
+        <div class="page-content tab" id="ordersTab">
+          <div  id="orders">
             <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
-          </div>
-          <div class="infinite-scroll-preloader">
-            <div class="preloader infinite-preloader"></div>
-          </div>
-        </div>
-        <div class="page-content tab active home-refresh infinite-scroll " id="paypalSalesTab">
-          <div id="paypalSales">
-            <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
-          </div>
-          <div class="infinite-scroll-preloader">
-            <div class="preloader"></div>
           </div>
         </div>
       </div>

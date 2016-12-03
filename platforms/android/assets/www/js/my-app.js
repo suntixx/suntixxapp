@@ -572,6 +572,44 @@ app.onPageInit('categories', function(page) {
 
 });
 
+app.onPageInit('favorites', function(page) {
+
+  var nocache = "?t="+moment().unix();
+  var result;
+  $$.ajax({
+    async: true,
+    timeout: 1000 * 30,
+    url: config.server + "/api/getuserfavoriteevents/" + user.id  + nocache,
+    method: "GET",
+    success: function(data, status, xhr) {
+      if (status == 200 || status == 0 ){
+        result = JSON.parse(data);
+        //categoryEvents = util.formatSearchResults(result);
+        //$$("#page-loading").hide();
+        if (result.interested.length > 0) {
+          //$$('#category').html(Template7.templates.eventsTemplate(result));
+          //var eventSet = eventsService.getMoreEvents(categoryEvents, categoryEventsLastIndex);
+          $$(document).find('#interested').html(Template7.templates.eventsTemplate(result.interested));
+          //categoryEventsLastIndex = eventSet.index;
+        } else {
+          $$(document).find('#interested').html(noContentMessage);
+          $$(document).find('.oops-message').text(language.HOMEPAGE.NO_FAVORIRES);
+        }
+        if (result.attending.length > 0) {
+          //$$('#category').html(Template7.templates.eventsTemplate(result));
+          //var eventSet = eventsService.getMoreEvents(categoryEvents, categoryEventsLastIndex);
+          $$(document).find('#attending').html(Template7.templates.eventsTemplate(result.attending));
+          //categoryEventsLastIndex = eventSet.index;
+        } else {
+          $$(document).find('#attending').html(noContentMessage);
+          $$(document).find('.oops-message').text(language.HOMEPAGE.NO_FAVORIRES);
+        }
+
+      }
+    }
+  });
+});
+
 mainView.router.loadPage('home.html');
 
 $$(document).find('.panel-left').on('open', function() {

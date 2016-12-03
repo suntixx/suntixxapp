@@ -17,11 +17,13 @@ var language;
 var socket;
 var push;
 var config;
-var storeView = null;
+var storeView = null
+var utcOffset;
 var autoScan = storage.getItem('autoscan');
 if (!autoScan) {
   storage.setItem('autoscan', false);
 }
+storage.setItem('servertimezone', '-07:00');
 
 $$.ajax ({
   method: "GET",
@@ -138,7 +140,7 @@ Template7.registerHelper('englishtime', function (arr, options) {
   if (typeof arr === 'function') arr = arr.call(this);
   //moment().utcOffset(-7);
   //var serverTime = moment.utc(arr).utcOffset(-3).format('ddd MMM Do YYYY, h:mm A')
-  return moment.utc(arr).utcOffset(-7).format('ddd MMM Do YYYY, h:mm A');
+  return moment.utc(arr).utcOffset(storage.getItem('servertimezone')).format('ddd MMM Do YYYY, h:mm A');
 });
 Template7.registerHelper('nocache', function (arr, options) {
   if (typeof arr === 'function') arr = arr.call(this);
@@ -164,21 +166,52 @@ document.addEventListener('deviceready', onDeviceReady, false);
 
 
 function onDeviceReady() {
+  navigator.globalization.getPreferredLanguage(getLanguageSuccess, getLanguageError);
+  navigator.globalization.getDatePattern(getDatePatternSuccess, getDatePatternFail, {formatLength:'full', selector:'date and time'});
   camera = navigator.camera;
   navigator.splashscreen.hide();
   geolocation = navigator.geolocation;
-  window.open = cordova.InAppBrowser.open;
   connection= navigator.connection;
   db = window.sqlitePlugin.openDatabase({name: 'suntixx.db', location: 'default',  androidLockWorkaround: 1}, onDatabaseCreate, onDatabaseCreateError);
-  navigator.globalization.getPreferredLanguage(getLanguageSuccess, getLanguageError);
-  StatusBar.backgroundColorByHexString("#3f51b5");
-  StatusBar.styleBlackTranslucent();
-  initializePushMessaging();
+  window.open = cordova.InAppBrowser.open;
   document.addEventListener("pause", onPauseApp, false);
   document.addEventListener("resume", checkLogin, false);
   document.addEventListener('backbutton', onBackKey, false);
+  StatusBar.backgroundColorByHexString("#3f51b5");
+  StatusBar.styleBlackTranslucent();
+  initializePushMessaging();
+
   //document.addEventListener('online', , false);
 }
+
+var getServerTime = function() {
+  $$.ajax({
+    async: true,
+    url: config.server + "/api/servertime" + nocache,
+    method: "GET",
+    timeout: 20 * 1000,
+    success: function(data, status, xhr) {
+      if (status == 200) {
+        storage.setItem('servertimezone', JSON.parse(data).timezone);
+      }
+    },
+    error: function (xhr, status){
+      //do nothing
+    },
+  });
+};
+//getServerTime();
+
+var getDatePatternSuccess = function (date) {
+  utcOffset = date.utc_offset;
+  utcOffset = utcOffset / 3600; //3600 seconds per hour
+  console.log(JSON.stringify(date));
+};
+
+var getDatePatternFail = function(err) {
+  //do nothing
+  console.log(JSON.stringify(err));
+};
 
 var initializePushMessaging = function() {
   push = PushNotification.init({
@@ -220,7 +253,8 @@ $$.getJSON('lang/en.json', function(data) {
   Template7.global.language = language;
 });
 
-var getLanguageError = function () {
+var getLanguageError = function (err) {
+  console.log(JSON.stringify(err));
   $$.getJSON('lang/en.json', function(data, status, xhr) {
     language = data;
     Template7.global.language = language;

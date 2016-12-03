@@ -4,40 +4,53 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back-button step-one link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center sliding">Ticket Names</div>
+        <div class="center sliding">{{@global.language.STORE.TICKET_NAMES}}</div>
       </div>
     </div>
     <a href="#" class="floating-button color-orange save-ticket-names">
       <i class="icon icon-checkout"></i>
     </a>
     <div class="page-content">
-       <div class="card">
+      <div class="card event-details">
+        <div class="header">
+          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{event.id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border"></div>
+        </div>
+      </div>
+       <div class="card full-width">
          <div class="card-header">
-           <div class="col-55">Name</div>
-           <div class="col-45">Price&nbsp;({{event.currency}})</div>
+          <div class="col-55">{{@global.language.OTHER.NAME}}</div>
+           <div class="col-45">{{@global.language.STORE.PRICE}}&nbsp;({{event.currency}})</div>
          </div>
          <div class="card-content list-block" id="ticket-names-form">
            <ul>
-             {{#each cart}}
-             <li class="swipeout">
-               <div class="shopping-cart item-content row swipeout-content">
-                 <div class="col-75">
-                   {{tickettype}}
+             {{#each userTicketsList}}
+             <div class="shopping-cart item-content row" id="tickettype-{{id}}">
+               <div class="col-75">
+                 {{ticket.tickettype}}
+               </div>
+               <div class="col-25">${{js "this.ticket.price.toFixed(2)"}}</div>
+             </div>
+             <ul>
+             {{#each names}}
+               <li class="swipeout" ticketid ="{{../id}}">
+                <div class="shopping-cart item-content row swipeout-content">
+                 <div class="col-100">
                    <div class="item-input">
-                     <input type="text" placeholder="Admit One" name="nameonticket-{{id}}-{{@index}}">
+                     <input type="text" placeholder="Admit One" name="nameonticket-{{../id}}-{{@index}}" value="{{this}}">
                    </div>
                  </div>
-                 <div class="col-25">${{js "this.price.toFixed(2)"}}</div>
-               </div>
-               <div class="swipeout-actions-right">
-                <a class="swipeout-delete" ticketid ="{{id}}" href="#">Delete</a>
-              </div>
-             </li>
+                </div>
+                <div class="swipeout-actions-right">
+                  <a class="swipeout-delete" ticketid="{{../id}}" data-confirm="{{@global.language.STORE.CONFIRM_DELETE_TICKETTYPE}}" nameid="{{@index}}" href="#">{{@global.language.OTHER.DELETE}}</a>
+                </div>
+               </li>
+              {{/each}}
+             </ul>
              {{/each}}
            </ul>
           </div>
           <div class="card-footer row">
-            <div class="col-55">Total</div>
+            <div class="col-55">{{@global.language.STORE.TOTAL}}</div>
             <div class="col-45 cart-total">${{js "this.total.toFixed(2)"}}&nbsp;{{event.currency}}</div>
           </div>
         </div>

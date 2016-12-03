@@ -55,28 +55,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-device/www/device.js",
-        "id": "cordova-plugin-device.device",
-        "pluginId": "cordova-plugin-device",
-        "clobbers": [
-            "device"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-device/src/browser/DeviceProxy.js",
-        "id": "cordova-plugin-device.DeviceProxy",
-        "pluginId": "cordova-plugin-device",
-        "runs": true
-    },
-    {
-        "file": "plugins/cordova-plugin-facebook4/www/facebook-browser.js",
-        "id": "cordova-plugin-facebook4.FacebookConnectPluginBrowser",
-        "pluginId": "cordova-plugin-facebook4",
-        "clobbers": [
-            "facebookConnectPlugin"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "id": "cordova-plugin-file.DirectoryEntry",
         "pluginId": "cordova-plugin-file",
@@ -308,23 +286,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-inappbrowser/src/browser/InAppBrowserProxy.js",
-        "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "merges": [
-            ""
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-network-information/www/network.js",
         "id": "cordova-plugin-network-information.network",
         "pluginId": "cordova-plugin-network-information",
@@ -370,11 +331,59 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-        "id": "cordova-sqlite-storage.SQLitePlugin",
-        "pluginId": "cordova-sqlite-storage",
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
         "clobbers": [
-            "SQLitePlugin"
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-inappbrowser/src/browser/InAppBrowserProxy.js",
+        "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "merges": [
+            ""
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device/www/device.js",
+        "id": "cordova-plugin-device.device",
+        "pluginId": "cordova-plugin-device",
+        "clobbers": [
+            "device"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device/src/browser/DeviceProxy.js",
+        "id": "cordova-plugin-device.DeviceProxy",
+        "pluginId": "cordova-plugin-device",
+        "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-fullscreen/www/AndroidFullScreen.js",
+        "id": "cordova-plugin-fullscreen.AndroidFullScreen",
+        "pluginId": "cordova-plugin-fullscreen",
+        "clobbers": [
+            "AndroidFullScreen"
+        ]
+    },
+    {
+        "file": "plugins/ionic-plugin-keyboard/www/browser/keyboard.js",
+        "id": "ionic-plugin-keyboard.keyboard",
+        "pluginId": "ionic-plugin-keyboard",
+        "clobbers": [
+            "cordova.plugins.Keyboard"
+        ],
+        "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-facebook4/www/facebook-browser.js",
+        "id": "cordova-plugin-facebook4.FacebookConnectPluginBrowser",
+        "pluginId": "cordova-plugin-facebook4",
+        "clobbers": [
+            "facebookConnectPlugin"
         ]
     },
     {
@@ -413,6 +422,14 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+        "id": "cordova-sqlite-storage.SQLitePlugin",
+        "pluginId": "cordova-sqlite-storage",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
         "id": "cordova-plugin-statusbar.statusbar",
         "pluginId": "cordova-plugin-statusbar",
@@ -432,24 +449,26 @@ module.exports.metadata =
 {
     "card.io.cordova.mobilesdk": "2.0.1",
     "com.paypal.cordova.mobilesdk": "3.2.0",
-    "cordova-plugin-app-event": "1.2.0",
     "cordova-plugin-barcodescanner": "0.7.0",
+    "cordova-plugin-camera": "2.1.1",
     "cordova-plugin-compat": "1.0.0",
-    "cordova-plugin-camera": "2.2.0",
-    "cordova-plugin-device": "1.1.2",
-    "cordova-plugin-facebook4": "1.7.1",
     "cordova-plugin-file": "4.2.0",
     "cordova-plugin-file-transfer": "1.5.1",
     "cordova-plugin-geolocation": "2.1.0",
     "cordova-plugin-globalization": "1.0.3",
-    "cordova-plugin-inappbrowser": "1.4.0",
     "cordova-plugin-network-information": "1.2.1",
     "cordova-plugin-splashscreen": "3.1.0",
     "cordova-plugin-whitelist": "1.2.1",
     "cordova-plugin-x-socialsharing": "5.0.12",
-    "cordova-sqlite-storage": "1.4.6",
+    "cordova-plugin-inappbrowser": "1.4.0",
+    "cordova-plugin-device": "1.1.2",
+    "cordova-plugin-fullscreen": "1.1.0",
+    "ionic-plugin-keyboard": "2.2.1",
+    "cordova-plugin-facebook4": "1.7.1",
+    "cordova-plugin-app-event": "1.2.0",
     "de.appplant.cordova.plugin.local-notification": "0.8.4",
     "phonegap-plugin-push": "1.7.4",
+    "cordova-sqlite-storage": "1.4.6",
     "cordova-plugin-statusbar": "2.2.0"
 }
 // BOTTOM OF METADATA

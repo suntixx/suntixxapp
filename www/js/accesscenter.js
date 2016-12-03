@@ -90,6 +90,7 @@ app.onPageInit('scanner-result', function (page) {
         success: function(data, status, xhr) {
           if (status == 200 || status == 0 ){
             var scanResult = JSON.parse(data);
+            console.log(data);
             updateScannerResultPage(code, scanResult);
             updateScanHistory(code, scannedTime, scanResult);
           }
@@ -206,6 +207,7 @@ var autoScan = function() {
         success: function(data, status, xhr) {
           if (status == 200 || status == 0 ){
             var scanResult = JSON.parse(data);
+
             updateScannerResultPage(code, scanResult);
             updateScanHistory(code, scannedTime, scanResult);
           }
@@ -273,8 +275,8 @@ var updateScannerResultPage = function (code, scanResult) {
     }
     $$('.ticket-id').html("<b>Ticket Id:</b> " + scanResult.purchasemodel.ticketNo);
     if (scanResult.purchasemodel.purchasedate) {
-      var previousScanDate = new Date(scanResult.purchasemodel.purchasedate);
-      $$('.previous-scan-date').html("<b>Previously Scanned:</b><br> "+ previousScanDate.toLocaleString());
+      var previousScanDate = moment.utc(scanResult.purchasemodel.purchasedate);
+      $$('.previous-scan-date').html("<b>Previously Scanned:</b><br> "+ previousScanDate.utcOffset(storage.getItem('servertimezone')).toLocaleString());
     }
   }
   $$('.barcode').val("");

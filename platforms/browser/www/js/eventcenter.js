@@ -2635,6 +2635,44 @@ app.onPageInit('add-scanners', function(page) {
 
 //======================Report functions==========================
 app.onPageInit('report', function (page) {
+
+  $$('.accordion-item').on('click', function() {
+    var ticketTypeId = $$(this).attr("ticket-type-id");
+    var color1 = '#f9a11b';
+    var color2 = '#3f51b5';
+    var thisTicket = SEARCHJS.matchArray(page.context.tickets, {id: Number(ticketTypeId)});
+    thisTicket = thisTicket[0];
+    console.log(thisTicket);
+    var createPieChart = function(type, field1, value1, value2) {
+      var data = [
+      	{
+          name: field1,
+          value: value1,
+          color: color1
+        },
+      	{
+          name: language.REPORTS.BALANCE,
+          value: value2,
+          color: color2
+        },
+    	];
+
+			new iChart.Pie2D({
+				render : type + '-' + ticketTypeId,
+				data: data,
+        border: false,
+				//title : 'Top 5 Browsers from 1 to 29 Feb 2012',
+				//showpercent:true,
+				//decimalsnum:1,
+				width : window.innerWidth,
+				//height : 400,
+				radius: '60%',
+			}).draw();
+    };
+    createPieChart ('sold-graph', language.REPORTS.SOLD, thisTicket.soldquantity, thisTicket.quantity - thisTicket.soldquantity);
+  });
+
+
   $$('.pull-to-refresh-content').on('refresh', function () {
     setTimeout(function () {
       var nocache = "?t="+moment().unix();

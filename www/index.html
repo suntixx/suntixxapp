@@ -815,16 +815,6 @@
                 </div>
               </div>
             </li>
-            <!--<li>
-              <div class="item-content">
-                <div class="item-inner">
-                  <div class="form-error confirmemail"></div>
-                  <div class="item-input">
-                    <input type="email" placeholder="{{@global.language.OTHER.CONFIRM_EMAIL}}" name="confirmemail" class="purchaser-info" required/>
-                  </div>
-                </div>
-              </div>
-            </li>-->
             <li>
              <label class="label-radio item-content">
                <div class="form-error paymentoption"></div>
@@ -840,29 +830,6 @@
                  <div class="item-title">{{@global.language.STORE.CASH}}</div>
                </div>
              </label>
-             <ul>
-               <li>
-                <label class="label-checkbox item-content color-gray sell-cashout">
-                  <input type="checkbox" name="cashout" value="1"
-                    {{#if paymentoption}}
-                      {{#js_compare "this.paymentoption == 1"}}
-                        {{#js_compare "this.cashout.length > 0"}}
-                          checked
-                        {{/js_compare}}
-                      {{else}}
-                        disabled
-                      {{/js_compare}}
-                    {{/if}}
-                  >
-                  <div class="item-media">
-                    <i class="icon icon-form-checkbox"></i>
-                  </div>
-                  <div class="item-inner">
-                    <div class="item-title">{{@global.language.STORE.MARK_PAID}}</div>
-                  </div>
-                </label>
-              </li>
-            </ul>
            </li>
            <li>
              <label class="label-radio item-content">
@@ -886,6 +853,78 @@
         <div class="buttons-row">
           <a href="#" class="button button-big button-fill color-red close-popup back-button">{{@global.language.STORE.CANCEL}}</a>
           <a href="#" class="button button-big button-fill color-green confirm-purchaser">{{@global.language.STORE.CONFIRM}}</a>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="saleReportDetails">
+      <div class=popup "sale-report-details">
+        <div class="pages">
+          <div data-page="purchase-detail" class="page navbar-fixed">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+                <div class="center sliding">{{@global.language.STORE.PURCHASE_DETAILS}}</div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div class="card event-details">
+                <div class="card-header">
+                  <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{eventid}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border"></div>
+                </div>
+                <div class="card-content">
+                  <div class="list-block media-list">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-media">
+                            <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{userid}}/portrait.png"/>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title-row">
+                              <div class="item-title">{{fullName}}</div>
+                            </div>
+                            <div class="item-subtitle">{{email}}<br/><span class="small">{{cardtype}}</span></div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="card full-width">
+                <div class="card-content">
+                  <div class="card-content-inner">
+                    <div class="list-block media-list">
+                      <ul>
+                        <li>
+                          {{#each details}}
+                          <div class="item-content">
+                            <div class="item-inner">
+                              <div class="item-title-row">
+                                <div class="item-title">{{tickettype}}</div>
+                                <div class="item-after">{{js "this.linetotal.toFixed(2)"}}</div>
+                              </div>
+                              <div class="item-subtitle">{{quantity}} x {{js "this.price.toFixed(2)"}}</div>
+                              <div class="item-text color-gray shopping-cart">
+                                {{#each nameonticket}}
+                                  {{this}}{{#unless @last}},{{/unless}}
+                                {{/each}}
+                              </div>
+                            </div>
+                          </div>
+                          {{/each}}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div>&nbsp;</div><div>&nbsp;</div>
+                  <div class="">${{js "this.totalprice.toFixed(2)"}} ({{currency}})</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </script>
@@ -938,6 +977,7 @@
     <script type="text/javascript" src="https://dev.suntixx.com/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript" src="js/libs/gmaps.min.js"></script>
+    <script type="text/javascript" src="js/libs/ichart.1.2.min.js"></script>
     <script type="text/javascript" src="js/framework7.min.js"></script>
 
 

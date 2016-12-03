@@ -46,6 +46,7 @@ var showLoginOrCreate = function () {
   $$(document).find('#user-avatar').html(html);
   $$(document).find('.logout-menu').hide();
 };
+
 if(user) {
   checkLogin();
 } else {
@@ -55,7 +56,7 @@ if(user) {
 
 function checkLogin () {
   var facebookConnectPlugin = false;
-  console.log("loggin in");
+  //console.log("loggin in");
   if (user && Number(user.id) > 0) {
     var nocache = "?t="+moment().unix();
     if(user.social_id && user.social  && facebookConnectPlugin) {
@@ -121,15 +122,8 @@ function checkLogin () {
         },
       });
     }
-  } //else {
-  //  user = null;
-  //  storage.removeItem("userId");
-  //  storage.removeItem("userEmail");
-  //  storage.removeItem("userPassword");
-  //  Template7.global.user = null;
-//  }
+  }
 }
-//checkLogin();
 
 app.onPageInit('create-new-user', function(page) {
 

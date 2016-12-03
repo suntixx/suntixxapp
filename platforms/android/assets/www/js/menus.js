@@ -320,7 +320,7 @@ $$(document).on('click', '.open-event-report', function() {
           selectedEventLocal.boxOfficeTickets = SEARCHJS.matchArray(selectedEventLocal.tickets, {origin: 2});
           selectedEventLocal.fromScan = true;
           mainView.router.load({
-            url: 'views/events/report.html',
+            url: 'views/events/reports.html',
             context: selectedEventLocal,
           });
         }
@@ -433,7 +433,7 @@ $$(document).on('click', '.event-menu-link', function () {
     selectedEventLocal.boxOfficeTickets = SEARCHJS.matchArray(selectedEventLocal.tickets, {origin: 2});
 
     mainView.router.load({
-      url: 'views/events/report.html',
+      url: 'views/events/reports.html',
       context: selectedEventLocal,
     });
   } else if (menuItem == "cmembers") {
