@@ -4,9 +4,12 @@
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back link icon-only back-button"> <i class="icon icon-back"></i></a></div>
         <div class="center">{{@global.language.EVENTS.DETAILS}}</div>
+        <div class="right">
+          {{#unless @global.user}}<a href="#" class="link icon-only login"> <i class="icon icon-login"></i></a>{{/unless}}
+        </div>
       </div>
     </div>
-
+    {{> "homeNavBarPartial"}}
     <div class="toolbar tabbar tabbar-labels">
       <div class="toolbar-inner">
         <a href="#eventDetailsTab" class="tab-link show-details active"><i class="icon icon-information"></i><span class="tabbar-label">{{@global.language.OTHER.DETAILS}}</span></a>
@@ -27,34 +30,30 @@
       </div>
     </div>
     {{#if hasOnlineTickets}}
-    <a href="#" class="floating-button color-orange purchase-event-tickets">
+    <a href="#" class="floating-button color-orange purchase-online-tickets" event-id="{{id}}">
       <i class="icon icon-purchase"></i>
     </a>
     {{/if}}
     <div class="tabs-swipeable-wrap">
 
       <div class="tabs">
-        <div class="page-content tab active" id="eventDetailsTab">
+        <div class="page-content tab active hide-navbar-on-scroll" id="eventDetailsTab">
           <div class="card event-details">
             <div class="header">
               <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
             </div>
             <div class="card-content">
-              <p></p>
-              <div class="buttons-row">
-                <a href="#" class="button buttons attending color-gray" attending="false">{{@global.language.EVENTS.ATTENDING}}</a>
-                <a href="#" class="button buttons interested color-gray" interested="false">{{@global.language.EVENTS.INTERESTED}}</a>
-                <a href="#" class="button buttons chatroom">{{@global.language.CHATS.CHATS}}</a>
-              </div>
-              <div class="buttons-row">
-                <a href="#" class="button attending-count no-ripple">{{count attending}}</a>
-                <a href="#" class="button interested-count no-ripple">{{count interested}}</a>
-                <a href="#" class="button chat-count no-ripple">?</a>
+
+              <div class="row event-buttons">
+                <a href="#" class="interested icon-only">{{favorite interested @global.user}}</a>
+                <!--<a href="#" class="calender icon-only">{{calender this}}</a>-->
+                <a href="#" class="chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+                <a href="#" class="share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange active"></i></a>
               </div>
               <div class="card-content-inner">
                 <div class="event-name">{{name}}</div>
                 <div class="color-gray hosted-by">
-                  <span class="small">by</span>
+                  <span class="small">{{@global.language.EVENTS.PROMOTER}}:&nbsp;</span>
                     {{#js_compare "this.hostedby == 0"}}
                       <a href="#" profile="0" class="user-profile link" user-id="{{user.id}}">{{user.fullname}}</a>
                     {{else}}
@@ -99,17 +98,17 @@
               {{#if twitter}}
               <a href="#" class="link twitter-link icon-only"><i class="icon icon-twitter-event"></i></a>
               {{/if}}
-              <a href="#" class="link icon-only share-event" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
+
             </div>
           </div>
         </div>
-        <div class="page-content tab" id="eventPromoterTab">
+        <div class="page-content tab hide-navbar-on-scroll" id="eventPromoterTab">
           <div class="card profile"><div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div></div>
         </div>
        <!--<div class="page-content tab" id="eventActivityTab">
        </div>-->
        {{#js_compare "this.commuser.length > 0"}}
-        <div class="page-content tab" id="eventSellersTab">
+        <div class="page-content tab hide-navbar-on-scroll" id="eventSellersTab">
         </div>
         {{/js_compare}}
       </div>

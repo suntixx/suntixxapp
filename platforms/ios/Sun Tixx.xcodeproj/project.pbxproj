@@ -104,6 +104,11 @@
 		F0B5C5585C31482C83DDF85B /* libGTM_NSStringHTML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7A1B9B4698942808245F2FB /* libGTM_NSStringHTML.a */; };
 		FDA9F43D1A54489D977036D5 /* zxing-all-in-one.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8977CC196B634B3DA8710D24 /* zxing-all-in-one.cpp */; };
 		147CF797DCD847F881409C24 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 67CB7DF806EF460FBE9D255B /* CDVStatusBar.m */; };
+		7747A2B8C13E4A7699F292A0 /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D3D38E2B1847B38D8B3C8C /* IonicKeyboard.m */; };
+		F365CC4CEFC9473C8D893687 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19D1015C324143358E138142 /* StoreKit.framework */; };
+		A3D3D7CF73784B04BDB2E7D3 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 730C438ADCAC4F0B9D07F1C6 /* EventKit.framework */; };
+		BEF47E2FD2CF43CE87D376C0 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67C31B21FAB84269890B18A8 /* EventKitUI.framework */; };
+		69D31F30000142CDB8515AE6 /* Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5056B3BFC0E94254B3403360 /* Calendar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -299,6 +304,13 @@
 		FF091BADA8AD49F49A7BC48A /* CDVInAppBrowser.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVInAppBrowser.m; path = "cordova-plugin-inappbrowser/CDVInAppBrowser.m"; sourceTree = "<group>"; };
 		67CB7DF806EF460FBE9D255B /* CDVStatusBar.m */ = {isa = PBXFileReference; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		0E559E3E15FB499493ADC108 /* CDVStatusBar.h */ = {isa = PBXFileReference; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		12D3D38E2B1847B38D8B3C8C /* IonicKeyboard.m */ = {isa = PBXFileReference; name = "IonicKeyboard.m"; path = "ionic-plugin-keyboard/IonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		D4E7E81213804139BADE4353 /* IonicKeyboard.h */ = {isa = PBXFileReference; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		19D1015C324143358E138142 /* StoreKit.framework */ = {isa = PBXFileReference; name = "StoreKit.framework"; path = "System/Library/Frameworks/StoreKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		730C438ADCAC4F0B9D07F1C6 /* EventKit.framework */ = {isa = PBXFileReference; name = "EventKit.framework"; path = "System/Library/Frameworks/EventKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		67C31B21FAB84269890B18A8 /* EventKitUI.framework */ = {isa = PBXFileReference; name = "EventKitUI.framework"; path = "System/Library/Frameworks/EventKitUI.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		5056B3BFC0E94254B3403360 /* Calendar.m */ = {isa = PBXFileReference; name = "Calendar.m"; path = "cordova-plugin-calendar/Calendar.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		3B9FEA1094DD4CC3BB00B188 /* Calendar.h */ = {isa = PBXFileReference; name = "Calendar.h"; path = "cordova-plugin-calendar/Calendar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -365,6 +377,9 @@
 				D39C83E3C5494A7BB60A4DB9 /* AddressBook.framework in Frameworks */,
 				D368ED9C40CC4AA28459984B /* libsqlite3.tbd in Frameworks */,
 				BB6C46E06D5B4F97B3C147BB /* libz.tbd in Frameworks */,
+				F365CC4CEFC9473C8D893687 /* StoreKit.framework in Frameworks */,
+				A3D3D7CF73784B04BDB2E7D3 /* EventKit.framework in Frameworks */,
+				BEF47E2FD2CF43CE87D376C0 /* EventKitUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +508,9 @@
 				9E96D39104B2483CB51B5D70 /* AddressBook.framework */,
 				61092FAA247340CB8B5207ED /* libsqlite3.tbd */,
 				6AA5959851804B2BA4A3B9B5 /* libz.tbd */,
+				19D1015C324143358E138142 /* StoreKit.framework */,
+				730C438ADCAC4F0B9D07F1C6 /* EventKit.framework */,
+				67C31B21FAB84269890B18A8 /* EventKitUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -615,6 +633,10 @@
 				F5DF0E0D5F7D4F1AA1974AF8 /* CDVExif.h */,
 				67CB7DF806EF460FBE9D255B /* CDVStatusBar.m */,
 				0E559E3E15FB499493ADC108 /* CDVStatusBar.h */,
+				12D3D38E2B1847B38D8B3C8C /* IonicKeyboard.m */,
+				D4E7E81213804139BADE4353 /* IonicKeyboard.h */,
+				5056B3BFC0E94254B3403360 /* Calendar.m */,
+				3B9FEA1094DD4CC3BB00B188 /* Calendar.h */,
 			);
 			name = Plugins;
 			path = "Sun Tixx/Plugins";
@@ -769,6 +791,8 @@
 				37C93D28F2774B34A192E0BF /* CDVCamera.m in Sources */,
 				352D30A83BC444DE86F49E27 /* CDVJpegHeaderWriter.m in Sources */,
 				147CF797DCD847F881409C24 /* CDVStatusBar.m in Sources */,
+				7747A2B8C13E4A7699F292A0 /* IonicKeyboard.m in Sources */,
+				69D31F30000142CDB8515AE6 /* Calendar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,7 +869,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.suntixx.application;
 				PRODUCT_NAME = "Sun Tixx";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Debug;
 		};
@@ -908,7 +932,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.suntixx.application;
 				PRODUCT_NAME = "Sun Tixx";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Release;
 		};
@@ -937,7 +961,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Debug;
 		};
@@ -964,7 +988,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1";
 			};
 			name = Release;
 		};

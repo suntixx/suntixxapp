@@ -7,15 +7,17 @@
         <div class="center sliding">{{@global.language.STORE.TICKET_NAMES}}</div>
       </div>
     </div>
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <div>&nbsp;</div>
+        <div>{{event.name}}</div>
+        <div>&nbsp;</div>
+      </div>
+    </div>
     <a href="#" class="floating-button color-orange save-ticket-names">
       <i class="icon icon-checkout"></i>
     </a>
     <div class="page-content">
-      <div class="card event-details">
-        <div class="header">
-          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{event.id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border"></div>
-        </div>
-      </div>
        <div class="card full-width">
          <div class="card-header">
           <div class="col-55">{{@global.language.OTHER.NAME}}</div>

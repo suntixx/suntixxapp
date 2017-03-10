@@ -5,8 +5,45 @@ var user = JSON.parse(storage.getItem('userData'));
 if (user) {
   user.password = storage.getItem('userPassword');
 }
-var selectedEventLocal;
-var allUserEvents;
+var selectedEventLocal = null;
+var appActive = true;
+var afterLoginLink = null;
+var returnFromStoreTab = null;
+var loginScreenOpened = false;
+var refreshButton;
+//storage.removeItem(myEvents);
+var allUserEvents = JSON.parse(storage.getItem('myEvents'));
+if (!allUserEvents || !allUserEvents.managedEventList || !allUserEvents.scanningEventList || !allUserEvents.committeeEventList || !allUserEvents.favoriteEventList || !allUserEvents.previousEventList) {
+  allUserEvents = {
+    managedEventList: [],
+    scanningEventList: [],
+    committeeEventList: [],
+    favoriteEventList: [],
+    previousEventList: []
+  };
+}
+var allUserFavorites = JSON.parse(storage.getItem('myFavorites'));
+if (!allUserFavorites) {
+  allUserFavorites = {
+    attending: [],
+    interested: []
+  };
+}
+var allUserTickets = JSON.parse(storage.getItem('myTickets'));
+if (!allUserTickets || !allUserTickets.selltickets || !allUserTickets.mytickets) {
+  allUserTickets = {
+    selltickets: [],
+    mytickets: [],
+  };
+}
+
+//storage.removeItem('myWallet');
+//storage.setItem('myWallet', '');
+var myWallet = JSON.parse(storage.getItem('myWallet'));
+if (!myWallet) {
+  myWallet = [];
+}
+var upcomingEvents = [];
 var camera;
 var geolocation;
 var connection;
@@ -14,16 +51,17 @@ var fileTransfer;
 var fileSystem;
 var db;
 var language;
-var socket;
 var push;
 var config;
-var storeView = null
 var utcOffset;
-var autoScan = storage.getItem('autoscan');
-if (!autoScan) {
-  storage.setItem('autoscan', false);
-}
 storage.setItem('servertimezone', '-07:00');
+
+var onlineScan = storage.getItem('onlinescan');
+if (!onlineScan) {
+  storage.setItem('onlinescan', false);
+  onlineScan = true;
+}
+
 
 $$.ajax ({
   method: "GET",
@@ -31,7 +69,13 @@ $$.ajax ({
   url: "config/config.json",
   success: function(data, status, xhr) {
     config = JSON.parse(data);
-    config.settings.autoScan = autoScan;
+    var settings = JSON.parse(storage.getItem('settings'))
+    if (settings) {
+      config.settings = settings;
+    } else {
+      storage.setItem('settings', settings);
+    }
+    //config.settings.autoScan = autoScan;
   },
   error: function(status, xhr) {
     alert("Application Failure. Re-install may be required");
@@ -46,12 +90,10 @@ app = new Framework7({
       modalTitle: config.appName,
       modalTemplate: '<div class="modal bg-indigo color-white {{#unless buttons}}modal-no-buttons{{/unless}}">'+
                         '<div class="modal-inner" style="text-align:center">'+
-                          '{{#if title}}'+
                             '<div class="modal-title"><i class="icon icon-suntixx"></i></div>'+
-                          '{{/if}}'+
-                          '{{#if text}}'+
+                          //'{{#if text}}'+
                             '<div class="modal-text">{{text}}</div>'+
-                          '{{/if}}'+
+                          //'{{/if}}'+
                           '{{#if afterText}}'+
                             '{{afterText}}'+
                           '{{/if}}'+
@@ -65,76 +107,179 @@ app = new Framework7({
                         '{{/if}}'+
                         '</div>',
       //uniqueHistory: true,
-      //cache: true,
-      //cacheDuration: 1000*60*5,
-      //cacheIgnore: ['home.html'],
-      notificationHold: 1750,
+      cache: false,
+      cacheDuration: 1000*60*5,
+      cacheIgnore: ['home.html'],
+      animatePages: false,
+      //notificationHold: 1750,
       init: false,
       material: true,
       swipePanelOnlyClose: true,
       sortable: false,
       smartSelectOpenIn:'popup',
-      preloadPreviousPage: false,
+      preloadPreviousPage: true,
       template7Pages: true,
       precompileTemplates: true,
       imagesLazyLoadSequential: true,
-      hideNavbarOnPageScroll: true,
-      hideToolbarOnPageScroll: true,
+      hideNavbarOnPageScroll: false,
+      hideToolbarOnPageScroll: false,
       notificationCloseOnClick: true,
       fastClicks:true,
       fastClicksDelayBetweenClicks: 500,
       tapHold:true,
       tapHoldDelay: 1000,
       tapHoldPreventClicks: true,
-      preroute: function (view, options) {
+      /*preroute: function (view, options) {
           if (!navigator.onLine) {
             app.addNotification({
               message: "There was a problem connecting to the Internet.  Please check your connection",
             });
             return false;
           }
-        },
-      onAjaxStart: function (view, options) {
+        },*/
+      /*onAjaxStart: function (view, options) {
           if (!navigator.onLine) {
             app.addNotification({
-              message: "There was a problem connecting to the Internet.  Please check your connection",
+              message: language.ERRORS.NO_INTERNET,
             });
             return false;
           }
-        },
+        },*/
+      onPageInit: function(app, page) {
+        //$$.each($$(document).find('.cache-image'), function(key, item) {
+        //  console.log(item);
+        //  if (item.attr('src') != "") {
+
+            ImgCache.isCached($$('.cache-image src'), function(path, success) {
+              if (success) {
+                // already cached
+                console.log('cached');
+                ImgCache.useCachedFile($$('.cache-image'));
+              } else {
+                // not there, need to cache the image
+                ImgCache.cacheFile($$('.cache-image src'), function () {
+                  ImgCache.useCachedFile(item);
+                });
+              }
+            });
+          //}
+        //});
+      }
 });
+
+
 
 
 
 var eventPartial =  '<div class="card event-details">' +
 
                     '  <div class="header">'+
-                      '<div style="background-image:url(\'{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png\')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>'+
+                      '<div style="background-image:url(\'{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png\')" valign="bottom" class="lazy card-header color-white no-border cache-image"></div>'+
                 //  '  <img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border"/>'+
                     '</div>'+
                     '<div class="card-content">'+
                     '  <div class="card-content-inner">'+
                     '   <div class="event-name">{{name}}</div>'+
-                    '   <div class="color-gray hosted-by"><span class="small">by</span>&nbsp;{{#js_compare "this.hostedby == 0"}}'+
-                      '{{user.fullname}}'+
-                  '  {{else}}'+
-                        '{{#js_compare "this.hostedby == 1"}}'+
-                        '{{user.organization.name}}'+
-                        '{{else}}'+
-                        '  {{hostedby}}'+
-                        '{{/js_compare}}'+
-                    '{{/js_compare}}</div>'+
+                  //  '   <div class="color-gray hosted-by"><span class="small">by</span>&#58;&nbsp;{{#js_compare "this.hostedby == 0"}}'+
+                  //    '{{user.name2}}&nbsp;{{user.name4}}'+
+                //  '  {{else}}'+
+                //        '{{#js_compare "this.hostedby == 1"}}'+
+                //        '{{user.organization.name}}'+
+                //        '{{else}}'+
+                  //      '  {{hostedby}}'+
+                //        '{{/js_compare}}'+
+                //    '{{/js_compare}}</div>'+
                     '    <span class="color-black">{{englishtime starttime}}</span><br>'+
                     '    <span class="color-gray">{{venue}}</span>'+
                     '  </div>'+
                     '</div>'+
                   '</div>';
 
+var homeNavBarPartial =  ' <div class="toolbar toolbar-bottom">'+
+                          '  <div class="toolbar-inner">'+
+                            '  <a href="#" class="link icon-only"><i class="icon icon-home active"></i></a>'+
+                              '<a href="#" class="link switch-events icon-only"><i class="icon icon-events"></i></a>'+
+                              '<a href="#" class="link switch-tickets icon-only"><i class="icon icon-tickets"></i></a>'+
+                              '<a href="#" class="link switch-profile icon-only"><i class="icon icon-profile"></i></a>'+
+                              '<a href="#" class="link chatrooms switch-chats icon-only"><i class="icon icon-chats">{{#if @global.config.chats}}<span class="badge bg-green">{{@global.config.chats}}</span>{{/if}}</i></a>'+
+                            '</div>'+
+                        '  </div>';
 
+var eventsNavBarPartial =  ' <div class="toolbar toolbar-bottom">'+
+                          '  <div class="toolbar-inner">'+
+                            '  <a href="#" class="link switch-home icon-only"><i class="icon icon-home "></i></a>'+
+                              '<a href="#" class="link icon-only"><i class="icon icon-events active"></i></a>'+
+                              '<a href="#" class="link switch-tickets icon-only"><i class="icon icon-tickets"></i></a>'+
+                              '<a href="#" class="link switch-profile icon-only"><i class="icon icon-profile"></i></a>'+
+                              '<a href="#" class="link chatrooms switch-chats icon-only icon-only"><i class="icon icon-chats">{{#if @global.config.chats}}<span class="badge bg-green">{{@global.config.chats}}</span>{{/if}}</i></a>'+
+                            '</div>'+
+                        '  </div>';
+
+var ticketsNavBarPartial =  ' <div class="toolbar toolbar-bottom">'+
+                            '  <div class="toolbar-inner">'+
+                              '  <a href="#" class="link switch-home icon-only"><i class="icon icon-home "></i></a>'+
+                                '<a href="#" class="link switch-events icon-only"><i class="icon icon-events"></i></a>'+
+                                '<a href="#" class="link icon-only"><i class="icon icon-tickets active"></i></a>'+
+                                '<a href="#" class="link switch-profile icon-only"><i class="icon icon-profile"></i></a>'+
+                                '<a href="#" class="link chatrooms switch-chats icon-only"><i class="icon icon-chats">{{#if @global.config.chats}}<span class="badge bg-green">{{@global.config.chats}}</span>{{/if}}</i></a>'+
+                              '</div>'+
+                          '  </div>';
+
+var profileNavBarPartial =  ' <div class="toolbar toolbar-bottom">'+
+                            '  <div class="toolbar-inner">'+
+                              '  <a href="#" class="link switch-home icon-only"><i class="icon icon-home "></i></a>'+
+                                '<a href="#" class="link switch-events icon-only"><i class="icon icon-events "></i></a>'+
+                                '<a href="#" class="link switch-tickets icon-only"><i class="icon icon-tickets "></i></a>'+
+                                '<a href="#" class="link icon-only"><i class="icon icon-profile active"></i></a>'+
+                                '<a href="#" class="link chatrooms switch-chats icon-only"><i class="icon icon-chats">{{#if @global.config.chats}}<span class="badge bg-green">{{@global.config.chats}}</span>{{/if}}</i></a>'+
+                              '</div>'+
+                          '  </div>';
+
+var chatsNavBarPartial =  ' <div class="toolbar toolbar-bottom">'+
+                            '  <div class="toolbar-inner">'+
+                              '  <a href="#" class="link switch-home icon-only"><i class="icon icon-home "></i></a>'+
+                                '<a href="#" class="link switch-events icon-only"><i class="icon icon-events "></i></a>'+
+                                '<a href="#" class="link switch-tickets icon-only"><i class="icon icon-tickets "></i></a>'+
+                                '<a href="#" class="link switch-profile icon-only"><i class="icon icon-profile"></i></a>'+
+                                '<a href="#" class="link chatrooms icon-only"><i class="icon icon-chats active">{{#if @global.config.chats}}<span class="badge bg-green">{{@global.config.chats}}</span>{{/if}}</i></a>'+
+                              '</div>'+
+                          '  </div>';
+
+Template7.registerPartial('homeNavBarPartial', homeNavBarPartial);
+Template7.registerPartial('eventsNavBarPartial', eventsNavBarPartial);
+Template7.registerPartial('ticketsNavBarPartial', ticketsNavBarPartial);
+Template7.registerPartial('profileNavBarPartial', profileNavBarPartial);
+Template7.registerPartial('chatsNavBarPartial', chatsNavBarPartial);
 Template7.registerPartial('eventPartial', eventPartial);
+Template7.registerHelper('birthdate', function (arr, options) {
+  if (typeof arr === 'function') arr = arr.call(this);
+  var birthdate = moment(new Date()).subtract(18, 'years').format('YYYY-MM-DD');
+  return birthdate;
+});
 Template7.registerHelper('count', function (arr, options) {
   if (typeof arr === 'function') arr = arr.call(this);
   return arr.length;
+});
+Template7.registerHelper('favorite', function (arr, user, options) {
+  if (typeof arr === 'function') arr = arr.call(this);
+  var fav = null;
+  if (user && user.id) {
+    fav = _.find(arr, function(item) { return item.id===user.id; });
+  }
+  if (fav) {
+    return '<span class="favorite-count">'+arr.length+'</span>&nbsp;<i class="icon icon-favorites active"></i>';
+  } else {
+    return '<span class="favorite-count">'+arr.length+'</span>&nbsp;<i class="icon icon-favorites"></i>';
+  }
+});
+Template7.registerHelper('calender', function (arr, options) {
+  if (typeof arr === 'function') arr = arr.call(this);
+
+  return '<i class="icon icon-calender"></i>';
+});
+Template7.registerHelper('messageTime', function(arr, options) {
+  if (typeof arr === 'function') arr = arr.call(this);
+  return moment.utc(arr).utcOffset(utcOffset).format('h:mm a');
 });
 Template7.registerHelper('englishtime', function (arr, options) {
   if (typeof arr === 'function') arr = arr.call(this);
@@ -161,7 +306,16 @@ Template7.global = {
 
 app.init();
 
-$$('.app-version').html("Sun Tixx v"+config.version);
+$$(document).on('ajax:start', function (e) {
+  if (!navigator.onLine) {
+    app.addNotification({
+      message: language.ERRORS.NO_INTERNET,
+      hold: 2000,
+    });
+    //return false;
+  }
+});
+
 document.addEventListener('deviceready', onDeviceReady, false);
 
 
@@ -169,25 +323,96 @@ function onDeviceReady() {
   navigator.globalization.getPreferredLanguage(getLanguageSuccess, getLanguageError);
   navigator.globalization.getDatePattern(getDatePatternSuccess, getDatePatternFail, {formatLength:'full', selector:'date and time'});
   camera = navigator.camera;
-  navigator.splashscreen.hide();
+
   geolocation = navigator.geolocation;
   connection= navigator.connection;
-  db = window.sqlitePlugin.openDatabase({name: 'suntixx.db', location: 'default',  androidLockWorkaround: 1}, onDatabaseCreate, onDatabaseCreateError);
+
   window.open = cordova.InAppBrowser.open;
   document.addEventListener("pause", onPauseApp, false);
-  document.addEventListener("resume", checkLogin, false);
+  document.addEventListener("resume", onResumeApp, false);
   document.addEventListener('backbutton', onBackKey, false);
   StatusBar.backgroundColorByHexString("#3f51b5");
   StatusBar.styleBlackTranslucent();
   initializePushMessaging();
 
+  ImgCache.options.debug = true;
+  ImgCache.options.chromeQuota = 50*1024*1024;
+  ImgCache.options.cordovaFilesystemRoot = cordova.file.cacheDirectory;
+  ImgCache.init(function () {
+    console.log('ImgCache init: success!');
+  }, function () {
+      console.log('ImgCache init: error! Check the log for errors');
+  });
+  db = window.sqlitePlugin.openDatabase({name: 'suntixx.db', location: 'default',  androidLockWorkaround: 1}, onDatabaseCreate, onDatabaseCreateError);
+  init();
+  navigator.splashscreen.hide();
+
+  /*AppRate.preferences = {
+    useCustomRateDialog: true,
+    openStoreInApp: true,
+    displayAppName: config.appName,
+    usesUntilPrompt: 1,
+    promptAgainForEachNewVersion: true,
+    storeAppURL: {
+      ios: config.mobileAppLinks.iosAppId,
+      android: config.mobileAppLinks.android
+    },
+    customLocale: {
+      title: "Rate %@",
+      message: "If you enjoy using %@, would you mind taking a moment to rate it? It won’t take more than a minute. Thanks for your support!",
+      cancelButtonLabel: "No, Thanks",
+      laterButtonLabel: "Remind Me Later",
+      rateButtonLabel: "Rate It Now"
+    },
+    callbacks: {
+      onButtonClicked: function(buttonIndex){
+        console.log("onButtonClicked -> " + buttonIndex);
+      }
+    }
+  };
+
+  AppRate.promptForRating();*/
+
+
+  var appUsage = storage.getItem('appusage');
+  var appRateInterval = storage.getItem('rateinterval');
+  if (!appUsage) { appUsage = 0; }
+  if (!appRateInterval) {appRateInterval = 10;}
+
+  if (appRateInterval > 0 && appUsage >= appRateInterval) {
+    appUsage = 0;
+    promptForRating();
+  } else {
+    appUsage++;
+  }
+  storage.setItem('appusage', appUsage);
   //document.addEventListener('online', , false);
 }
+
+var init = function() {
+  if (navigator.onLine && user && user.id) {
+    eventsService.downloadEvents();
+    //eventsService.downloadFavorites();
+    ticketsService.downloadTickets();
+    chatService.downloadMessages();
+  } else if (user && user.id) {
+    eventsView.router.load({
+        url: 'views/events/myevents.html?local=1',
+        context: allUserEvents
+    });
+    ticketsView.router.load({
+        url: 'views/tickets/purchases.html?local=1',
+        context: allUserTickets
+    });
+  }
+};
+
 
 var getServerTime = function() {
   $$.ajax({
     async: true,
-    url: config.server + "/api/servertime" + nocache,
+    cache: false,
+    url: config.server + "/api/servertime",
     method: "GET",
     timeout: 20 * 1000,
     success: function(data, status, xhr) {
@@ -205,7 +430,8 @@ var getServerTime = function() {
 var getDatePatternSuccess = function (date) {
   utcOffset = date.utc_offset;
   utcOffset = utcOffset / 3600; //3600 seconds per hour
-  console.log(JSON.stringify(date));
+  //getServerTime();
+  //console.log(JSON.stringify(date));
 };
 
 var getDatePatternFail = function(err) {
@@ -213,30 +439,16 @@ var getDatePatternFail = function(err) {
   console.log(JSON.stringify(err));
 };
 
-var initializePushMessaging = function() {
-  push = PushNotification.init({
-    android: {
-        senderID: config.push.androidId,
-        sound:true,
-        //icon:icon,
-        iconColor: "white",
-        forceShow: true,
-    },
-    browser: {
-        pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-    },
-    ios: {
-        alert: "true",
-        badge: true,
-        sound: 'false'
-    },
+var onResumeApp = function() {
+  appActive = true;
+  checkLogin(function() {
+    init();
   });
-  PushNotification.hasPermission(pushHandlers);
 };
 
 var onPauseApp = function () {
-  if (socket) socket.disconnect();
-  initializePushMessaging();
+  appActive = false;
+  //initializePushMessaging();
 };
 
 var getLanguageSuccess = function(lang) {
@@ -244,13 +456,21 @@ var getLanguageSuccess = function(lang) {
     $$.getJSON('lang/en.json', function(data, status, xhr) {
       language = data;
       Template7.global.language = language;
+      loadInitialLanguageVariables();
     });
   }
 };
 
+var loadInitialLanguageVariables = function () {
+  refreshButton = '<div style="width:80vw;text-align:center;margin:40vh auto 0 auto; font-size:18px">'+
+                      '<p>'+language.HOMEPAGE.FEED_ERROR+'</p>' +
+                      '</div>';
+}
+
 $$.getJSON('lang/en.json', function(data) {
   language = data;
   Template7.global.language = language;
+  loadInitialLanguageVariables();
 });
 
 var getLanguageError = function (err) {
@@ -258,12 +478,14 @@ var getLanguageError = function (err) {
   $$.getJSON('lang/en.json', function(data, status, xhr) {
     language = data;
     Template7.global.language = language;
+    loadInitialLanguageVariables();
   });
 };
 
 var onDatabaseCreate = function () {
   db.sqlBatch([
   'DROP TABLE IF EXISTS scanhistory',
+  //'DROP TABLE IF EXISTS localscan',
   //'DROP TABLE IF EXISTS chatrooms',
   //'DROP TABLE IF EXISTS messages',
   'CREATE TABLE scanhistory ('+
@@ -283,20 +505,54 @@ var onDatabaseCreate = function () {
   ')',
   'CREATE TABLE IF NOT EXISTS messages ('+
     'message_id text PRIMARY KEY,'+
-    /*'roomid text,'+
-    'message text,'+
+    'roomid text,'+
+    'isevent boolean DEFAULT 0,'+
+    /*'message text,'+
     'sender_id text,'+
     'sender_name text,'+
     'receiver_id text'+
     'receiver_name text,'+
-    'isdelivered boolean DEFAULT 0,'+
-    'isread boolean DEFAULT 0,'+*/
+    'isdelivered boolean DEFAULT 0,'+*/
+    'isread boolean DEFAULT 0,'+
     'isdelivered boolean DEFAULT 0,'+
     'messageJSON text,'+
+    'isreceived boolean DEFAULT 0,'+
     'created_on timestamp DEFAULT CURRENT_TIMESTAMP'+
   ')',
+  'CREATE TABLE IF NOT EXISTS localscan ('+
+    'id text PRIMARY KEY,'+
+    'event_id text,'+
+    'code text,'+
+    'tickettypeid text,'+
+    'nameonticket text, '+
+    'scandate timestamp DEFAULT NULL,'+
+    'purchasedate timestamp DEFAULT NULL,'+
+    'scancount text DEFAULT 0,'+
+    'verified boolean DEFAULT 0'+
+  ')',
+  /*'CREATE TABLE IF NOT EXISTS events ('+
+    'id text PRIMARY KEY,'+
+    'name text,'+
+    'hostedby text,'+
+    'starttime text,'+
+    'venue text,'+
+    'city text,'+
+    'country text,'+
+    'currency text'+
+  ')',
+  'CREATE TABLE IF NOT EXISTS tickets ('+
+    'id text PRIMARY KEY,'+
+    'ticketno text,'+
+    'code text,'+
+    'nameonticket text,'+
+    'tickettype text,'+
+    'price text'+
+  ')'*/
   ], function() {
     console.log("Configuration tables created");
+    //init();
+    chatService.getChats();
+
   }, function(error) {
     //console.log(error);
     app.alert(language.SYSTEM.DATABASE_CONFIGURATION_ERROR);
@@ -310,6 +566,7 @@ var onDatabaseCreateError = function (err) {
   db = null;
 };
 
+
 var promptForRating = function() {
   app.modal({
     title:  'Rate Sun Tixx',
@@ -320,7 +577,7 @@ var promptForRating = function() {
         text: 'Rate It Now',
         onClick: function() {
           app.closeModal();
-          storage.setItem('rateinterval', 20);
+          storage.setItem('rateinterval', -1);
           var options = "";
           var target = "_system";
           var url;
@@ -336,12 +593,13 @@ var promptForRating = function() {
         text: 'Remind Me Later',
         onClick: function() {
           app.closeModal();
-          storage.setItem('rateinterval', 5);
+          storage.setItem('rateinterval', 15);
         }
       },
       {
         text: 'No Thanks',
         onClick: function() {
+          storage.setItem('rateinterval', 20);
           app.closeModal();
         }
       },
@@ -349,38 +607,47 @@ var promptForRating = function() {
   });
 }
 
-var checkInternet = function() {
-  if (!navigator.onLine) {
-    app.addNotification({
-      message: "There was a problem connecting to the Internet.  Please check your connection",
-    });
-    return false;
-  }
-}
 
-var appUsage = storage.getItem('appusage');
-var appRateInterval = storage.getItem('rateinterval');
-if (!appUsage) { appUsage = 0; }
-if (!appRateInterval) {appRateInterval = 1;}
-
-if (appUsage >= appRateInterval) {
-  appUsage = 0;
-  promptForRating;
-} else {
-  appUsage++;
-}
-storage.setItem('appusage', appUsage);
 
 var mainView = app.addView('.view-main', {
-  //domCache: true,
+  domCache: false
+});
+var eventsView = app.addView('.view-events', {
+  domCache: true
+});
+var ticketsView = app.addView('.view-tickets', {
+  domCache: false,
+});
+var profileView = app.addView('.view-profile', {
+  domCache: true
 });
 
+var storeView = app.addView(".view-store", {
+  domCache: false,
+  allowDuplicateUrls: true,
+  uniqueHistory: true
+});
+
+var chatsView = app.addView('.view-chats', {
+  domCache: false,
+});
+
+
 function onBackKey() {
-  if ( $$(document).find('.back-button').length > 0 ) {
-    $$('.back-button').click();
-  } else if ( mainView.activePage.name == "homepage") {
-    navigator.app.exitApp();
-  } else {
-    window.history.back(-1);
+  var thisView = app.getCurrentView();
+  var backButton = $$(thisView.activePage.container).find('.navbar .navbar-inner .left .back-button');
+  //console.log(backButton.length);
+  switch (backButton.length) {
+    case 1:
+      $$(thisView.activePage.container).find('.navbar .navbar-inner .left .back-button').click();
+    break;
+
+    case 0:
+      if (loginScreenOpened) {
+        app.closeModal('.login-screen');
+      } else {
+        navigator.app.exitApp();
+      }
+    break;
   }
 }

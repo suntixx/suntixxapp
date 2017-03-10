@@ -20,6 +20,9 @@
   border-bottom: double 1px #000;
 }
 
+.page-content {
+  padding-bottom: 50px;
+}
 /*#category {
   width:100vw;
   padding:0;
@@ -36,16 +39,22 @@
   -moz-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  width: 100vw;
+  margin: 2px 0 2px 0;
 }
+
+.message {
+  max-width: 100%;
+}
+
 .messagebar, .messagebar .toolbar-inner {
   background-color: #ddd;
   color: #000;
   opacity: 1;
 }
 
-
 .message-selected {
-  background-color: blue;
+  background-color: #f9a11b;
 }
 
 .user-announcement {
@@ -116,7 +125,7 @@ div.infinite-scroll-preloader .preloader {
   background: rgba(249,161,27,0.9)
 }
 
-.tabbar, .tabbar.toolbar-inner {
+/*.tabbar, .tabbar.toolbar-inner {
   background-color: #fff;
 }
 
@@ -125,13 +134,14 @@ a.button.tab-link {
   color:#f9a11b;
   border-color: #fff;
 
-}
+}*/
 
 
 .oops-message, .oops-message-load{
   text-align: center;
   padding: 0;
   border: none;
+  margin:0 auto;
   vertical-align: middle;
 }
 div.oops-image-load, div.oops-image {
@@ -202,6 +212,14 @@ div.oops-image-load, div.oops-image {
   padding:0;
 }
 
+.graphs {
+    border-bottom: 1px solid #ddd;
+}
+
+.graphs-label {
+    font-weight: 400;
+}
+
 .event-details .divider {
   position: absolute;
   left:0;
@@ -227,13 +245,17 @@ div.oops-image-load, div.oops-image {
   padding:2px 4px 2px 4px;
   background-color: #3f51b5;
 }
-.event-details .card-header, .event-image, .ticket-details img {
-  width:100vw;
-  height:37vw;
+
+.event-details .card-header, .event-details .event-image, .ticket-details img {
+  width: 100vw;
+  height: 37vw;
+  padding:0;
+  margin:0;
+}
+
+.event-details .event-image, .ticket-details img {
    background-size: cover;
    background-position: center;
-   padding:0;
-   margin:0;
  }
 
  /*.event-details img, .ticket-details img {
@@ -372,12 +394,28 @@ div.oops-image-load, div.oops-image {
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
 }
 
-.user-image-square {
+.user-image-square, .wallet-ticket-image {
   width: 50px;
   height:50px;
   box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.3);
   margin:0;
   padding:0;
+}
+
+.wallet-ticket-image .large {
+  width: 100px;
+  height: 100px;
+}
+
+.wallet-ticket, .wallet-open {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  margin-bottom: 4px;
+}
+
+.wallet-ticket.ticket-selected, .event-selected {
+  background-color: #f9a11b;
 }
 
 div.new-user-image-container {
@@ -421,14 +459,90 @@ div.instagram {
   margin-bottom: 0;
 }
 
+.event-buttons {
+  width: 40vw;
+  margin: 10px auto -5px auto;
+}
+
 a.social-icon {
   margin-left:7px;
+}
+
+i.icon.icon-crop {
+  width: 24px;
+  height: 24px;
+  background-image: url("../img/crop.svg");
+}
+
+i.icon.icon-success {
+  width:100px;
+  height:100px;
+  background-image: url("../img/success.svg");
+}
+
+i.icon.icon-error {
+  width:100px;
+  height:100px;
+  background-image: url("../img/error.svg");
+}
+
+i.icon.icon-add-image {
+  width:100px;
+  height:100px;
+  background-image: url("../img/add-image.svg");
+}
+
+i.icon.icon-add-image.list {
+  width:50px;
+  height:50px;
+  background-image: url("../img/add-image.svg");
+}
+
+i.icon.icon-home {
+  width:24px;
+  height:24px;
+  background-image: url("../img/home.svg");
+}
+
+i.icon.icon-home.active {
+  width:24px;
+  height:24px;
+  background-image: url("../img/home-active.svg");
+}
+
+i.icon.icon-add-tickets {
+  width:24px;
+  height:24px;
+  background-image: url("../img/add-tickets.svg");
+}
+
+i.icon.icon-tickets {
+  width:24px;
+  height:24px;
+  background-image: url("../img/tickets.svg");
+}
+
+i.icon.icon-tickets.active {
+  width:24px;
+  height:24px;
+  background-image: url("../img/tickets-active.svg");
 }
 
 i.icon.icon-reports {
   width: 24px;
   height:24px;
-  background-image: url("../img/reporting.svg");
+  background-image: url("../img/report.svg");
+}
+i.icon.icon-reports-white {
+  width: 20px;
+  height:20px;
+  background-image: url("../img/report-white.svg");
+}
+
+i.icon.icon-reports.orange {
+  width: 20px;
+  height:20px;
+  background-image: url("../img/report-orange.svg");
 }
 
 i.icon.icon-chat-loading {
@@ -443,10 +557,34 @@ i.icon.icon-chat-undelivered {
   background-image: url("../img/undelivered.svg");
 }
 
+i.icon.icon-add-event {
+  width:24px;
+  height:24px;
+  background-image: url("../img/add-event.svg");
+}
+
+i.icon.icon-add-event.text {
+  width:24px;
+  height:24px;
+  background-image: url("../img/add-event-black.svg");
+}
+
 i.icon.icon-favorites {
-  width:17px;
-  height:17px;
-  background-image: url("../img/favorites.svg");
+  width:24px;
+  height:24px;
+  background-image: url("../img/favorite.svg");
+}
+
+i.icon.icon-favorites.text {
+  width:24px;
+  height:24px;
+  background-image: url("../img/favorite-black.svg");
+}
+
+i.icon.icon-favorites.active {
+  width:24px;
+  height:24px;
+  background-image: url("../img/favorite-orange.svg");
 }
 
 i.icon.icon-attending {
@@ -495,11 +633,11 @@ i.icon.icon-link {
   margin-right:3px;
 }
 
-i.icon.icon-home {
+/*i.icon.icon-home {
   width: 29px;
   height: 29px;
   background-image: url("../img/buildings.svg");
-}
+}*/
 
 i.icon.icon-money {
   width: 29px;
@@ -530,10 +668,22 @@ i.icon.icon-sell {
   background-image: url("../img/sell.svg");
 }
 
+i.icon.icon-sell.orange {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/sell-orange.svg");
+}
+
 i.icon.icon-events {
   width:24px;
   height: 24px;
   background-image: url("../img/events.svg");
+}
+
+i.icon.icon-events.active {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/events-active.svg");
 }
 
 i.icon.icon-profile {
@@ -542,10 +692,28 @@ i.icon.icon-profile {
   background-image: url("../img/profile.svg");
 }
 
+i.icon.icon-profile.active {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/profile-active.svg");
+}
+
+i.icon.icon-settings {
+  width:24px;
+  height:24px;
+  background-image: url("../img/settings.svg");
+}
+
 i.icon.icon-chats {
   width:24px;
   height: 24px;
   background-image: url("../img/chats.svg");
+}
+
+i.icon.icon-chats.active {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/chats-active.svg");
 }
 
 i.icon.icon-sellers {
@@ -566,6 +734,18 @@ i.icon.icon-chats-orange {
   background-image: url("../img/chat-orange.svg");
 }
 
+i.icon.icon-calender {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/calendar.svg");
+}
+
+i.icon.icon-calender.active {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/calendar-active.svg");
+}
+
 i.icon.icon-friends {
   width:24px;
   height: 24px;
@@ -579,9 +759,27 @@ i.icon.icon-submenu {
 }
 
 i.icon.icon-new {
-  width:24px;
-  height: 24px;
+  width:20px;
+  height: 20px;
   background-image: url("../img/new.svg");
+}
+
+i.icon.icon-edit.orange {
+  width:20px;
+  height: 20px;
+  background-image: url("../img/edit-orange.svg");
+}
+
+i.icon.icon-edit-item {
+  width:24px;
+  height:24px;
+  background-image: url("../img/edit-pencil.svg");
+}
+
+i.icon.icon-copy.orange {
+  width:20px;
+  height: 20px;
+  background-image: url("../img/copy-orange.svg");
 }
 
 i.icon.icon-down {
@@ -656,6 +854,12 @@ i.icon.icon-share-orange {
   background-image: url("../img/share-orange.svg");
 }
 
+i.icon.icon-share {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/share.svg");
+}
+
 i.icon.icon-delete-orange {
   width:24px;
   height: 24px;
@@ -684,6 +888,13 @@ i.icon.icon-scan {
   width:25vw;
   height: 25vw;
   background-image: url("../img/start-scan.svg");
+  padding-top:50%;
+}
+
+i.icon.icon-scan.orange {
+  width:24px;
+  height: 24px;
+  background-image: url("../img/scan-orange.svg");
   padding-top:50%;
 }
 
@@ -755,7 +966,6 @@ i.icon.icon-login {
   width:24px;
   height: 24px;
   background-image: url("../img/log-in.svg");
-  padding-right: 5px;
 }
 
 p.ticket-details {
@@ -853,26 +1063,50 @@ img.edit-thumbnail {
 
 .cropper-container {
   max-width: 100%;
-  height:100vh;
+  height:90vh;
+  max-height: 90vh;
   padding:0;
   margin:0;
 }
 
-.cropper-buttons{
-  position:fixed;
-  bottom:0;
-  width:100vw;
-}
-
 .cropper-image-container {
   max-width: 100%;
+  max-height: 100%;
+  height:100%;
   padding:0;
-  overlow:hidden;
+  position: relative;
 }
 
-.cropper-label {
-  text-align: center;
+.cropper-label-chip {
+  position: absolute;
+  width:80vw;
+  left:10vw;
+  z-index: 9999;
 }
+
+
+
+.cropper-label {
+  position: absolute;
+   left:0;
+   right:0;
+   margin-left: auto;
+   margin-right: auto;
+   width:100%;
+   text-align: center;
+  color:#f9a11b;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+
+#imageCropper {
+  height: 100%;
+  margin:0 auto;
+  background-color: #fff;
+}
+
+
 
 div.image-preview {
   width:100vw;
@@ -908,26 +1142,27 @@ div.thumbnail-preview {
   max-height: 60vh;
 }
 
-.barcode-container {
+.barcode-container, .wallet-barcode-text {
   max-height:60vh;
   max-width:100vw;
 
 }
 
-.barcode-wrapper {
-  width:75vw;
-  max-height: 75vh;
-  padding:0
+.barcode-wrapper .barcode-active, .wallet-barcode-wrapper {
+  width:80vw;
+  max-height: 60vh;
+  padding:0;
+  margin: 0 auto;
 }
 
-.barcode-container .barcode-active img{
+.barcode-container .barcode-active .barcode-image img, .wallet-barcode-container .wallet-barcode-image img{
   margin: 0 auto;
   padding:0;
   width:60vw;
   height:60vw;
 }
 
-#barcode-text, #barcode-nameonticket, #barcode-ticketid {
+#barcode-text, #barcode-nameonticket, #barcode-ticketid, #barcode-tickettype, #wallet-barcode-text, #wallet-barcode-tickettype{
   text-align: center;
   font-size: 20px;
   display:block;
@@ -938,4 +1173,12 @@ div.thumbnail-preview {
 .small {
   font-size: small;
   text-transform: lowercase;
+}
+
+.floating-button {
+  bottom: 65px;
+}
+
+.floating-button .crop-image {
+  bottom: 40px;
 }

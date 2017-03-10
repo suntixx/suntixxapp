@@ -4,9 +4,7 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center">Scan History</div>
-        <!--<div class="right"><a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-submenu"></i></a></div>-->
-        <!--<div class="right"><a href="#" class="link start-scanning "> <span>Scan</span><i class="icon icon-next"></i></a></div>-->
+        <div class="center">{{@global.language.ACCESS.SCAN_HISTORY}}</div>
       </div>
     </div>
    <div class="page-content infinite-scroll" data-distance="100">
@@ -16,7 +14,7 @@
       <div class="card" id="select-gates-form">
         <div class="card-content">
           {{#js_compare "this.scanhistory.data.length == 0"}}
-          You have not scanned any barcodes yet
+            {{@global.language.ACCESS.NO_BARCODES_SCANNED}}
           {{else}}
           <div class="list-block media-list">
             <ul>

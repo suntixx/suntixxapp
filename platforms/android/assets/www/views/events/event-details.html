@@ -3,10 +3,9 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center sliding">Event Details</div>
+        <div class="center sliding">{{@global.language.EVENTS.EVENT_DETAILS}}</div>
         <div class="right">
           <!--<a href="#" class="link save-event" event-id="{{id}}"></i><span>Save</span></a>-->
-          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
         </div>
       </div>
     </div>
@@ -16,14 +15,14 @@
     <!-- Scrollable page content-->
     <div class="page-content">
       <div class="event-details">
-        <img class="link edit-image" src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" id="edit-event-image"/>
+        <img class="link edit-image event-image" src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" id="edit-event-image"/>
       </div>
       <form class="list-block" id="update-event-details-form">
         <ul>
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Name</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.NAME}}</div>
                 <div class="item-subtitle color-red form-error name"></div>
                 <div class="item-input">
                   <input type="text" name="name" value="{{name}}" required/>
@@ -36,7 +35,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Headline</div>
+                <div class="item-title label">{{@global.language.EVENTS.HEADLINE}}</div>
                 <div class="item-input">
                   <input type="text" placeholder="Headline" name="headline" value="{{headline}}"/>
                 </div>
@@ -46,7 +45,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Category</div>
+                <div class="item-title label">{{@global.language.EVENTS.CATEGORY}}</div>
                 <div class="item-input">
                   <input type="text" name="category" id="event-category" value="{{category.name}}"/>
                 </div>
@@ -56,7 +55,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Private</div>
+                <div class="item-title label">{{@global.language.EVENTS.PRIVATE}}</div>
                 <div class="item-input">
                   <label class="label-switch">
                     <input type="checkbox" name="private" {{#js_compare "this.status_id == 19"}}checked="checked"{{/js_compare}}>
@@ -69,7 +68,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Description</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.DESCRIPTION}}</div>
                 <div class="item-subtitle color-red form-error description"></div>
                   <div class="item-input">
                    <textarea type="text" name="description"  required>{{description}}</textarea>
@@ -80,7 +79,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Currency</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.CURRENCY}}</div>
                 <div class="item-input">
                   <input type="text" name="currency" value="{{currency}}" id="currency">
                 </div>
@@ -90,7 +89,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Start Date</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.START_DATE}}</div>
                 <div class="item-subtitle color-red form-error start"></div>
                 <div class="item-input">
                   <input type="datetime-local" name="start" value="{{js "this.starttime.substring(0,19)"}}" id="start" required/>
@@ -101,7 +100,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>End Date</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.END_DATE}}</div>
                 <div class="item-subtitle color-red form-error end"></div>
                 <div class="item-input">
                   <input type="datetime-local" name="end" value="{{js "this.endtime.substring(0,19)"}}"  required/>
@@ -112,7 +111,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Restrictions</div>
+                <div class="item-title label">{{@global.language.EVENTS.RESTRICTIONS}}</div>
                 <div class="item-input">
                   <input type="text" placeholder="Please Select" name="restriction" id="event-restriction" value="{{restrictions.name}}"/>
                 </div>
@@ -122,7 +121,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Dress Code</div>
+                <div class="item-title label">{{@global.language.EVENTS.DRESS_CODE}}</div>
                 <div class="item-input">
                   <input type="text" placeholder="Please Select" name="dresscode" id="event-dresscode" value="{{dresscode.name}}"/>
                 </div>

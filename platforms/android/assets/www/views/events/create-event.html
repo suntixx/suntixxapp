@@ -3,8 +3,8 @@
   <div data-page="create-new-event" class="page  navbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" class="{{#if previous}}back-event{{else}}back{{/if}} link icon-only back-button"> <i class="icon icon-back"></i></a></div>
-        <div class="center sliding">New Event</div>
+        <div class="left"><a href="#" class="back link icon-only back-button"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.EVENTS.NEW_EVENT}}</div>
         <!--<div class="right">
           <a href="#" class="link add-venue"><span>Continue</span></a>
         </div>-->
@@ -15,7 +15,7 @@
     </a>
     <div class="page-content">
       <div class="event-details">
-        <img class="link edit-image" src="{{@global.config.server}}/thumbnails/events/{{#if cloneEvent}}{{id}}{{else}}0{{/if}}/landscape.png" valign="bottom" id="add-event-image"/>
+        <img class="link edit-image event-image" src="{{@global.config.server}}/thumbnails/events/{{#if cloneEvent}}{{id}}{{else}}0{{/if}}/landscape.png" valign="bottom" id="add-event-image"/>
         <div class="item-subtitle color-red form-error imageLandscapePath"></div>
       </div>
       <form class="list-block" id="create-event-details-form">
@@ -23,7 +23,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Hosted By</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.PROMOTER}}</div>
                 <div class="item-subtitle color-red form-error hostedby"></div>
                 <div class="item-input">
                   <input type="text" name="hostedby" id="event-host" value="{{HostedBy}}" required/>
@@ -34,7 +34,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Name</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.NAME}}</div>
                 <div class="item-subtitle color-red form-error name"></div>
                 <div class="item-input">
                   <input type="text" name="name" value="{{name}}" required/>
@@ -47,7 +47,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Headline</div>
+                <div class="item-title label">{{@global.language.EVENTS.HEADLINE}}</div>
                 <div class="item-input">
                   <input type="text" placeholder="Headline" name="headline" value="{{headline}}"/>
                 </div>
@@ -57,7 +57,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Category</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.CATEGORY}}</div>
                 <div class="item-subtitle color-red form-error category"></div>
                 <div class="item-input">
                   <input type="text" name="category" id="event-category" placeholder="Please Select"  value="{{#if cloneEvent}}{{category.name}}{{/if}}" required/>
@@ -68,7 +68,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Private</div>
+                <div class="item-title label">{{@global.language.EVENTS.PRIVATE}}</div>
                 <div class="item-input">
                   <label class="label-switch">
                     <input type="checkbox" name="private">
@@ -81,7 +81,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Description</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.DESCRIPTION}}</div>
                 <div class="item-subtitle color-red form-error description"></div>
                 <div class="item-input">
                   <textarea name="description" required>{{description}}</textarea>
@@ -92,7 +92,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Currency</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.CURRENCY}}</div>
                 <div class="item-subtitle color-red form-error currency"></div>
                 <div class="item-input">
                   <input type="text" name="currency" id="currency" placeholder="Please Select" value="{{currency}}" required/>
@@ -103,7 +103,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Start Date</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.START_DATE}}</div>
                 <div class="item-subtitle color-red form-error start"></div>
                 <div class="item-input">
                   <input type="datetime-local" name="start" required value="{{now}}" id="start"/>
@@ -114,7 +114,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>End Date</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.END_DATE}}</div>
                 <div class="item-subtitle color-red form-error end"></div>
                 <div class="item-input">
                   <input type="datetime-local" name="end" required value=""/>
@@ -125,7 +125,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Restrictions</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.RESTRICTIONS}}</div>
                 <div class="item-subtitle color-red form-error restriction"></div>
                 <div class="item-input">
                   <input type="text" placeholder="Please Select" name="restriction" id="event-restriction" value="{{#if cloneEvent}}{{restrictions.name}}{{/if}}" required/>
@@ -136,7 +136,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label"><i class="icon icon-required"></i>Dress Code</div>
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.DRESS_CODE}}</div>
                 <div class="item-subtitle color-red form-error dresscode"></div>
                 <div class="item-input">
                   <input type="text" placeholder="Please Select" name="dresscode" id="event-dresscode" value="{{#if cloneEvent}}{{dresscode.name}}{{/if}}" required/>
@@ -147,7 +147,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title label">Facebook Link</div>
+                <div class="item-title label">Facebook</div>
                 <div class="item-input">
                     <input type="text" placeholder="https://www.facebook.com/" name="facebook" value="{{facebook}}"/>
                   </div>
@@ -157,7 +157,7 @@
             <li>
               <div class="item-content">
                 <div class="item-inner">
-                  <div class="item-title label">Twitter Link</div>
+                  <div class="item-title label">Twitter</div>
                   <div class="item-input">
                     <input type="text" placeholder="https://www.twitter.com/" name="twitter" value="{{twitter}}"/>
                 </div>

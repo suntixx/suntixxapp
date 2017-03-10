@@ -2,38 +2,32 @@
   <div data-page="homepage" class="page navbar-fixed toolbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left"><a href="#" data-panel="left" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
+        <div class="left"><!--<a href="#" data-panel="left" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>-->
           <a href="#" data-popover=".event-categories" class="link open-popover icon-only"><i class="icon icon-suntixx"></i><i class="icon icon-down"></i></a>
         </div>
         <div class="right">
-          <a href="#" class="link icon-only open-favorites"> <i class="icon icon-favorites"></i></a>
+          <div class="login-button"></div>
+          {{#unless @global.user}}<a href="#" class="link icon-only login"> <i class="icon icon-login"></i></a>{{/unless}}
           <a href="#" class="link icon-only open-search"> <i class="icon icon-search"></i></a>
-          <a href="#" class="link icon-only home-submenu"> <i class="icon icon-submenu"></i></a>
+          <!--<a href="#" class="link icon-only home-submenu"> <i class="icon icon-submenu"></i></a>-->
         </div>
       </div>
     </div>
-    <div class="toolbar tabbar" style="background:#eee">
-      <div class="toolbar-inner" style="background:#eee">
 
-        <a href="#featuredEventsTab" class="button active tab-link" style="color:#F9A11B">Featured</a>
-        <a href="#upcomingEventsTab" class="button tab-link" style="color:#F9A11B">Upcoming</a>
-        <a href="#homeFeedTab" class="button tab-link" style="color:#F9A11B">Feed</a>
-        <!--<a href="#justAddedEventsTab" class="button tab-link">Recommended</a>-->
-      </div>
-    </div>
-    <div class="toolbar toolbar-bottom">
+    <div class="toolbar tabbar">
       <div class="toolbar-inner">
 
-        <a href="#" class="link open-search"><i class="icon icon-purchase"></i><span class="tabbar-label">Buy</span></a>
-        <a href="#" class="link goto-sell"><i class="icon icon-sell"></i><span class="tabbar-label">Sell</span></a>
-        <a href="#" class="link goto-scan"><i class="icon icon-start-scan"></i><span class="tabbar-label">Scan</span></a>
-        <a href="#" class="link create-event"><i class="icon icon-new"></i><span class="tabbar-label">New</span></a>
+        <a href="#featuredEventsTab" class="button tab-link active">{{@global.language.HOMEPAGE.FEATURED}}</a>
+        <a href="#upcomingEventsTab" class="button tab-link">{{@global.language.HOMEPAGE.UPCOMING}}</a>
+        <a href="#homeFeedTab" class="button tab-link">{{@global.language.HOMEPAGE.FEED}}</a>
+        <!--<a href="#justAddedEventsTab" class="button tab-link"  style="color:#F9A11B">Recommended</a>-->
       </div>
     </div>
+    {{> "homeNavBarPartial"}}
     <div class="tabs-swipeable-wrap">
       <div class="tabs">
 
-        <div class="page-content tab infinite-scroll featured-scroll pull-to-refresh-content" id="featuredEventsTab" data-distance="100">
+        <div class="page-content tab infinite-scroll featured-scroll pull-to-refresh-content hide-navbar-on-scroll" id="featuredEventsTab" data-distance="100">
           <div class="pull-to-refresh-layer">
             <div class="preloader"></div>
             <div class="pull-to-refresh-arrow"></div>
@@ -45,7 +39,7 @@
             <div class="preloader"></div>
           </div>
         </div>
-        <div class="page-content tab infinite-scroll upcoming-scroll pull-to-refresh-content" id="upcomingEventsTab" data-distance="100">
+        <div class="page-content tab infinite-scroll upcoming-scroll pull-to-refresh-content hide-navbar-on-scroll" id="upcomingEventsTab" data-distance="100">
           <div class="pull-to-refresh-layer">
             <div class="preloader"></div>
             <div class="pull-to-refresh-arrow"></div>
@@ -57,7 +51,7 @@
             <div class="preloader infinite-preloader"></div>
           </div>
         </div>
-        <div class="page-content tab active pull-to-refresh-content home-refresh infinite-scroll " id="homeFeedTab" data-distance="100">
+        <div class="page-content tab pull-to-refresh-content home-refresh infinite-scroll hide-navbar-on-scroll" id="homeFeedTab" data-distance="100">
           <div class="pull-to-refresh-layer">
             <div class="preloader"></div>
             <div class="pull-to-refresh-arrow"></div>

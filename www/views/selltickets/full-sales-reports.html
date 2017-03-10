@@ -1,0 +1,57 @@
+<div class="pages ">
+  <div data-page="full-sales-reports" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">{{@global.language.STORE.SALES_REPORTS}}</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="card event-details">
+        <div class="header">
+          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{event.id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border"></div>
+        </div>
+        <div class="card-content">
+          {{#js_compare "this.reports.length > 0"}}
+          <div class="list-block media-list">
+            <ul>
+               {{#each reports}}
+                <li class="accordion-item">
+                <div class="item-link item-content accordion-item-toggle">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                      <div class="item-after">{{totalTickets}}</div>
+                    </div>
+                    <div class="item-subtitle color-gray">{{email}}</div>
+                    <div class="item-text">{{js "this.totalSales.toFixed(2)"}}&nbsp;{{@root.event.currency}}</div>
+                  </div>
+                </div>
+                <ul class="accordion-item-content list-block media-list">
+                 {{#each sales}}
+                  <li>
+                    <a href="#" class="item-link item-content purchase-details" purchase="{{id}}" user-id="{{../id}}">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">{{fullName}}</div>
+                          <div class="item-after">{{ticketsquantity}}</div>
+                        </div>
+                        <div class="item-subtitle color-gray">{{email}}</div>
+                        <div class="item-text">{{purchasedate}}</div>
+                      </div>
+                    </a>
+                  </li>
+                  {{/each}}
+                </ul>
+               </li>
+               {{/each}}
+            </ul>
+          </div>
+          {{else}}
+          <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.REPORTS.NO_COMMITTEE_MEMBERS}}</div>
+          {{/js_compare}}
+        </div>
+      </div>
+    </div>
+ </div>
+</div>

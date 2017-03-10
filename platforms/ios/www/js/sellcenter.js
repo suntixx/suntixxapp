@@ -15,7 +15,7 @@ app.onPageInit('sell-tickets-list', function(page) {
       return;
     }
     var tickets = util.getTicketsToSell(selectedTickets, sellerTickets);
-    mainView.router.load ({
+    storeView.router.load ({
       url: 'views/selltickets/select-quantity.html',
       context: {
         event:selectedEventLocal,
@@ -28,17 +28,17 @@ app.onPageInit('sell-tickets-list', function(page) {
   var salesReports;
 
   $$('.reports').on('click', function() {
-    var nocache = "?t="+moment().unix();
     var result;
     $$.ajax({
       async: true,
       timeout: 30 * 1000,
-      url: config.server + "/api/usersalesreports/" + selectedEventLocal.id + "/" + user.id + nocache,
+      cache: false,
+      url: config.server + "/api/usersalesreports/" + selectedEventLocal.id + "/" + user.id,
       method: "GET",
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           salesReports = JSON.parse(data);
-          mainView.router.load ({
+          storeView.router.load ({
             url: 'views/selltickets/sales-reports.html',
             context: {
               event: selectedEventLocal,
@@ -58,11 +58,7 @@ app.onPageInit('sell-tickets-list', function(page) {
   });
 
   $$('.back-events').on('click', function () {
-    mainView.router.back ({
-      url: 'views/events/myevents.html',
-      context: allUserEvents,
-      force: true,
-    });
+    app.showTab(returnFromStoreTab);
   });
 });
 
@@ -114,7 +110,7 @@ app.onPageInit('sell-quantity', function(page) {
       processing = false;
       return;
     }
-    mainView.router.load ({
+    storeView.router.load ({
       url: 'views/selltickets/ticket-names.html',
       context: {
         //cart: ticketList,
@@ -134,7 +130,7 @@ app.onPageInit('sell-quantity', function(page) {
         sellerTickets[i].chosen = true;
       }
     }
-    mainView.router.back ({
+    storeView.router.back ({
       url: 'views/selltickets/committee-home.html',
       force:true,
       context: {
@@ -157,7 +153,7 @@ app.onPageInit('sell-ticket-names', function(page) {
         selectedEventLocal.tickets[x].requestedqty = thisTicket[0].requestedqty;
       }
     }
-    mainView.router.back({
+    storeView.router.back({
       url: 'views/selltickets/select-quantity.html',
       force: true,
       context: {
@@ -185,7 +181,7 @@ app.onPageInit('sell-ticket-names', function(page) {
           $$('#tickettype-'+ticketId).remove();
         }
         if (total == 0) {
-          mainView.router.back({
+          storeView.router.back({
             url: 'views/selltickets/committee-home.html',
             force: true,
             context: {
@@ -230,7 +226,7 @@ app.onPageInit('sell-ticket-names', function(page) {
         }
       }
     }
-    mainView.router.load({
+    storeView.router.load({
       url: 'views/selltickets/checkout.html',
       context: {
         total: total,
@@ -299,7 +295,7 @@ app.onPageInit('sell-checkout', function (page) {
 
    $$(".step-two").on('click', function() {
 
-     mainView.router.back({
+     storeView.router.back({
        url: 'views/selltickets/ticket-names.html',
        force: true,
        context: {
@@ -349,57 +345,14 @@ app.onPageInit('sell-checkout', function (page) {
     var paymentType = language.STORE.PAYPAL;
     if (purchaser.paymentoption == 1) {
       paymentType = language.STORE.CASH;
-      /*if (purchaser.cashout.length > 0) {
-        paymentType += " - " + language.STORE.PAID;
-        app.onPageInit('sell-tickets-list', function(page) {
-          var sellerTickets = page.context.tickets;
-            //alert(JSON.stringify(sellerTickets));
-          $$('.start-selling').on('click', function () {
-            var selectedTickets = app.formToJSON('#select-tickets-form');
-            var selected = 0;
-            for (var i in selectedTickets) {
-              if (selectedTickets[i].length > 0) {
-                selected++;
-              }
-            }
-            if (selected == 0) {
-              app.alert("Plese select ticket(s)");
-              return;
-            }
-            var tickets = util.getTicketsToSell(selectedTickets, sellerTickets);
-            //alert(JSON.stringify(tickets));
-            // = app.addView('.view-store', {});
-            mainView.router.load ({
-              url: 'views/selltickets/select-quantity.html',
-              context: {
-                event:selectedEventLocal,
-                tickets: tickets,
-                sellerTickets: sellerTickets,
-              },
-              //ignoreCache: true,
-            });
-          });
-
-          $$('.back-events').on('click', function () {
-            mainView.router.back ({
-              url: 'views/events/myevents.html',
-              context: allUserEvents,
-              force: true,
-            });
-          });
-        });
-
-
-
-      }*/
     }
-    var nocache = "?t="+moment().unix();
     app.showIndicator();
     var result;
     $$.ajax({
       async: true,
       timeout: 30 * 1000,
-      url: config.server + "/api/getuserbyemail" + nocache,
+      cache:false,
+      url: config.server + "/api/getuserbyemail",
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
       data: {email: purchaser.email},
@@ -458,9 +411,9 @@ app.onPageInit('sell-checkout', function (page) {
     if (processing) {
       return;
     }
-    app.confirm(language.STORE.CONFIRM_SALE, function () {
+    var completeSale = function () {
       processing = true;
-      var request = {
+      saleRequest = {
         user_id: 0,
         event_id: selectedEventLocal.id,
   		  pos_user_id: user.id,
@@ -475,43 +428,71 @@ app.onPageInit('sell-checkout', function (page) {
         tickets: checkoutCart.tickets,
         order: checkoutCart.cart,
       };
-      app.showPreloader(language.STORE.COMPLETING_PAYMENT_MSG);
-      var nocache = "?t="+moment().unix();
-      var result;
+      app.showIndicator();
       $$.ajax({
         async: true,
         timeout: 30 * 1000,
-        url: config.server + "/api/savecommpayment" + nocache,
+        cache: false,
+        url: config.server + "/api/savecommpayment",
         method: "POST",
         contentType: "application/x-www-form-urlencoded",
-        data: request,
+        data: saleRequest,
         xhrFields: { withCredentials: true },
         success: function(data, status, xhr) {
           if (status == 200 || status == 0 ){
-            result = JSON.parse(data);
-            app.hidePreloader();
-            app.alert(language.STORE.COLLECT_MONEY_MSG, function() {
+            var result = JSON.parse(data);
+            if (result.err) {
+              app.hideIndicator();
               processing = false;
-              mainView.router.back({
-                url: 'home.html',
-                force:true,
-              });
-            });
+              app.popup(Template7.templates.saleForceTemplate());
+            } else {
+              app.hideIndicator();
+              processing = false;
+              app.popup(Template7.templates.saleCompleteTemplate());
+            }
           }
         },
         error: function(status, xhr) {
-          app.hidePreloader();
-          app.alert(language.STORE.CHECKOUT_SELL_ERROR, function() {
-            processing = false;
-            mainView.router.back({
-              url: 'home.html',
-              force:true,
-            });
-          });
+          processing = false;
+          app.hideIndicator();
+          app.popup(Template7.templates.saleErrorTemplate());
         },
       });
-    }, function () {
+    };
+
+    app.confirm(language.STORE.CONFIRM_SALE, completeSale , function () {
       return;
+    });
+  });
+
+
+  $$(document).on('click', '.force-sale', function () {
+    saleRequest.force = true;
+    completeSale();
+  });
+
+  $$(document).on('click','.retry', function() {
+    completeSale();
+  });
+
+  $$(document).on('click', '.home', function () {
+    mainView.router.load({
+      url: home.html,
+      reload:true,
+      ignoreCache: true
+    });
+    app.showTab('#homepage-tab');
+  });
+
+  $$(document).on('click', '.sell-more', function() {
+
+    storeView.router.back({
+      url: 'views/selltickets/committee-home.html',
+      context: {
+        tickets: page.context.sellerTickets,
+        event: selectedEventLocal,
+      },
+      reload: true,
     });
   });
 });
@@ -521,5 +502,20 @@ app.onPageInit('sales-reports', function(page) {
     var purchaseId = Number($$(this).attr('purchase'));
     var purchaseInfo = SEARCHJS.matchArray(page.context.reports.sales, {id: purchaseId});
     app.popup(Template7.templates.saleReportDetails(purchaseInfo[0]));
+  });
+});
+
+app.onPageInit('full-sales-reports', function(page) {
+  $$('.purchase-details').on('click', function () {
+    var purchaseId = $$(this).attr('purchase');
+    var userId = $$(this).attr('user-id');
+    var userSales = _.find(page.context.reports, function(item) {
+      return item.id == userId;
+    });
+    var purchaseInfo = _.find(userSales.sales, function(item) {
+      return item.id == purchaseId;
+    });
+    purchaseInfo.eventid = page.context.event.id;
+    app.popup(Template7.templates.saleReportDetails(purchaseInfo));
   });
 });

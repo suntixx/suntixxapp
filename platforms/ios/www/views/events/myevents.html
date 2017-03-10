@@ -1,197 +1,153 @@
 <div class="pages">
-  <div data-page="all-user-events" class="page navbar-fixed">
+  <div data-page="all-user-events" class="page navbar-fixed toolbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
-        <div class="left">
-          <a href="#" class="link icon-only home back-button" data-ignore-cache="true"> <i class="icon icon-back"></i></a>
-        </div>
-        <div class="center">My Events</div>
+        <div class="center">{{@global.language.EVENTS.MY_EVENTS}}</div>
+        <div class="right"><a href="#" class="link create-new-event"><i class="icon icon-add-event"></i></a></div>
       </div>
     </div>
-    <a href="#" class="floating-button color-orange create-event">
-      <i class="icon icon-new"></i>
-    </a>
-    <div class="page-content">
-      <div class="accordion-item managed-events">
-        <div class="accordion-item-toggle button button-big">Managed Events</div>
-        <div class="accordion-item-content">
-          {{#js_compare "this.managedEventList.length > 0"}}
-          {{#each managedEventList}}
-          <div class="search-details">
-            <a href="#" class="item-content item-link my-event-link search-details" event-id="{{id}}">
-              <div class="row no-gutter header">
-                <span>{{name}}</span>
-              </div>
-              <div class="row no-gutter content">
-                  <div class="col-50 image">
-                    <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
-                  </div>
-                <div class="col-50 content-details">
-                  <span>{{ShortStartDate}}</span>
-                  <span>{{ShortStartTime}}</span>
-                  <span>{{venue}}</span>
-                </div>
-              </div>
-              <div class="row footer no-gutter">
-                <div class="col-50 category">
-                  {{#if Total}}
-                  <span>Sold: {{SoldTotal}}/{{Total}}</span>
-                  {{else}}
-                  <span>{{@global.language.EVENTS.NO_TICKETS}}</span>
-                  {{/if}}
-                </div>
-                <div class="col-50">
-                  <span>
-                    Scanned: {{Scanned}}/{{SoldTotal}}
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          {{/each}}
-          {{else}}
-          <div class="oops-message">No Events</div>
-          {{/js_compare}}
-        </div>
-      </div>
-      <div class="accordion-item committee-events">
-        <div class="accordion-item-toggle button button-big">Box Office</div>
-        <div class="accordion-item-content">
-        {{#js_compare "this.committeeEventList.length > 0"}}
-        {{#each committeeEventList}}
-        <div class="search-details">
-          <a href="#" class="item-content item-link committee-event-link search-details" event-id="{{id}}">
-            <div class="row no-gutter header">
-              <span>{{name}}</span>
-            </div>
-            <div class="row no-gutter content">
-                <div class="col-50 image">
-                  <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
-                </div>
-              <div class="col-50 content-details">
-                <span>{{ShortStartDate}}</span>
-                <span>{{ShortStartTime}}</span>
-                <span>{{venue}}</span>
-              </div>
-            </div>
-            <div class="row footer no-gutter">
-              <div class="col-50 category">
-                {{#if UserTickets.Total}}
-                <span>Sold: {{UserTickets.SoldTotal}}/{{UserTickets.Total}}</span>
-                {{else}}
-                <span>{{@global.language.EVENTS.NO_TICKETS}}</span>
-                {{/if}}
-              </div>
-              <div class="col-50">
-                <span>
-                  {{#js_compare "this.UserTickets.LowestPrice == this.UserTickets.HighestPrice"}}
-                    {{js "this.UserTickets.LowestPrice.toFixed(2)"}}{{currency}}
-                  {{else}}
-                    {{js "this.UserTickets.LowestPrice.toFixed(2)"}}&nbsp;{{currency}} - {{js "this.UserTickets.HighestPrice.toFixed(2)"}}&nbsp;{{currency}}
-                  {{/js_compare}}
-                </span>
-              </div>
-            </div>
-          </a>
-        </div>
-        {{/each}}
-        {{else}}
-        <div class="oops-message">No Events</div>
+    {{> "eventsNavBarPartial"}}
+    <div class="toolbar tabbar">
+      <div class="toolbar-inner">
+        <a href="#favoritesEventsTab" class="tab-link active">{{@global.language.HOMEPAGE.FAVORITES}}</a>
+        <a href="#managedEventsTab" class="tab-link">{{@global.language.EVENTS.MANAGE}}</a>
+        {{#js_compare "this.previousEventList.length > 0"}}
+          <a href="#previousEventsTab" class="tab-link">{{@global.language.EVENTS.PREVIOUS}}</a>
         {{/js_compare}}
       </div>
-      </div>
-      <div class="accordion-item access-events">
-        <div class="accordion-item-toggle button button-big">Access Control</div>
-        <div class="accordion-item-content">
-          {{#js_compare "this.scanningEventList.length > 0"}}
-          {{#each scanningEventList}}
-          <div class="search-details">
-            <a href="#" class="item-content item-link scanning-event-link search-details" event-id="{{id}}">
-              <div class="row no-gutter header">
-                <span>{{name}}</span>
-              </div>
-              <div class="row no-gutter content">
-                  <div class="col-50 image">
-                    <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
+    </div>
+    <div class="tabs-swipeable-wrap">
+      <div class="tabs">
+        <div class="page-content tab active" id="favoritesEventsTab">
+          {{#js_compare "this.favoriteEventList.length > 0"}}
+            {{#each favoriteEventList}}
+              <div class="card event-details">
+                <a href="#" class="link favorite-event-link" event-id="{{id}}">
+                <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+                <div class="card-header">
+                  <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border cache-image"><div class="category">{{category.name}}</div></div>
+                </div>
+                  <div class="card-content">
+
+
+                  <div class="card-content-inner">
+                    <div class="event-name">{{name}}</div>
+                    <div class="color-gray hosted-by"><span class="small">{{@global.language.EVENTS.PROMOTER}}&#58;&nbsp;</span>
+
+                        {{#js_compare "this.hostedby == 0"}}
+                          {{user.fullname}}
+                        {{else}}
+                            {{#js_compare "this.hostedby == 1"}}
+                              {{user.organization.name}}
+                            {{else}}
+                              {{hostedby}}
+                            {{/js_compare}}
+                        {{/js_compare}}
+
+                    </div>
+                    <span class="color-black">{{englishtime starttime}}</span><br>
+                    <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
                   </div>
-                <div class="col-50 content-details">
-                  <span>{{ShortStartDate}}</span>
-                  <span>{{ShortStartTime}}</span>
-                  <span>{{venue}}</span>
                 </div>
-              </div>
-              <div class="row footer no-gutter">
-                <div class="col-50 category">
-                  <span>
-                    {{#if CanScan}}
-                      Scanning Available
-                    {{else}}
-                      Scanning Unavailable
-                    {{/if}}
-                  </span>
-                </div>
-                <div class="col-50">
-                  <span>
-                    {{#if Scanned}}
-                      Scanning Started
-                    {{else}}
-                      Scanning Not Started
-                    {{/if}}
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-          {{/each}}
-          {{else}}
-          <div class="oops-message">No Events</div>
-          {{/js_compare}}
-        </div>
-      </div>
-      <div class="accordion-item previous-events">
-        <div class="accordion-item-toggle button button-big">Previous Events</div>
-        <div class="accordion-item-content">
-          {{#js_compare "this.previousEventList.length > 0"}}
-          <div class="swiper-container swiper-init" data-speed="400" data-space-between="40" data-pagination=".swiper-pagination">
-            <div class="swiper-wrapper">
-          {{#each previousEventList}}
-              <div class="swiper-slide">
-                <div class="search-details">
-                  <a href="#" class="item-content item-link previous-event-link search-details" event-id="{{id}}">
-                    <div class="row no-gutter header">
-                      <span>{{name}}</span>
-                    </div>
-                    <div class="row no-gutter content">
-                        <div class="col-50 image">
-                          <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{id}}/thumbnail.png"/>
-                        </div>
-                      <div class="col-50 content-details">
-                        <span>{{ShortStartDate}}</span>
-                        <span>{{ShortStartTime}}</span>
-                        <span>{{venue}}</span>
-                      </div>
-                    </div>
-                    <div class="row footer no-gutter">
-                      <div class="col-50 category">
-                        <span>Sold: {{SoldTotal}}/{{Total}}</span>
-                      </div>
-                      <div class="col-50">
-                        <span>
-                          Scanned: {{Scanned}}/{{SoldTotal}}
-                        </span>
-                      </div>
-                    </div>
-                  </a>
+                </a>
+                <div class="card-footer">
+                  <div class="prices">
+                    {{#js_compare "this.LowestPrice > 0"}}
+                      {{#js_compare "this.LowestPrice == this.HighestPrice"}}
+                      {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                      {{else}}
+                        {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}} - {{js "this.HighestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                      {{/js_compare}}
+                    {{/js_compare}}
+                  </div>
+                    <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+                    <a href="#" class="link share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
+                    {{#if hasOnlineTickets}}<a href="#" class="link purchase-online-tickets icon-only"  event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/if}}
+                  <!--</div>-->
                 </div>
               </div>
             {{/each}}
-            </div>
-            <div class="swiper-pagination"></div>
-          </div>
           {{else}}
-          <div class="oops-message">No Events</div>
+            <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.HOMEPAGE.NO_FAVORITES}}</div>
           {{/js_compare}}
         </div>
+        <div class="page-content tab" id="managedEventsTab">
+          {{#if hasManageEvents}}
+          {{#each managedEventList}}
+            <div class="card event-details">
+              <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+              <div class="card-header">
+                <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border">
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="card-content-inner">
+                  <div class="event-name">{{name}}</div>
+                  <span class="color-black">{{englishtime starttime}}</span><br>
+                  <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+                <a href="#" class="link sell-event icon-only" event-id="{{id}}"><i class="icon icon-sell orange"></i></a>
+                <a href="#" class="link scan-event icon-only"  event-id="{{id}}"><i class="icon icon-scan orange"></i></a>
+                <a href="#" class="link edit-event icon-only"  event-id="{{id}}"><i class="icon icon-edit orange"></i></a>
+                <a href="#" class="link event-menu-link icon-only" event-id="{{id}}" menuItem="reports"><i class="icon icon-reports orange"></i></a>
+                <!--</div>-->
+              </div>
+            </div>
+          {{/each}}
+          {{#each scanningEventList}}
+            <div class="card event-details">
+              <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+              <div class="card-header">
+                <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border">
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="card-content-inner">
+                  <div class="event-name">{{name}}</div>
+                  <span class="color-black">{{englishtime starttime}}</span><br>
+                  <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a href="#" class="icon-only">&nbsp;</a><a href="#" class="icon-only">&nbsp;</a><a href="#" class="icon-only">&nbsp;</a>
+                <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+                <a href="#" class="link scan-event icon-only"  event-id="{{id}}"><i class="icon icon-scan orange"></i></a>
+              </div>
+            </div>
+          {{/each}}
+          {{else}}
+            <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.EVENTS.NO_MANAGED_EVENTS}}</div>
+          {{/if}}
+        </div>
+        {{#js_compare "this.previousEventList.length > 0"}}
+        <div class="page-content tab" id="previousEventsTab">
+          {{#each previousEventList}}
+            <div class="card event-details">
+              <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+              <div class="card-header">
+                <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border">
+                </div>
+              </div>
+                <div class="card-content"><div class="card-content-inner">
+                  <div class="event-name">{{name}}</div>
+                  <span class="color-black">{{englishtime starttime}}</span><br>
+                  <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a href="#" class="icon-only">&nbsp;</a>
+                <a href="#" class="icon-only">&nbsp;</a>
+                <a href="#" class="icon-only">&nbsp;</a>
+                <a href="#" class="link event-menu-link icon-only previous" event-id="{{id}}" menuItem="clone"><i class="icon icon-copy orange"></i></a>
+                <a href="#" class="link event-menu-link icon-only previous" event-id="{{id}}" menuItem="reports"><i class="icon icon-reports orange"></i></a>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+        {{/js_compare}}
       </div>
     </div>
   </div>

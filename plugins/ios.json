@@ -60,6 +60,13 @@
         },
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
+        "cordova-plugin-calendar": {
+            "CALENDAR_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.suntixx.application"
         }
     },
     "dependent_plugins": {

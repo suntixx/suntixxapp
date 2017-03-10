@@ -1,31 +1,107 @@
-
 <div class="pages">
-  <div data-page="purchases" class="page navbar-fixed toolbar-fixed with-subnavbar">
+  <div data-page="purchases" class="page navbar-fixed toolbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left">
-          <a href="#" class="link home icon-only back-button"><i class="icon icon-back"></i></a>
         </div>
         <div class="center">{{@global.language.TICKETS.MY_TICKETS}}</div>
         <div class="right">
-          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
         </div>
       </div>
-      <div class="toolbar tabbar">
-        <div class="toolbar-inner">
-          <a href="#upcomingPurchasesTab" class="button active tab-link" style="color:#F9A11B">{{@global.language.TICKETS.UPCOMING_EVENTS}}</a>
-          <a href="#ordersTab" class="button tab-link" style="color:#F9A11B">{{@global.language.TICKETS.ORDERS}}</a>
-        </div>
+    </div>
+    {{> "ticketsNavBarPartial"}}
+    <div class="toolbar tabbar edit-toolbar">
+      <div class="toolbar-inner">
+        <a href="#myTicketsTab" class="tab-link active">{{@global.language.TICKETS.MY_TICKETS}}</a>
+        <a href="#storeTicketsTab" class="tab-link">{{@global.language.TICKETS.WALLET}}</a>
+        {{#js_compare "this.commevents.length > 0"}}
+          <a href="#sellTicketsTab" class="tab-link">{{@global.language.TICKETS.SELL_TICKETS}}</a>
+        {{/js_compare}}
       </div>
     </div>
     <div class="tabs-swipeable-wrap">
       <div class="tabs">
-       <div class="page-content tab active" id="upcomingPurchasesTab">
-         <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
+       <div class="page-content tab active" id="myTicketsTab">
+         {{#js_compare "this.tickets.mytickets.length > 0"}}
+           {{#each tickets.mytickets}}
+             <div class="accordion-item">
+               <div class="accordion-item-toggle">
+                 <div class="card event-details">
+                   <div class="card-header">
+                     <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"></div>
+                   </div>
+                   <div class="card-content">
+                     <div class="card-content-inner">
+                       <div class="event-name">{{name}}</div>
+                       <span class="color-black">{{englishtime starttime}}</span><br>
+                       <span class="color-gray capitalize">{{venue}}</span>
+                       <div class="item-content">
+                         <div class="item-inner">
+                           <div class="item-title">
+                             {{@global.language.TICKETS.TICKETS}}&nbsp;-&nbsp;{{js "this.tickets.length"}}
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               <div class="accordion-item-content">
+                 <div class="list-block media-list">
+                   <ul>
+                     {{#each tickets}}
+                     <li>
+                       <a href="#" class="item-link item-content ticket-link" code="{{code}}" ticket-index="{{@index}}" event-id="{{../id}}">
+                         <div class="item-inner">
+                           <div class="item-title-row">
+                             <div class="item-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}} {{../currency}}</div>
+                           </div>
+                           <div class="item-subtitle">{{nameonticket}}</div>
+                           <div class="item-text"><span>Tickets Id: {{id}}</span></div>
+                         </div>
+                       </a>
+                     </li>
+                     {{/each}}
+                   </ul>
+                 </div>
+               </div>
+             </div>
+           {{/each}}
+          {{else}}
+            <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.TICKETS.NO_TICKETS}}</div>
+          {{/js_compare}}
         </div>
-        <div class="page-content tab " id="ordersTab">
-          <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
-         </div>
+        <div class="page-content tab" id="storeTicketsTab">
+
+        </div>
+        {{#js_compare "this.commevents.length > 0"}}
+        <div class="page-content tab" id="sellTicketsTab">
+          {{#each commevents}}
+          <div class="card event-details">
+            <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+            <a href="#" class="select-tickets" event-id="{{id}}">
+                <div class="card-header">
+                  <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"></div>
+                </div>
+                <div class="card-content">
+                  <div class="user-announcement">{{@global.language.TICKETS.CASH_PAYMENT_ANNOUNCMENT}}</div>
+                  <div class="card-content-inner">
+                    <div class="event-name">{{name}}</div>
+                    <span class="color-black">{{englishtime starttime}}</span><br>
+                    <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+                  </div>
+                </div>
+            </a>
+            <div class="card-footer">
+              <a href="#" class="icon-only">&nbsp;</a><a href="#" class="icon-only">&nbsp;</a><a href="#" class="icon-only">&nbsp;</a>
+              <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+              <a href="#" class="link sale-reports icon-only"  event-id="{{id}}"><i class="icon icon-reports orange"></i></a>
+            </div>
+          </div>
+
+          {{/each}}
+        </div>
+        {{/js_compare}}
       </div>
     </div>
   </div>

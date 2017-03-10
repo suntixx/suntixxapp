@@ -1,64 +1,13 @@
-var showAvatar = function () {
-  var organization = '' ;
-  if (user.organization_id && user.organization) {
-    organization = user.organization.name;
-  }
-  var userFullname = user.fullname ? user.fullname: user.name2+ " "+user.name4;
-  var html = '<div class="list-block media-list user-avatar">' +
-              '<ul>' +
-               '<li class="item-content">' +
-                  '<div class="item-media">' +
-                    '<img class="user-image" src="' + config.server + '/thumbnails/users/' + user.id + '/portrait.png" width="44">' +
-                  '</div>' +
-                  '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                      '<div class="item-title">' +userFullname+'</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">' + organization + '</div>' +
-                  '</div>' +
-                '</li>' +
-              '</ul>' +
-            '</div>';
-            //alert(html);
-  $$(document).find('#user-avatar').html(html);
-  $$(document).find('.logout-menu').show();
-};
-
-var showLoginOrCreate = function () {
-  var html = '<div class="list-block media-list">' +
-              '<ul>' +
-               '<li class="item-content"><a href="#" class="login link close-panel">' +
-                  '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                      '<div class="item-title color-orange"><i class="icon icon-login"></i>Sign In</div>' +
-                    '</div>' +
-                  '</div>' +
-                '</a></li>' +
-                '<li class="item-content"><a href="#" class="create-new-user link close-panel">' +
-                   '<div class="item-inner">' +
-                     '<div class="item-title-row">' +
-                       '<div class="item-title color-orange"><i class="icon icon-register"></i>Create Account</div>' +
-                     '</div>' +
-                   '</div>' +
-                 '</a></li>' +
-              '</ul>' +
-            '</div>';
-  $$(document).find('#user-avatar').html(html);
-  $$(document).find('.logout-menu').hide();
-};
 
 if(user) {
   checkLogin();
-} else {
-  showLoginOrCreate();
 }
 
 
-function checkLogin () {
-  var facebookConnectPlugin = false;
-  //console.log("loggin in");
+function checkLogin (callback) {
+  //var facebookConnectPlugin = false;
+
   if (user && Number(user.id) > 0) {
-    var nocache = "?t="+moment().unix();
     if(user.social_id && user.social  && facebookConnectPlugin) {
       //getLoginStatus
       app.showIndicator();
@@ -68,10 +17,12 @@ function checkLogin () {
             app.hideIndicator();
             success.background = true;
             userService.facebookLoginSuccess(success);
-
+            if(callback) {
+              callback();
+            }
           } else {
             app.hideIndicator();
-            showLoginOrCreate();
+            //showLoginOrCreate();
             user = null;
             Template7.global.user  = null;
             app.addNotification({
@@ -84,10 +35,12 @@ function checkLogin () {
     } else {
       user.password = storage.getItem('userPassword');
       app.showIndicator();
+      console.log("loggin in");
       var result = {};
       $$.ajax({
         async: true,
-        url: config.server + "/api/userinfo" + nocache,
+        cache: false,
+        url: config.server + "/api/userinfo",
         method: "POST",
         timeout: 20 * 1000,
         contentType: "application/x-www-form-urlencoded",
@@ -97,24 +50,28 @@ function checkLogin () {
             app.hideIndicator();
             user = JSON.parse(data);
             if (user.mobilephone == "" || user.mobilephone == "null" || user.mobilephone == null) {
-              mainView.router.load({
+              app.showTab("#profile-view");
+              profileView.router.load({
                 url: 'views/user/complete-registration.html',
               });
             } else {
-              showAvatar();
+              //showAvatar();
               storage.setItem('userData', JSON.stringify(user));
               Template7.global.user = user;
-              socket = io.connect(config.server);
-              socket.on('connect', socketManager);
+              //openSocket();
+              console.log("logged in");
+              if (callback) {
+                callback();
+              }
             }
           }
 
         },
         error: function (xhr, status){
           app.hideIndicator();
-          showLoginOrCreate();
-          user = null;
-          Template7.global.user  = null;
+          //showLoginOrCreate();
+          //user = null;
+          //Template7.global.user  = null;
           app.addNotification({
             message: language.SYSTEM.SERVER_ERROR,
             hold: 2000,
@@ -154,7 +111,7 @@ app.onPageInit('create-new-user', function(page) {
     storage.setItem('userPassword', request.password);
     request.captcha = config.secret;
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Registering User");
+    app.showIndicator();
     var result = {};
     $$.ajax({
       timeout: 20 * 1000,
@@ -166,15 +123,19 @@ app.onPageInit('create-new-user', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           user = JSON.parse(data);
-          storage.setItem('userData', JSON.stringify(user));
+          storage.setItem('userData', data);
           Template7.global.user = user;
-          app.hidePreloader();
-          showAvatar();
-          mainView.router.loadPage('home.html');
+          app.hideIndicator();
+          //showAvatar();
+          profileView.router.back ({
+            url: 'views/user/profile.html',
+            context: user,
+            force: true
+          });
         }
       },
       error: function (xhr, status){
-        app.hidePreloader();
+        app.hideIndicator();
         storage.setItem('userPassword', null);
         app.alert("Registration Failed!");
       },
@@ -289,6 +250,10 @@ app.onPageInit('create-new-user', function(page) {
     }, options);
   });
 
+  $$('.back-home').on('click', function() {
+    app.showTab('#homepage-tab');
+  });
+
 });
 
 
@@ -310,7 +275,7 @@ app.onPageInit('update-preferences', function (page) {
   $$('.save-user').on('click', function () {
     var formData = app.formToJSON('#update-preferences-form');
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating User");
+    app.showIndicator();
     var result = {};
     $$.ajax({
       timeout: 20 * 1000,
@@ -324,16 +289,20 @@ app.onPageInit('update-preferences', function (page) {
         if (status == 200 || status == 0 ){
 
           user = JSON.parse(data);
-          storage.setItem('userData', JSON.stringify(user));
-          app.hidePreloader();
-          mainView.router.loadPage('home.html');
+          storage.setItem('userData', data);
+          app.hideIndicator();
+          profileView.router.back ({
+            url: 'views/user/profile.html',
+            context: user,
+            force:true
+          });
           //alert(satus + " " +JSON.stringify(result));
         }
 
       },
       error: function (xhr, status){
-        app.hidePreloader();
-        app.alert("User Update Failed!");
+        app.hideIndicator();
+        app.alert(language.ERRORS.USER_UPDATE_FAILED);
       },
     });
   });
@@ -354,53 +323,16 @@ app.onPageInit('user-profile', function(page) {
   $$('.message-user').on('click', function() {
     var receiverId = $$(this).attr("user-id");
     var receiverName = $$(this).attr("user-name");
-    chatService.openChat(receiverId, receiverName);
+    chatService.openChat(receiverId, receiverName, false);
   });
 });
 
 app.onPageInit('profile', function(page) {
-  //var thisProfile = user;
-  //alert(JSON.stringify(thisProfile.id));
   $$('#right-panel-menu').html(Menus.user);
-  if (user.social_id) {
-    $$('.facebook-menu').addClass('delete-facebook-integration');
-    $$('.facebook-menu .item-title').html(language.USER_AREA.MENU.REMOVE_FACEBOOK);
-  } else {
-    $$('.facebook-menu').addClass('add-facebook-integration');
-    $$('.facebook-menu .item-title').html(language.USER_AREA.MENU.ADD_FACEBOOK);
-  }
 
-  $$('.home').on('click', function () {
-    mainView.router.back ({
-      url: 'home.html',
-      force: true,
-      ignoreCache: true,
-    });
+  $$('.open-settings').on('click', function() {
+    profileView.router.loadPage('views/user/settings.html');
   });
-
-  $$('.delete-facebook-integration').on('click', function() {
-    app.confirm('Do you really want to remove integration with Facebook',
-      function() {
-        facebookConnectPlugin.getLoginStatus(function(success) {
-          if(success.status === 'connected') {
-            facebookConnectPlugin.logout(userService.facebookLogoutSuccess, userService.facebookLogoutFail);
-          }
-        });
-      });
-  });
-
-  $$('.add-facebook-integration').on('click', function() {
-    facebookConnectPlugin.getLoginStatus(function(success) {
-        if(success.status === 'connected'){
-          //do nothing
-          app.alert(language.USER_AREA.FACEBOOK_ALREADY_AUTHORIZED);
-        } else {
-          facebookConnectPlugin.login(userService.facebookPermissions, userService.facebookLoginSuccess, userService.facebookLoginFail);
-        }
-    });
-  });
-
-
 
 
   $$('.message-user').on('click', function() {
@@ -455,7 +387,7 @@ app.onPageInit('profile', function(page) {
     $$('.show-friend-profile').on('click', function() {
       var friendId = $$(this).attr("friend-id");
       var friendProfile = SEARCHJS.matchArray(user.friends, {id: parseInt(friendId)});
-      mainView.router.load({
+      profileView.router.load({
         url: 'views/user/user-profile.html',
         context: friendProfile[0],
       });
@@ -468,38 +400,64 @@ app.onPageInit('profile', function(page) {
     $$('.profile-page-title').text(language.USER_AREA.ACTIVITY);
   });
 
-  $$('#userChatsTab').on('show', function() {
-    $$('.profile-page-title').text(language.USER_AREA.CHATS.CHATS);
-    var chatRoomList = [];
-    db.readTransaction(function(tx) {
-      tx.executeSql("SELECT c.roomid, c.receiver_name, c.modified_on, c.isevent,  "+
-                    "(SELECT COUNT(m2.isread) FROM  messages as m2 WHERE m2.isread=0 AND m2.roomid=c.roomid) as unread  "+
-                    "FROM chatrooms AS c "+
-                    "LEFT JOIN messages AS m ON c.roomid = m.roomid "+
-                    "ORDER BY c.modified_on DESC",
-                    [], function(tx, resultSet) {
-        for(var x = 0; x < resultSet.rows.length; x++) {
-          chatRoomList.push(resultSet.rows.item(x));
+
+});
+
+app.onPageInit('settings', function(page) {
+  var resetSettings = false;
+
+  $$('.email-messages').on('change', function() {
+    if (resetSettings) {
+      resetSettings = false;
+      return;
+    }
+    var tmpSettings = JSON.parse(JSON.stringify(config.settings));
+    tmpSettings.emailMessages = $$(this).prop('checked');
+    tmpSettings.captcha = config.secret;
+    tmpSettings.userid = user.id;
+    $$.ajax({
+      timeout: 20 * 1000,
+      async: true,
+      url: config.server + "/api/updatesettings/",
+      method: "POST",
+      contentType: "application/x-www-form-urlencoded",
+      data: tmpSettings,
+      xhrFields: { withCredentials: true },
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          config.settings = tmpSettings;
+          storage.setItem('settings', JSON.stringify(config.settings));
         }
-      }, function(tx, error) {
-        console.log('SELECT error: ' + error.message);
-      });
-    }, function(error) {
-      console.log(error);
-      app.alert(language.CHATS.CHAT_HISTORY_ERROR);
-    }, function() {
-        console.log(chatRoomList);
-        $$('#userChatsTab').html(Template7.templates.userChatsTemplate(chatRoomList));
-      }
-    );
+      },
+      error: function (xhr, status){
+        resetSettings = true;
+        $$('.email-messages').prop('checked', config.settings.emailMessages);
+        app.alert(language.ERRORS.USER_UPDATE_FAILED);
 
-    $$('.start-chat').on('click', function() {
-      var receiverId = $$(this).attr("room");
-      var receiverName = $$(this).attr("receiver_name");
-      var isEvent = $$(this).attr("isevent") == '1' ? true: false;
-      chatService.openChat(receiverId, receiverName, isEvent);
+      },
     });
+  });
 
+  $$('.delete-facebook-integration').on('click', function() {
+    app.confirm('Do you really want to remove integration with Facebook',
+      function() {
+        facebookConnectPlugin.getLoginStatus(function(success) {
+          if(success.status === 'connected') {
+            facebookConnectPlugin.logout(userService.facebookLogoutSuccess, userService.facebookLogoutFail);
+          }
+        });
+      });
+  });
+
+  $$('.add-facebook-integration').on('click', function() {
+    facebookConnectPlugin.getLoginStatus(function(success) {
+        if(success.status === 'connected'){
+          //do nothing
+          app.alert(language.USER_AREA.FACEBOOK_ALREADY_AUTHORIZED);
+        } else {
+          facebookConnectPlugin.login(userService.facebookPermissions, userService.facebookLoginSuccess, userService.facebookLoginFail);
+        }
+    });
   });
 });
 
@@ -517,13 +475,6 @@ app.onPageInit('update-details', function (page) {
     userCountry.open();
   });
 
-  $$('.home').on('click', function () {
-    mainView.router.back ({
-      url: 'home.html',
-      force: true,
-      ignoreCache: true,
-    });
-  });
 
   $$('.save-user').on('click', function () {
     if (uploading)  {
@@ -533,7 +484,7 @@ app.onPageInit('update-details', function (page) {
     if (!userService.validateForm('#update-details-form') ) {return;}
     var formData = app.formToJSON('#update-details-form');
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating User");
+    app.showIndicator();
     var result = {};
     $$.ajax({
       timeout: 20 * 1000,
@@ -547,22 +498,19 @@ app.onPageInit('update-details', function (page) {
         if (status == 200 || status == 0 ){
 
           user = JSON.parse(data);
-          storage.setItem('userData', JSON.stringify(user));
-          app.hidePreloader();
-          mainView.router.back({
+          storage.setItem('userData', data);
+          app.hideIndicator();
+          profileView.router.back ({
             url: 'views/user/profile.html',
             context: user,
-            force: true,
+            force:true
           });
-        } else {
-          app.hidePreloader();
-          app.alert("User Update Failed!");
         }
 
       },
       error: function (xhr, status){
-        app.hidePreloader();
-        app.alert("User Update Failed!");
+        app.hideIndicator();
+        app.alert(language.ERRORS.USER_UPDATE_FAILED);
       },
     });
   });
@@ -696,7 +644,7 @@ app.onPageInit('complete-facebook-registration', function(page) {
     request.admin =  0;
     request.deleted = 0;
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Registering User");
+    app.showIndicator();
     var result = {};
     $$.ajax({
       timeout: 20 * 1000,
@@ -708,15 +656,20 @@ app.onPageInit('complete-facebook-registration', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           user = JSON.parse(data);
-          storage.setItem('userData', JSON.stringify(user));
+          storage.setItem('userData', data);
           Template7.global.user = user;
-          app.hidePreloader();
-          showAvatar();
-          mainView.router.loadPage('home.html');
+          app.hideIndicator();
+          //showAvatar();
+          profileView.router.back ({
+            url: 'views/user/profile.html',
+            context: user,
+            force:true
+          });
+          app.showTab("#profile-view");
         }
       },
       error: function (xhr, status){
-        app.hidePreloader();
+        app.hideIndicator();
         storage.setItem('userPassword', null);
         app.alert("Registration Failed!");
       },
@@ -731,7 +684,7 @@ app.onPageInit('complete-facebook-registration', function(page) {
         storage.removeItem("userPassword");
         user = null;
         Template7.global.user = null;
-        showLoginOrCreate();
+        //showLoginOrCreate();
         facebookConnectPlugin.logout(userService.facebookLogoutSuccess, userService.facebookLogoutFail);
         /*mainView.router.loadPage("home.html");
         var nocache = "?t="+moment().unix();
@@ -744,13 +697,13 @@ app.onPageInit('complete-facebook-registration', function(page) {
           contentType: "application/x-www-form-urlencoded",
           //header: {"Get-Cookie" : storedUser.session},
           success: function(data, status, xhr) {
-            app.hidePreloader();
+            app.hideIndicator();
             if (status == 200 || status == 0 ){
               facebookConnectPlugin.logout(userService.facebookLogoutSuccess, userService.facebookLogoutFail);
             }
           },
           error: function(status, xhr) {
-            app.hidePreloader();
+            app.hideIndicator();
             facebookConnectPlugin.logout(userService.facebookLogoutSuccess, userService.facebookLogoutFail);
           },
         });*/
@@ -947,10 +900,11 @@ app.onPageInit('complete-registration', function (page) {
         storage.removeItem("userPassword");
         user = null;
         Template7.global.user = null;
-        showLoginOrCreate();
+        //showLoginOrCreate();
+        app.showTab("homepage-tab");
         mainView.router.loadPage("home.html");
         var nocache = "?t="+moment().unix();
-        app.showPreloader("Logging Out");
+        app.showIndicator();
         $$.ajax({
           timeout: 20 * 1000,
           async: true,
@@ -961,11 +915,11 @@ app.onPageInit('complete-registration', function (page) {
           success: function(data, status, xhr) {
             if (status == 200 || status == 0 ){
               // do nothing
-              app.hidePreloader();
+              app.hideIndicator();
             }
           },
           error: function(status, xhr) {
-            app.hidePreloader();
+            app.hideIndicator();
           }
         });
       },
@@ -988,7 +942,7 @@ app.onPageInit('complete-registration', function (page) {
     formData.admin =  0;
     formData.deleted = 0;
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating User");
+    app.showIndicator();
     var result = {};
     $$.ajax({
       async: true,
@@ -1002,21 +956,21 @@ app.onPageInit('complete-registration', function (page) {
         if (status == 200 || status == 0 ){
 
           user = JSON.parse(data);
-          storage.setItem('userData', JSON.stringify(user));
-          app.hidePreloader();
-          mainView.router.load({
-            url: 'home.html'
+          storage.setItem('userData', data);
+          app.hideIndicator();
+          profileView.router.load ({
+            url: 'views/user/profile.html',
+            context: user,
           });
-          //alert(satus + " " +JSON.stringify(result));
         } else {
-          app.hidePreloader();
-          app.alert("User Update Failed!");
+          app.hideIndicator();
+          app.alert(language.ERRORS.USER_UPDATE_FAILED);
         }
 
       },
       error: function (xhr, status){
-        app.hidePreloader();
-        app.alert("User Update Failed!");
+        app.hideIndicator();
+        app.alert(language.ERRORS.USER_UPDATE_FAILED);
       },
     });
   });
@@ -1130,7 +1084,7 @@ app.onPageInit('complete-registration', function (page) {
 app.onPageInit('update-organization', function(page) {
 
   if (user.organization) {
-    app.formFromJSON('#update-organization-form', user.organization);
+    //app.formFromJSON('#update-organization-form', user.organization);
   }
 
   $$('.save-user').on('click', function() {
@@ -1147,8 +1101,7 @@ app.onPageInit('update-organization', function(page) {
       data: data,
     });
     request.captcha = config.secret;
-    var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating User");
+    app.showIndicator();
     var result = {};
     $$.ajax({
       timeout: 20 * 1000,
@@ -1162,23 +1115,23 @@ app.onPageInit('update-organization', function(page) {
         if (status == 200 || status == 0 ){
 
           user = JSON.parse(data);
-          storage.setItem('userData', JSON.stringify(user));
-          app.hidePreloader();
-          mainView.router.back({
+          storage.setItem('userData', data);
+          app.hideIndicator();
+          profileView.router.back ({
             url: 'views/user/profile.html',
             context: user,
-            force: true,
+            force: true
           });
           //alert(satus + " " +JSON.stringify(result));
         } else {
-          app.hidePreloader();
-          app.alert("User Update Failed!");
+          app.hideIndicator();
+          app.alert(language.ERRORS.USER_UPDATE_FAILED);
         }
 
       },
       error: function (xhr, status){
-        app.hidePreloader();
-        app.alert("User Update Failed!");
+        app.hideIndicator();
+        app.alert(language.ERRORS.USER_UPDATE_FAILED);
       },
     });
   });
@@ -1424,7 +1377,7 @@ app.onPageInit('update-venue', function(page) {
     });
     request.captcha = config.secret;
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating User");
+    app.showIndicator();
     var result = {};
     $$.ajax({
       timeout: 20 * 1000,
@@ -1438,22 +1391,22 @@ app.onPageInit('update-venue', function(page) {
         if (status == 200 || status == 0 ){
 
           user = JSON.parse(data);
-          storage.setItem('userData', JSON.stringify(user));
-          app.hidePreloader();
-          mainView.router.back({
+          storage.setItem('userData', data);
+          app.hideIndicator();
+          profileView.router.bac ({
             url: 'views/user/profile.html',
             context: user,
-            force:true,
+            force: true
           });
         } else {
-          app.hidePreloader();
-          app.alert("User Update Failed!");
+          app.hideIndicator();
+          app.alert(language.ERRORS.USER_UPDATE_FAILED);
         }
 
       },
       error: function (xhr, status){
-        app.hidePreloader();
-        app.alert("User Update Failed!");
+        app.hideIndicator();
+        app.alert(language.ERRORS.USER_UPDATE_FAILED);
       },
     });
   });
@@ -1470,7 +1423,7 @@ app.onPageInit('update-password', function(page) {
     });
     request.captcha = config.secret;
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating User");
+    app.showIndicator();
     $$.ajax({
       timeout: 20 * 1000,
       async: true,
@@ -1483,23 +1436,23 @@ app.onPageInit('update-password', function(page) {
         if (status == 200){
 
           user = JSON.parse(data);
-          app.hidePreloader();
-          storage.setItem('userData', JSON.stringify(user));
+          app.hideIndicator();
+          storage.setItem('userData', data);
           storage.setItem('userPassword', user.password);
-          mainView.router.back({
+          profileView.router.back ({
             url: 'views/user/profile.html',
             context: user,
-            force:true,
+            force: true
           });
         } else {
-          app.hidePreloader();
-          app.alert("User Update Failed!");
+          app.hideIndicator();
+          app.alert(language.ERRORS.USER_UPDATE_FAILED);
         }
 
       },
       error: function (xhr, status){
-        app.hidePreloader();
-        app.alert("User Update Failed!");
+        app.hideIndicator();
+        app.alert(language.ERRORS.USER_UPDATE_FAILED);
       },
     });
   });
@@ -1511,50 +1464,46 @@ var doLogin = function() {
   var formData = app.formToJSON('#loginForm');
   $$(document).find('.login-password').val("");
   storage.setItem('userPassword', formData.password);
-  var nocache = "?t="+moment().unix();
-  app.showPreloader("Logging In");
+  app.showIndicator();
   var result = {};
   $$.ajax({
     async: true,
-    url: config.server + "/api/userinfo" + nocache,
+    cache: false,
+    url: config.server + "/api/userinfo",
     method: "POST",
     timeout: 20 * 1000,
     contentType: "application/x-www-form-urlencoded",
     data: formData,
     success: function(data, status, xhr) {
-      app.hidePreloader();
+
       if (status == 200 || status == 0 ){
         result = JSON.parse(data);
         if (result && result.id > 0) {
           user = result;
           storage.setItem('userData', JSON.stringify(user));
           storage.setItem('userPassword', formData.password);
-          //storage.setItem('userEmail', user.email);
-          showAvatar();
           Template7.global.user = user;
-          socket = io.connect(config.server);
-          socket.on('connect', socketManager);
-
-          $$(document).find('.logout-menu').show();
+          $$(document).find('.login').hide();
           if (user.mobilephone == "" || user.mobilephone == "null" || user.mobilephone == null) {
-            mainView.router.load({
+            app.showTab('#profile-view');
+            profileView.router.load({
               url: 'views/user/complete-registration.html',
             });
-          } else if (requestedPage) {
-            if (requestedPage == "events") {
-              eventsMenuClick(null, requestedArea);
-            } else if (requestedPage == "tickets") {
-              ticketsMenuClick();
-            } else if (requestedPage == "user") {
-              userMenuClick();
+          } else {
+            if (afterLoginLink) {
+              afterLoginLink.click();
+              afterLoginLink = null;
             }
+            init();
+            initializePushMessaging();
           }
-        }
 
+        }
+        app.hideIndicator();
       }
     },
     error: function (xhr, status){
-      app.hidePreloader();
+      app.hideIndicator();
       storage.removeItem("userPassword");
       app.alert(language.USER_AREA.LOGIN_FAILED);
       return;
@@ -1579,6 +1528,12 @@ $$('.login-screen').on('keydown', function (e) {
 
 $$('.login-screen').on('open', function (e) {
   $$('.login-screen-title').text = language.USER_AREA.SIGN_IN;
+  console.log(afterLoginLink);
+  loginScreenOpened = true;
+});
+
+$$('.login-screen').on('close', function (e) {
+  loginScreenOpened = false;
 });
 
 $$('.login-submit').on('click', function(){
@@ -1592,7 +1547,8 @@ $$('.login-submit').on('click', function(){
 });
 
 $$('.create-new-account').on('click', function () {
-  mainView.router.load({
+  app.showTab('#profile-view');
+  profileView.router.load({
     url: 'views/user/create-user.html'
   });
 });
@@ -1620,7 +1576,7 @@ var forgotPassword = function () {
     var request = {
       email: value,
     };
-    app.showPreloader("Please Wait...");
+    app.showIndicator();
     var nocache = "?t="+moment().unix();
     var result = {};
     $$.ajax({
@@ -1632,14 +1588,14 @@ var forgotPassword = function () {
       data: request,
       success: function(data, status, xhr) {
         if (status == 200){
-          app.hidePreloader();
+          app.hideIndicator();
           result = JSON.parse(data);
           app.alert("An email has been sent to you you with the instructions to reset your password");
         }
         return;
       },
       error: function (xhr, status){
-        app.hidePreloader();
+        app.hideIndicator();
         app.modal({
           title: config.appName,
           text: language.USER_AREA.FORGOT_PASSWORD_FAILED,
@@ -1674,27 +1630,30 @@ $$(document).on('click','.logout',  function () {
   storage.removeItem("userPassword");
   user = null;
   Template7.global.user = null;
-  showLoginOrCreate();
-  mainView.router.loadPage("home.html");
-  var nocache = "?t="+moment().unix();
-  app.showPreloader("Logging Out");
+  mainView.router.load({
+    url: 'home.html',
+    reload: true,
+    ignoreCache: true,
+  });
+  app.showTab('#homepage-tab');
+  app.showIndicator();
   var result = {};
   $$.ajax({
     timeout: 20 * 1000,
     async: true,
-    url: config.server + "/api/user/logout" + nocache,
+    cache: false,
+    url: config.server + "/api/user/logout",
     method: "POST",
     contentType: "application/x-www-form-urlencoded",
     //header: {"Get-Cookie" : storedUser.session},
     success: function(data, status, xhr) {
       if (status == 200 || status == 0 ){
-        app.hidePreloader();
-
+        app.hideIndicator();
       }
 
     },
     error: function (xhr, status){
-      app.hidePreloader();
+      app.hideIndicator();
     },
   });
 });
@@ -1706,13 +1665,14 @@ $$(document).on('click','.login',  function () {
 
 
 $$(document).on('click','.create-new-user',  function () {
-    mainView.router.load({
+  app.showTab('#profile-view');
+    profileView.router.load({
       url: 'views/user/create-user.html'
     });
 });
 
 $$(document).on('click','.back-user', function () {
-  mainView.router.back({
+  profileView.router.back({
     url: 'views/user/profile.html',
     //ignoreCache: true,
     force: true,

@@ -1,26 +1,25 @@
-<div class="pages no-navbar">
-  <div class="page" data-page="search-events" >
-
-    <form class="searchbar">
-      <a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a>
-        <div class="searchbar-input">
-
+<div class="pages">
+  <div class="page with-subnavbar navbar-fixed" data-page="search-events" >
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a>
+          <a href="#"  class="icon-only"><i class="icon icon-suntixx"></i></a>
+        </div>
+      </div>
+      <div class="subnavbar">
+        <form class="searchbar">
+          <div class="searchbar-input">
             <input type="search" placeholder="Search Event By Name" id="search-input">
             <a href="#" class="searchbar-clear"></a>
-        </div>
-        <a href="#" class="searchbar-cancel">Cancel</a>
-    </form>
-
-    <!-- Search Bar overlay-->
-    <div class="searchbar-overlay"></div>
-
-    <!-- Page content -->
-    <div class="page-content">
-
-
-        <div id="searchbar-results" class="content-block">
-
-        </div>
+          </div>
+          <a href="#" class="searchbar-cancel">{{@global.language.OTHER.CANCEL}}</a>
+        </form>
+      </div>
     </div>
-</div>
+    <div class="searchbar-overlay"></div>
+    <div class="page-content">
+      <div id="searchbar-results" class="content-block"></div>
+    </div>
+  </div>
 </div>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: gap:  https://*.suntixx.com:3000  https://*.suntixx.com  https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; connect-src 'self' https://*.suntixx.com ws://*.suntixx.com wss://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000; script-src https://api.instagram.com https://maps.googleapis.com/ https://maps.google.com/ https://*.suntixx.com 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' data: gap: android-webview-video-poster: android-webview: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.google.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: cdvfile: gap:   https://*.suntixx.com:3000  https://*.suntixx.com  https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; connect-src 'self' https://*.suntixx.com ws://*.suntixx.com wss://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000; script-src https://api.instagram.com https://maps.googleapis.com/ https://maps.google.com/ https://*.suntixx.com 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' cdvfile: data: gap: android-webview-video-poster: android-webview: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.google.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
 
     <title>Sun Tixx</title>
     <!-- Path to Framework7 Library CSS-->
@@ -63,80 +63,7 @@
     <!-- Panels overlay-->
     <div class="panel-overlay"></div>
     <!-- Left panel with reveal effect-->
-    <div class="panel panel-left panel-cover">
-
-        <div class="page-content">
-          <div id="user-avatar"></div>
-          <div class="content-block-title color-orange">Main Menu</div>
-          <div class="list-block media-list">
-
-            <ul>
-                <li class="item-content row">
-                  <a href="#" class="main-menulink item-link col-100 user-menulink close-panel" menuitem="user">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">My Profile</div>
-                    </div>
-                    <div class="item-subtitle color-orange">Manage your user profile</div>
-                  </div>
-                  </a>
-                </li>
-                <li class="item-content row">
-                  <a href="#" class="main-menulink item-link col-100 tickets-menulink close-panel" menuitem="tickets">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">My Tickets</div>
-                    </div>
-                    <div class="item-subtitle color-orange">Manage your tickets</div>
-                  </div>
-                  </a>
-                </li>
-                <li class="item-content row">
-                  <a href="#" class="main-menulink item-link col-100 events-menulink  close-panel" menuitem="events">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">My Events</div>
-                    </div>
-                    <div class="item-subtitle color-orange">Manage your events</div>
-                  </div>
-                  </a>
-                </li>
-                <li class="item-content row">
-
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">Social Media</div>
-                    </div>
-                    <div class="item-media">
-                      <a href="#" class="icon-only link close-panel social-icon" social="facebook"><i class="icon icon-facebook"></i></a>
-                      <a href="#" class="icon-only link close-panel social-icon" social="twitter"><i class="icon icon-twitter"></i></a>
-                      <a href="#" class="icon-only link close-panel social-icon" social="instagram"><i class="icon icon-instagram"></i></a>
-                      <a href="#" class="icon-only link close-panel social-icon share-app"><i class="icon icon-app-share"></i></a>
-                      <a href="#" class="icon-only link close-panel social-icon rate-app"><i class="icon icon-rate"></i></a>
-                    </div>
-                  </div>
-                </li>
-                <li class="item-content row">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">About</div>
-                    </div>
-                    <div class="item-subtitle app-version"></div>
-                  </div>
-                </li>
-                <li class="item-content logout-menu">
-                  <a href="#" class="link close-panel logout">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title">Logout</div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-          </div>
-        </div>
-    </div>
+    <div class="panel panel-left panel-cover"> </div>
     <!-- Right panel with cover effect-->
     <div class="panel panel-right panel-cover">
       <div class="content-block"><div class="content-block-title">Menu</div>
@@ -148,24 +75,31 @@
       <div class="view view-main active tab" id="homepage-tab">
         <div class="pages">
           <div data-page="init-page" class="page navbar-fixed toolbar-fixed">
-            <div class="navbar">
-              <div class="navbar-inner">
-                <div class="left">
-                  <a href="#" data-panel="left" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>
-                  <a href="#" data-popover=".event-categories" class="link open-popover icon-only"><i class="icon icon-suntixx"></i><i class="icon icon-down"></i></a>
-                </div>
-                <div class="right">
-                  <a href="#" class="link icon-only open-search"> <i class="icon icon-search"></i></a>
-                </div>
-              </div>
-            </div>
             <div class="page-content">
               <div id="page-loading"></div>
             </div>
           </div>
         </div>
       </div>
-      <div class="view tab view-store" id="store-tab">
+      <div class="view tab view-events" id="events-view">
+        <div class="pages">
+          <div data-page="events-init-page" class="page navbar-fixed toolbar-fixed">
+          </div>
+        </div>
+      </div>
+      <div class="view tab view-tickets" id="tickets-view">
+        <div class="pages">
+          <div data-page="tickets-init-page" class="page navbar-fixed toolbar-fixed">
+          </div>
+        </div>
+      </div>
+      <div class="view tab view-profile" id="profile-view">
+        <div class="pages">
+          <div data-page="profile-init-page" class="page navbar-fixed toolbar-fixed">
+          </div>
+        </div>
+      </div>
+      <div class="view tab view-store" id="store-view">
         <div class="pages">
           <div data-page="store-init" class="page">
             <div class="page-content">
@@ -174,10 +108,16 @@
           </div>
         </div>
       </div>
+      <div class="view tab view-chats" id="chats-view">
+        <div class="pages">
+          <div data-page="chats-init-page" class="page navbar-fixed toolbar-fixed">
+          </div>
+        </div>
+      </div>
     </div>
     <script type="text/template7" id="userProfileTemplate">
       <div class="card-header user-profile">
-          <img class="link user-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png{{nocache}}">
+          <img class="link user-image cache-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png{{nocache}}">
           {{#unless notMe}}
           {{#if organization_id}}{{#if organization}}<a href="#" class="buttons user-organization button">{{@global.language.USER_AREA.ORGANIZATION}}</a>{{/if}}{{/if}}
           {{else}}
@@ -213,7 +153,7 @@
     </script>
     <script type="text/template7" id="userOrganizationTemplate">
       <div class="card-header user-profile">
-          <img class="link user-image" src="{{@global.config.server}}/thumbnails/organizations/{{organization.id}}/portrait.png{{nocache}}">
+          <img class="link user-image cache-image" src="{{@global.config.server}}/thumbnails/organizations/{{organization_id}}/portrait.png{{nocache}}">
           {{#unless notMe}}
           <a href="#" class="buttons user-personal button">{{@global.language.USER_AREA.PERSONAL}}</a>
           {{else}}
@@ -262,7 +202,7 @@
                   <div class="col-80 item-content link show-friend-profile" friend-id="{{id}}">
 
                       <div class="item-media">
-                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                        <img class="user-image-square cache-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
                       </div>
                       <div class="item-inner">
                         <div class="item-title-row">
@@ -307,9 +247,9 @@
                   <a href="#" class="item-content link start-chat" room="{{roomid}}" isevent="{{isevent}}" receiver-name="{{receiver_name}}">
                     <div class="item-media">
                       {{#if isevent}}
-                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/events/{{roomid}}/portrait.png"/>
+                        <img class="user-image-square cache-image" src="{{@global.config.server}}/thumbnails/events/{{roomid}}/portrait.png"/>
                       {{else}}
-                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{roomid}}/portrait.png"/>
+                        <img class="user-image-square cache-image" src="{{@global.config.server}}/thumbnails/users/{{roomid}}/portrait.png"/>
                       {{/if}}
                     </div>
                     <div class="item-inner">
@@ -321,7 +261,7 @@
                   </a>
                 </div>
                 <div class="swipeout-actions-right">
-                  <a href="#" class="swipeout-delete">{{@global.language.OTHER.DELETE}}</a>
+                  <a href="#" class="swipeout-delete delete-chatroom">{{@global.language.OTHER.DELETE}}</a>
                 </div>
               </li>
               {{/each}}
@@ -347,7 +287,7 @@
                 <div class="row no-gutter">
                   <div class="col-80 item-content link show-seller-profile" user-id="{{id}}">
                     <div class="item-media">
-                      <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                      <img class="user-image-square cache-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
                     </div>
                     <div class="item-inner">
                       <div class="item-title-row">
@@ -379,14 +319,14 @@
           <a href="#" class="link event-link" event-id="{{id}}">
           <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
           <div class="card-header">
-            <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
+            <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border cache-image"><div class="category">{{category.name}}</div></div>
           </div>
             <div class="card-content">
 
 
             <div class="card-content-inner">
               <div class="event-name">{{name}}</div>
-              <div class="color-gray hosted-by"><span class="small">by</span>
+              <div class="color-gray hosted-by"><span class="small">{{@global.language.EVENTS.PROMOTER}}&#58;&nbsp;</span>
 
                   {{#js_compare "this.hostedby == 0"}}
                     {{user.fullname}}
@@ -414,12 +354,123 @@
                 {{/js_compare}}
               {{/js_compare}}
             </div>
+              <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
               <a href="#" class="link share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
               {{#if hasOnlineTickets}}<a href="#" class="link purchase-online-tickets icon-only"  event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/if}}
             <!--</div>-->
           </div>
         </div>
       {{/each}}
+    </script>
+    <script type="text/template7" id="managedEventsTemplate">
+      {{#js_compare "this.managedEventList.length > 0"}}
+        {{#each managedEventList}}
+          <div class="card event-details">
+            <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+            <div class="card-header">
+              <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border">
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-content-inner">
+                <div class="event-name">{{name}}</div>
+                <span class="color-black">{{englishtime starttime}}</span><br>
+                <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+              <a href="#" class="link sell-event icon-only" event-id="{{id}}"><i class="icon icon-sell orange"></i></a>
+              <a href="#" class="link scan-event icon-only"  event-id="{{id}}"><i class="icon icon-scan orange"></i></a>
+              <a href="#" class="link edit-event icon-only"  event-id="{{id}}"><i class="icon icon-edit orange"></i></a>
+              <a href="#" class="link event-menu-link icon-only" event-id="{{id}}" menuItem="reports"><i class="icon icon-reports orange"></i></a>
+              <!--</div>-->
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.EVENTS.NO_EVENTS}}</div>
+      {{/js_compare}}
+      {{#js_compare "this.committeeEventList.length > 0"}}
+        {{#each committeeEventList}}
+          <div class="card event-details">
+            <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+            <div class="card-header">
+              <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border">
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-content-inner">
+                <div class="event-name">{{name}}</div>
+                <span class="color-black">{{englishtime starttime}}</span><br>
+                <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="icon-only">&nbsp;</a><a href="#" class="icon-only">&nbsp;</a>
+              <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+              <a href="#" class="link sell-event icon-only" event-id="{{id}}"><i class="icon icon-sell orange"></i></a>
+              <a href="#" class="link sale-reports icon-only" event-id="{{id}}"><i class="icon icon-reports orange"></i></a>
+              <!--</div>-->
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.EVENTS.NO_EVENTS}}</div>
+      {{/js_compare}}
+      {{#js_compare "this.scanningEventList.length > 0"}}
+        {{#each scanningEventList}}
+          <div class="card event-details">
+            <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+            <div class="card-header">
+              <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy card-header color-white no-border">
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-content-inner">
+                <div class="event-name">{{name}}</div>
+                <span class="color-black">{{englishtime starttime}}</span><br>
+                <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="icon-only">&nbsp;</a><a href="#" class="icon-only">&nbsp;</a><a href="#" class="icon-only">&nbsp;</a>
+              <a href="#" class="link chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+              <a href="#" class="link scan-event icon-only"  event-id="{{id}}"><i class="icon icon-scan orange"></i></a>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.EVENTS.NO_EVENTS}}</div>
+      {{/js_compare}}
+    </script>
+    <script type="text/template7" id="previousEventsTemplate">
+      {{#js_compare "this.previousEventList.length > 0"}}
+        {{#each previousEventList}}
+          <div class="card event-details">
+            <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+            <div class="card-header">
+              <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border">
+              </div>
+            </div>
+              <div class="card-content"><div class="card-content-inner">
+                <div class="event-name">{{name}}</div>
+                <span class="color-black">{{englishtime starttime}}</span><br>
+                <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="icon-only">&nbsp;</a>
+              <a href="#" class="icon-only">&nbsp;</a>
+              <a href="#" class="icon-only">&nbsp;</a>
+              <a href="#" class="link event-menu-link icon-only previous" event-id="{{id}}" menuItem="clone"><i class="icon icon-copy orange"></i></a>
+              <a href="#" class="link event-menu-link icon-only previous" event-id="{{id}}" menuItem="reports"><i class="icon icon-reports orange"></i></a>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.EVENTS.NO_EVENTS}}</div>
+      {{/js_compare}}
     </script>
     <!--search Result List Template--->
     <script type="text/template7" id="searchResultTemplate">
@@ -429,7 +480,7 @@
       {{#js_compare "this.length > 0"}}
       {{#each this}}
       <div class="search-details">
-        <a href="#" class="item-content item-link event-link search-details" event-id="{{id}}">
+        <a href="#" class="item-content item-link reload event-link" event-id="{{id}}">
           <div class="row no-gutter header">
             <span>{{name}}</span>
           </div>
@@ -487,39 +538,6 @@
         </div>
       </div>
       {{/each}}
-    </script>
-    <!--purchases template-->
-    <script type="text/template7" id="purchasesTemplate">
-      <div class="content-block">
-        {{#each this}}
-        <div class="search-details">
-          <a href="#" class="item-content link purchases-link search-details" purchase-id="{{PurchaseId}}" event-id="{{EventId}}">
-            <div class="row no-gutter header">
-              <span>{{EventName}}</span>
-            </div>
-            <div class="row no-gutter content">
-                <div class="col-50 image">
-                  <img class="lazy" src="{{@global.config.server}}/thumbnails/events/{{EventId}}/thumbnail.png"/>
-                </div>
-              <div class="col-50 content-details">
-                <span>{{EnglishStartDate}}</span>
-                <span>{{EnglishStartTime}}</span>
-                <span>{{Venue}}</span>
-              </div>
-            </div>
-            <div class="row footer no-gutter">
-              <div class="col-50 category">
-                <span>{{CategoryName}}</span>
-              </div>
-              <div class="col-50">
-                <span>
-                  {{SumQty}} {{#js_compare "this.SumQty > 1"}}Tickets{{else}}Ticket{{/js_compare}}</span>
-              </div>
-            </div>
-          </a>
-        </div>
-        {{/each}}
-      </div>
     </script>
     <!--store purchase checkout template-->
     <script type="text/template7" id="purchaseCheckoutTemplate">
@@ -672,7 +690,7 @@
                   {{#each friends}}
                     <div class="item-content" friend-id="{{id}}">
                       <div class="item-media">
-                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                        <img class="user-image-square cache-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
                       </div>
                       <div class="item-inner">
                         <div class="item-title-row">
@@ -719,24 +737,20 @@
     <script type="text/template7" id="chatRoomMembersTemplate">
       <div class="popup">
         <div class="pages">
-          <div class="page" data-page="chatroom-members" >
+          <div class="page" data-page="chatroom-members">
             <div class="navbar">
               <div class="navbar-inner">
                 <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+                <div class="center">{{@global.language.CHATS.MEMBERS}}</div>
               </div>
             </div>
             <div class="page-content">
-              {{#with event}}
-                {{> "eventPartial"}}
-              {{/with}}
-              {{js_compare "this.members.length == 0"}}
-              {{else}}
               <div class="list-block">
                 <ul>
                   {{#each members}}
                     <div class="item-content">
                       <div class="item-media">
-                        <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
+                        <img class="user-image-square cache-image" src="{{@global.config.server}}/thumbnails/users/{{id}}/portrait.png"/>
                       </div>
                       <div class="item-inner">
                         <div class="item-title-row">
@@ -747,13 +761,12 @@
                   {{/each}}
                 </ul>
               </div>
-              {{/js_compare}}
             </div>
           </div>
         </div>
       </div>
     </script>
-    <div class="popup barcodes">
+    <!--<div class="popup barcodes">
       <div class="tabs-swipeable-wrap">
         <div class="tabs">
           {{#each ticket}}
@@ -761,22 +774,7 @@
           {{/each}}
         </div>
       </div>
-    </div>
-    <div class="popup enable-committee">
-      <div class="content-block">
-        <p>To use this feature you must agree to our Terms and Services</p>
-        <div class="list-block">
-          <ul>
-            <li>
-              <a href="#" class="button button-big button-fill color-orange committee-terms-agree">Agree</a>
-            </li>
-            <li>
-              <a href="#" class="button button-big button-fill color-red committee-terms-cancel">Cancel</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    </div>-->
     <script type="text/template7" id="addPurchaserTemplate">
       <div class="popup add-purchaser">
         <div class="content-block-title">
@@ -815,7 +813,7 @@
                 </div>
               </div>
             </li>
-            <li>
+          <!--  <li>
              <label class="label-radio item-content">
                <div class="form-error paymentoption"></div>
                <input type="radio" name="paymentoption" value="1" class="paymentoption" required
@@ -847,17 +845,84 @@
                  <div class="item-title">{{@global.language.STORE.PAYPAL}}</div>
                </div>
              </label>
-           </li>
+           </li>-->
           </ul>
         </form>
-        <div class="buttons-row">
-          <a href="#" class="button button-big button-fill color-red close-popup back-button">{{@global.language.STORE.CANCEL}}</a>
-          <a href="#" class="button button-big button-fill color-green confirm-purchaser">{{@global.language.STORE.CONFIRM}}</a>
+        <div class="buttons-row" style="width:90vw; margin: 0 auto">
+          <a href="#" class="button buttons close-popup back-button">{{@global.language.STORE.CANCEL}}</a>
+          <a href="#" class="button buttons confirm-purchaser">{{@global.language.STORE.CONFIRM}}</a>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="scanHistoryTemplate">
+      <div class="popup" "scan-history">
+        <div class="pages">
+          <div data-page="scan-history" class="page  navbar-fixed">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left"><a href="#" class="close-popup back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+                <div class="center">{{@global.language.ACCESS.SCAN_HISTORY}}</div>
+              </div>
+            </div>
+           <div class="page-content infinite-scroll" data-distance="100">
+           {{#with event}}
+             {{> "eventPartial"}}
+           {{/with}}
+              <div class="card" id="select-gates-form">
+                <div class="card-content">
+                  {{#js_compare "this.scanhistory.data.length == 0"}}
+                    {{@global.language.ACCESS.NO_BARCODES_SCANNED}}
+                  {{else}}
+                  <div class="list-block media-list">
+                    <ul>
+                      {{#each scanhistory.data}}
+                      <li class="item-content">
+                        <div class="item-inner color-{{scancolor}}">
+                         <div class="item-title-row">
+                           <div class="item-title">Barcode: {{code}}</div>
+                         </div>
+                         <div class="item-subtitle">{{scandate}}</div>
+                         <div class="item-text">{{js "this.scanresponse.toUpperCase()"}}!</div>
+                       </div>
+                      </li>
+                      {{/each}}
+                    </ul>
+                  {{/js_compare}}
+                  </div>
+                </div>
+              </div>
+              {{#if scanhistory.scroll}}
+              <div class="infinite-scroll-preloader">
+                <div class="preloader"></div>
+              </div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="joinRoomTemplate">
+      <div class="popup join-room-popup">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="center">
+              <a href="#"  class="icon-only"><i class="icon icon-suntixx"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="page-content">
+          <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">
+            {{@global.language.CHATS.JOIN_ROOM_DISCLAIMER}}
+            <p class="buttons-row">
+              <a href="#" class="button buttons close-popup">{{@global.language.OTHER.CANCEL}}</a>
+              <a href="#" class="button buttons join-room close-popup" event-id="{{eventid}}">{{@global.language.OTHER.CONTINUE}}</a>
+            </p>
+          </div>
         </div>
       </div>
     </script>
     <script type="text/template7" id="saleReportDetails">
-      <div class=popup "sale-report-details">
+      <div class="popup sale-report-details">
         <div class="pages">
           <div data-page="purchase-detail" class="page navbar-fixed">
             <div class="navbar">
@@ -877,7 +942,7 @@
                       <li>
                         <div class="item-content">
                           <div class="item-media">
-                            <img class="user-image-square" src="{{@global.config.server}}/thumbnails/users/{{userid}}/portrait.png"/>
+                            <img class="user-image-square cache-image" src="{{@global.config.server}}/thumbnails/users/{{userid}}/portrait.png"/>
                           </div>
                           <div class="item-inner">
                             <div class="item-title-row">
@@ -928,24 +993,309 @@
         </div>
       </div>
     </script>
+    <script type="text/template7" id="sellTicketsAccordion">
+      {{#js_compare "this.length > 0"}}
+      <div class="list-block media-list">
+        <ul>
+          {{#each this}}
+          <li>
+            <label class="label-checkbox item-content">
+              <!-- Checked by default -->
+              <input type="checkbox" name="commticket-{{id}}" value="{{id}}" {{#if enable}}{{else}}disabled{{/if}} {{#js_compare "this.soldquantity >= this.quantity"}}disabled{{/js_compare}} {{#if chosen}}checked="checked"{{/if}}>
+              <div class="item-media">
+                <i class="icon icon-form-checkbox"></i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">{{ticket.tickettype}}&nbsp;-&nbsp;${{js "this.ticket.price.toFixed(2)"}}&nbsp;{{@root.event.currency}}</div>
+                <div class="item-subtitle">{{soldquantity}}/{{quantity}}&nbsp;{{@global.language.TICKETS.TICKETS_SOLD}}</div>
+                {{#if enable}}{{else}}<div class="item-text color-red">{{@global.language.TICKETS.YOUR_TICKETS_DISABLED}}</div>{{/if}}
+              </div>
+
+
+            </label>
+          </li>
+          {{/each}}
+        </ul>
+        {{else}}
+        <div style="width:90vw; margin: 0 auto">{{@global.language.TICKETS.NO_TICKETS_ASSIGNED_TO_YOU}}</div>
+      {{/js_compare}}
+    </script>
+    <script type="text/template7" id="saleCompleteTemplate">
+      <div class="popup sale-complete-popup">
+        <div class="pages">
+          <div class="page navbar-fixed" data-page="sale-complete" >
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="center">
+                  <a href="#"  class="icon-only"><i class="icon icon-suntixx"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div class="content-block">
+                <div style="text-align:center;width:75vw;margin:30% auto 0 auto; font-size:18px">{{@global.language.STORE.SALE_SUCCESSFUL}}</div>
+                <div style="text-align:center;width:90vw;margin: 30 auto">
+                  <i class="icon icon-success"></i>
+                </div>
+                <p class="buttons-row">
+                  <a href="#" class="button buttons home close-popup">{{@global.language.STORE.HOME}}</a>
+                  <a href="#" class="button buttons sell-more close-popup">{{@global.language.STORE.SELL_MORE}}</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="saleErrorTemplate">
+      <div class="popup sale-error-popup">
+        <div class="pages">
+          <div class="page navbar-fixed" data-page="sale-error" >
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="center">
+                  <a href="#" class="icon-only"><i class="icon icon-suntixx"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div class="content-block">
+                <div style="text-align:center;width:75vw;margin:15% auto 0 auto; font-size:18px">{{@global.language.STORE.SALE_ERROR}}</div>
+                <div style="text-align:center;width:90vw;margin: 30 auto">
+                  <i class="icon icon-error"></i>
+                </div>
+                <p class="buttons-row">
+                  <a href="#" class="button buttons home close-popup">{{@global.language.OTHER.CANCEL}}</a>
+                  <a href="#" class="button buttons retry close-popup">{{@global.language.STORE.RETRY}}</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="saleForceTemplate">
+      <div class="popup sale-force-popup">
+        <div class="pages">
+          <div class="page navbar-fixed" data-page="sale-force" >
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="center">
+                  <a href="#"  class="icon-only"><i class="icon icon-suntixx"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div class="content-block">
+                <div style="text-align:center;width:75vw;margin:30% auto 0 auto; font-size:18px">{{@global.language.STORE.SALE_SUCCESSFUL}}</div>
+                <div style="text-align:center;width:90vw;margin: 30 auto">
+                  <i class="icon icon-success"></i>
+                </div>
+                <p class="buttons-row">
+                  <a href="#" class="button buttons home close-popup">{{@global.language.OTHER.CANCEL}}</a>
+                  <a href="#" class="button buttons force-sale close-popup">{{@global.language.OTHER.CONTINUE}}</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="ticketWalletTemplate">
+      {{#js_compare "this.length > 0"}}
+        {{#each this}}
+        <div class="accordion-item wallet-item wallet-event-{{id}}" event-id="{{id}}">
+          <div class="accordion-item-toggle wallet-open" event-id="{{id}}">
+            <div class="card event-details">
+              <div class="card-content">
+                <div class="card-content-inner" event-id="{{id}}">
+                  <div class="event-name">{{name}}</div>
+                  <span class="color-black">{{englishtime starttime}}</span><br>
+                  <span class="color-gray capitalize">{{venue}}</span>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title">
+                        {{@global.language.TICKETS.TICKETS}}&nbsp;-&nbsp;<span class="ticket-quantity-{{id}}">{{js "this.wallet.length"}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item-content wallet-item-content">
+            <div class="list-block media-list">
+              <ul>
+                {{#each wallet}}
+                <li class="item-link item-content wallet-ticket wallet-ticket-{{id}} add-event-id" ticket-id="{{id}}">
+                  <div class="item-media {{id}}">
+                    {{#if image}}
+                    <img ticket-id="{{id}}" src="{{image}}" class="show-ticket-wallet-image link wallet-ticket-image add-event-id"/>
+                    {{else}}
+                    <div ticket-id="{{id}}" class="icon-only link wallet-add-image wallet-ticket-image add-event-id"><i class="icon icon-add-image list"></i></div>
+                    {{/if}}
+                  </div>
+                  <div class="item-inner wallet-ticket-link link add-event-id" code="{{code}}" ticket-index="{{@index}}" ticket-id="{{id}}">
+                    <div class="item-title-row">
+                      <div class="item-title">{{tickettype}}</div>
+                    </div>
+                    <div class="item-subtitle">{{code}}</div>
+                  </div>
+                </li>
+                {{/each}}
+                <li class="item-link item-content add-ticket" event-id="{{id}}">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{@global.language.TICKETS.ADD_TICKET}}</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.TICKETS.NO_TICKETS_SAVED}}</div>
+      {{/js_compare}}
+    </script>
+    <div class="popup wallet-enter-barcode-popup"></div>
+    <script type="text/template7" id="enterBarcodeTemplate">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left"><a href="#" class="close-popup link icon-only back-button"> <i class="icon icon-back"></i></a></div>
+          <div class="center">
+            <a href="#"  class="icon-only"><i class="icon icon-suntixx"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="accordion-item show-barcode">
+          <div class="accordion-item-toggle"></div>
+          <div class="accordion-item-content">
+            <div class="wallet-barcode-container content-block">
+              <div class="wallet-barcode-wrapper">
+                <div id="walletTicket" class="wallet-barcode-image link"></div>
+                <div id="wallet-barcode-text"></div>
+                <div id="wallet-barcode-tickettype" class="link"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item wallet">
+          <div class="accordion-item-toggle"></div>
+          <div class="accordion-item-content">
+            <div style="width:75vw;text-align:center;margin: 0 auto">
+              <div class="icon-only link wallet-add-image large"><i class="icon icon-add-image"><span class="badge bg-red">{{@global.language.TICKETS.ADD_IMAGE}}</span></i></div>
+              <p></p>
+              <p class="buttons-row">
+                <a href="#" class="button buttons wallet-add-ticket">{{@global.language.TICKETS.ADD_TICKET}}</a>
+                <a href="#" class="button buttons wallet-done close-popup">{{@global.language.OTHER.DONE}}</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item enter-barcode">
+          <div class="accordion-item-toggle"></div>
+          <div class="accordion-item-content">
+            <div class="enter-code-instructions" style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">
+              {{@global.language.TICKETS.ENTER_BARCODE_INSTRUCTIONS}}
+              <p class="buttons-row">
+                <a href="#" class="button buttons manual-code">{{@global.language.OTHER.ENTER}}</a>
+                <a href="#" class="button buttons scan-qr-code">{{@global.language.EVENTS.SCAN}}</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/template7" id="walletAddEventTemplate">
+      <div class="popup wallet-add-event-popup">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left"><a href="#" class="close-popup link back-button icon-only"> <i class="icon icon-back"></i></a></div>
+            <div class="center sliding">{{@global.language.TICKETS.ADD_EVENT}}</div>
+          </div>
+        </div>
+        <a href="#" class="floating-button color-orange close-popup save-event">
+          <i class="icon icon-save"></i>
+        </a>
+       <div class="page-content">
+         <div class="content-block">
+           {{@global.language.TICKETS.ADD_EVENT_INSTRUCTIONS}}
+         </div>
+         <div class=" list-block" id="wallet-event-form">
+           <ul>
+             <li>
+               <div class="item-content">
+                 <div class="item-inner">
+                   <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.NAME}}</div>
+                   <div class="item-subtitle color-red form-error name"></div>
+                   <div class="item-input">
+                     <input type="text" value="{{name}}" name="name" id="name" class="capitalize" required/>
+                   </div>
+                 </div>
+               </div>
+             </li>
+             <li>
+               <div class="item-content">
+                 <div class="item-inner">
+                   <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.START_DATE}}</div>
+                   <div class="item-subtitle color-red form-error start"></div>
+                   <div class="item-input">
+                     <input type="datetime-local" name="start" required value="{{now}}" id="start"/>
+                   </div>
+                 </div>
+               </div>
+             </li>
+             <li>
+               <div class="item-content">
+                 <div class="item-inner">
+                   <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.CITY_FIELD}}</div>
+                   <div class="item-subtitle color-red form-error city"></div>
+                   <div class="item-input">
+                     <input type="text" value="{{city}}" name="city" required/>
+                   </div>
+                 </div>
+               </div>
+             </li>
+             <li>
+               <div class="item-content">
+                 <div class="item-inner">
+                   <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.COUNTRY_FIELD}}</div>
+                   <div class="item-subtitle color-red form-error country"></div>
+                   <div class="item-input">
+                     <input type="text" placeholder="" name="country" id="venue-country" value="{{country}}" required/>
+                   </div>
+                 </div>
+               </div>
+             </li>
+           </ul>
+         </div>
+       </div>
+      </div>
+    </script>
     <div class="popup form-popup">
       <div class="view view-popup"></div>
     </div>
-    <div class="popup image-popup bg-black color-white">
-      <h2 class="cropper-label"></h2>
-      <div class="cropper-container ">
-        <div class="cropper-image-container">
-          <img id="imageCropper">
+    <div class="popup image-popup bg-black">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left"><a href="#" class="close-popup crop-cancel link back-button icon-only"> <i class="icon icon-back"></i></a></div>
+          <div class="center">
+            <a href="#"  class="icon-only"><i class="icon icon-suntixx"></i></a>
+          </div>
         </div>
-
-        <div class="row cropper-buttons">
-
-          <div class="col-50">
-            <a href="#" data-popup=".image-popup" class="button button-big button-fill color-red close-popup crop-cancel">Cancel</a>
+      </div>
+      <a href="#" class="floating-button color-orange crop-image">
+        <i class="icon icon-crop"></i>
+      </a>
+      <div class="cropper-container bg-black page-content">
+        <div class="cropper-image-container bg-black">
+          <div class="chip cropper-label-chip">
+            <div class="chip-label cropper-label">Crop Image</div>
           </div>
-          <div class="col-50">
-            <a href="#" class="button button-big button-fill color-green crop-image" id="image-save">Save</a>
-          </div>
+          <img id="imageCropper" src="#">
         </div>
       </div>
     </div>
@@ -956,13 +1306,13 @@
         <div class="list-block">
           <ul>
             <li><a href="#" class="list-button item-link close-popover homepage">Home</a></li>
-            <li><a href="#" class="list-button item-link categories close-popover" mytab="#concertTab">Concerts &amp; Parties</a></li>
-            <li><a href="#" class="list-button item-link categories close-popover" mytab="#sportTab">Sports</a></li>
-            <li><a href="#" class="list-button item-link categories close-popover" mytab="#artTab">Arts &amp; Theatre</a></li>
-            <li><a href="#" class="list-button item-link categories close-popover" mytab="#familyTab">Family</a></li>
-            <li><a href="#" class="list-button item-link categories close-popover" mytab="#conferenceTab">Conferences &amp; Expos</a></li>
-            <li><a href="#" class="list-button item-link categories close-popover" mytab="#cinemaTab">Cinema</a></li>
-            <li><a href="#" class="list-button item-link categories close-popover" mytab="#travelTab">Travel Packages</a></li>
+            <li><a href="#" class="list-button item-link categories close-popover" mytab="concertTab">Concerts &amp; Parties</a></li>
+            <li><a href="#" class="list-button item-link categories close-popover" mytab="sportTab">Sports</a></li>
+            <li><a href="#" class="list-button item-link categories close-popover" mytab="artTab">Arts &amp; Theatre</a></li>
+            <li><a href="#" class="list-button item-link categories close-popover" mytab="familyTab">Family</a></li>
+            <li><a href="#" class="list-button item-link categories close-popover" mytab="conferenceTab">Conferences &amp; Expos</a></li>
+            <li><a href="#" class="list-button item-link categories close-popover" mytab="cinemaTab">Cinema</a></li>
+            <li><a href="#" class="list-button item-link categories close-popover" mytab="travelTab">Travel Packages</a></li>
           </ul>
         </div>
       </div>
@@ -973,35 +1323,38 @@
     <script type="text/javascript" src="js/libs/instafeed.min.js"></script>
     <script type="text/javascript" src="js/libs/cropper.min.js"></script>
     <script type="text/javascript" src="js/libs/qrcode.min.js"></script>
+    <script type="text/javascript" src="js/libs/imgcache.js"></script>
+    <script type="text/javascript" src="js/libs/underscore-min.js"></script>
+    <script type="text/javascript" src="js/libs/async.js"></script>
     <script type="text/javascript" src="js/paypal-mobile-js-helper.js"></script>
-    <script type="text/javascript" src="https://dev.suntixx.com/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript" src="js/libs/gmaps.min.js"></script>
     <script type="text/javascript" src="js/libs/ichart.1.2.min.js"></script>
-    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <script type="text/javascript" src="js/src/framework7.min.js"></script>
 
 
 
     <script type="text/javascript" src="js/config.js"></script>
-    <script type="text/javascript" src="js/db.js"></script>
-    <script type="text/javascript" src="js/util.js"></script>
+    <script type="text/javascript" src="js/helpers/util.js"></script>
     <script type="text/javascript" src="js/server.js"></script>
-    <script type="text/javascript" src="js/plugins.js"></script>
-    <script type="text/javascript" src="js/pickers.js"></script>
-    <script type="text/javascript" src="js/menus.js"></script>
+    <script type="text/javascript" src="js/helpers/pickers.js"></script>
 
-    <script type="text/javascript" src="js/eventsservice.js"></script>
-    <script type="text/javascript" src="js/userservice.js"></script>
-    <script type="text/javascript" src="js/cameraservice.js"></script>
-    <script type="text/javascript" src="js/my-app.js"></script>
+    <script type="text/javascript" src="js/services/eventsservice.js"></script>
+    <script type="text/javascript" src="js/services/ticketsservice.js"></script>
+    <script type="text/javascript" src="js/services/userservice.js"></script>
+    <script type="text/javascript" src="js/services/cameraservice.js"></script>
+    <script type="text/javascript" src="js/services/chatservice.js"></script>
+    <script type="text/javascript" src="js/services/accessservice.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/accesscenter.js"></script>
     <script type="text/javascript" src="js/ticketcenter.js"></script>
     <script type="text/javascript" src="js/purchasecenter.js"></script>
     <script type="text/javascript" src="js/eventcenter.js"></script>
     <script type="text/javascript" src="js/usercenter.js"></script>
     <script type="text/javascript" src="js/chatcenter.js"></script>
-    <script type="text/javascript" src="js/chatservice.js"></script>
     <script type="text/javascript" src="js/sellcenter.js"></script>
     <script type="text/javascript" src="js/pushcenter.js"></script>
+
+    <script type="text/javascript" src="js/helpers/menus.js"></script>
   </body>
 </html>

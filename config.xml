@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.suntixx.application" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.suntixx.application" version="2.0.0" android-versionCode="200009" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Sun Tixx</name>
     <description>Mobile Application for the Sun Tixx Ticketing Engine</description>
     <author email="admin@suntixx.com" href="">Sun Tixx Development Team</author>
     <content src="index.html" />
     <preference name="permissions" value="none" />
     <preference name="orientation" value="portrait" />
-    <preference name="target-device" value="universal" />
+    <preference name="target-device" value="handset" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
     <preference name="prerendered-icon" value="true" />
@@ -21,6 +21,7 @@
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="disable-cursor" value="false" />
     <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-targetSdkVersion" value="23" />
     <preference name="android-installLocation" value="auto" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
@@ -28,6 +29,7 @@
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" />
     <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" />
     <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="ErrorUrl" value="app-error.html"/>
     <gap:plugin name="org.apache.cordova.battery-status" />
     <gap:plugin name="org.apache.cordova.camera" />
     <gap:plugin name="org.apache.cordova.console" />
@@ -79,8 +81,8 @@
     <access origin="https://*.cdninstagram.com" />
     <access origin="http://181.188.62.63:3000" />
     <access origin="data:*" />
-    <access origin="*://*" />
     <access origin="content:///*" />
+    <access origin="cdvfile://*" />
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
@@ -88,6 +90,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-intent href="cdvfile://*" />
     <platform name="android">
         <allow-intent href="market:*" />
     </platform>
@@ -100,4 +103,16 @@
         <variable name="APP_NAME" value="Sun Tixx" />
     </plugin>
     <plugin name="cordova-sqlite-storage" spec="~1.4.6" />
+    <feature name="Device">
+      <param name="ios-package" value="CDVDevice" />
+      <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="File">
+        <param name="ios-package" value="CDVFile" />
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+    </feature>
+    <feature name="FileTransfer">
+        <param name="ios-package" value="CDVFileTransfer" />
+        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
+    </feature>
 </widget>

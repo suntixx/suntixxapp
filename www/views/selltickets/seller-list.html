@@ -1,0 +1,43 @@
+
+<div class="pages">
+  <div data-page="update-committee" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.REPORTS.SELLER_REPORTS}}</div>
+        <div class="right">
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+      {{#js_compare "this.commuser.length > 0"}}
+      <div class="list-block media-list" id="committee-list-form">
+        <ul>
+
+          {{#each commuser}}
+            <li commId="{{id}}">
+
+              <div>
+                <a href="#" class="item-content item-link committee-settings" user-id="{{id}}">
+                  <div class="item-inner">
+                    <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                    <div class="item-subtitle">{{email}}</div>
+                    <input type="hidden" name="user-id" value={{id}}>
+                  </div>
+                </a>
+              </div>
+
+            </li>
+
+          {{/each}}
+
+        </ul>
+      </div>
+      {{else}}
+      <div class="oops-image-load"></div>
+      <div class="oops-message-load">{{@global.language.ERRORS.NO_SELLERS_ADDED}}</div>
+      {{/js_compare}}
+    </div>
+  </div>
+</div>

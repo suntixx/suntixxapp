@@ -3,33 +3,28 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="link back-events icon-only back-button"> <i class="icon icon-back"></i></a></div>
-        <div class="center">Event</div>
-        <div class="right"><a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a></div>
+        <div class="center">{{@global.language.EVENTS.EVENT}}</div>
+        <div class="right">
+          <a href="#" class="link event-menu-link icon-only" menuItem="reports"> <i class="icon icon-reports-white"></i></a>
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
       </div>
     </div>
-    <a href="#" class="floating-button color-orange create-new-event">
-      <i class="icon icon-new"></i>
-    </a>
     <div class="page-content">
       <div class="card event-details">
         <div class="card-header">
           <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png{{nocache}}')" valign="bottom" class="lazy card-header color-white no-border"><div class="category">{{category.name}}</div></div>
         </div>
         <div class="card-content">
-          <p></p>
-          <div class="buttons-row">
-            <a href="#" class="button no-ripple">{{@global.language.EVENTS.ATTENDING}}</a>
-            <a href="#" class="button no-ripple">{{@global.language.EVENTS.INTERESTED}}</a>
-            <!--<a href="#" class="button button-raised show-chat">{{@global.language.CHATS.CHATS}}</a>-->
-          </div>
-          <div class="buttons-row">
-            <a href="#" class="button attending-count no-ripple">{{count attending}}</a>
-            <a href="#" class="button interested-count no-ripple">{{count interested}}</a>
-            <!--<a href="#" class="button chat-count no-ripple">?</a>-->
-          </div>
+
+            <div class="row event-buttons">
+              <a href="#" class="interested icon-only">{{favorite interested @global.user.id}}</a>
+              <a href="#" class="chatroom icon-only" event-id="{{id}}"><i class="icon icon-chats active"></i></a>
+              <a href="#" class="share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange active"></i></a>
+            </div>
           <div class="card-content-inner">
             <div class="event-name">{{name}}</div>
-            <div class="color-gray hosted-by"><span class="small">by</span>&nbsp;
+            <div class="color-gray hosted-by"><span class="small">{{@global.language.EVENTS.PROMOTER}}:</span>&nbsp;
             {{#js_compare "this.hostedby == 0"}}
               {{user.fullname}}
             {{else}}

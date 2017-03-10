@@ -401,6 +401,39 @@ module.exports = [
         "clobbers": [
             "window.StatusBar"
         ]
+    },
+    {
+        "file": "plugins/ionic-plugin-keyboard/www/ios/keyboard.js",
+        "id": "ionic-plugin-keyboard.keyboard",
+        "pluginId": "ionic-plugin-keyboard",
+        "clobbers": [
+            "cordova.plugins.Keyboard"
+        ],
+        "runs": true
+    },
+    {
+        "file": "plugins/suntixx-plugin-scannerdevice/www/scanner.js",
+        "id": "suntixx-plugin-scannerdevice.Scanner",
+        "pluginId": "suntixx-plugin-scannerdevice",
+        "clobbers": [
+            "Scanner"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+        "id": "cordova-plugin-keyboard.keyboard",
+        "pluginId": "cordova-plugin-keyboard",
+        "clobbers": [
+            "window.Keyboard"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-calendar/www/Calendar.js",
+        "id": "cordova-plugin-calendar.Calendar",
+        "pluginId": "cordova-plugin-calendar",
+        "clobbers": [
+            "Calendar"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -426,7 +459,11 @@ module.exports.metadata =
     "de.appplant.cordova.plugin.local-notification": "0.8.4",
     "phonegap-plugin-push": "1.7.4",
     "cordova-sqlite-storage": "1.4.6",
-    "cordova-plugin-statusbar": "2.2.0"
+    "cordova-plugin-statusbar": "2.2.0",
+    "ionic-plugin-keyboard": "2.2.1",
+    "suntixx-plugin-scannerdevice": "0.1.0",
+    "cordova-plugin-keyboard": "1.1.4",
+    "cordova-plugin-calendar": "4.5.5"
 }
 // BOTTOM OF METADATA
 });

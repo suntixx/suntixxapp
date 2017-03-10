@@ -1,0 +1,71 @@
+<div class="pages">
+  <div data-page="settings" class="page navbar-fixed ">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="link back back-button icon-only"> <i class="icon icon-back"></i></a>
+        </div>
+        <div class="center">
+          {{@global.language.USER_AREA.SETTINGS}}
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="list-block">
+        <ul>
+          <li class="item-divider">{{@global.language.USER_AREA.SETTINGS}}</li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title">{{@global.language.USER_AREA.EMAIL_MESSAGES}}</div>
+                <label class="label-switch">
+                  <input type="checkbox" class="email-messages" {{#if @global.config.settings.emailMessages}}checked{{/if}}/>
+                  <div class="checkbox"></div>
+                </label>
+              </div>
+            </div>
+          </li>
+          <li>
+            <a href="#" class="item-link item-content {{#if @global.user.social_id}}
+              delete-facebook-integration
+            {{else}}
+              add-facebook-integration
+            {{/if}}">
+              <div class="item-inner">
+                <div class="item-title">
+                  {{#if @global.user.social_id}}
+                    {{@global.language.USER_AREA.REMOVE_FACEBOOK}}
+                  {{else}}
+                    {{@global.language.USER_AREA.ADD_FACEBOOK}}
+                  {{/if}}
+                </div>
+              </div>
+            </a>
+          </li>
+          <li class="item-divider">{{@global.language.OTHER.ABOUT}}</li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title">{{@global.language.OTHER.VERSION}}</div>
+                <label class="label-switch">
+                  {{@global.config.version}}
+                </label>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="content-block" style="text-align: center">
+        <p>
+          <a href="#" class="icon-only link social-icon" social="facebook"><i class="icon icon-facebook"></i></a>
+          <a href="#" class="icon-only link  social-icon" social="twitter"><i class="icon icon-twitter"></i></a>
+          <a href="#" class="icon-only link  social-icon" social="instagram"><i class="icon icon-instagram"></i></a>
+          <a href="#" class="icon-only link  social-icon share-app"><i class="icon icon-app-share"></i></a>
+          <a href="#" class="icon-only link social-icon rate-app"><i class="icon icon-rate"></i></a>
+        </p>
+        <p>{{@global.language.OTHER.DEVELOPER}}:<br>{{@global.config.owner}}<br>{{@global.config.server}}</p>
+        <p>{{@global.language.OTHER.CONTACT}}:<br>{{@global.config.phone}}<br>{{@global.config.email}}</p>
+      </div>
+    </div>
+  </div>
+</div>

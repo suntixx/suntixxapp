@@ -1,40 +1,30 @@
-var updateEvent = function(data, redirect) {
-  var nocache = "?t="+moment().unix();
-  app.showPreloader("Updating Event");
-  console.log(JSON.stringify(data));
-  var returnEvent = {};
+$$(document).on('click', '.join-room', function() {
+
   $$.ajax({
+    timeout: 30 * 1000,
     async: true,
-    url: config.server + "/api/event/" + selectedEventLocal.id + nocache,
-    method: "PUT",
-    timeout: 20 * 1000,
-    //contentType: "application/x-www-form-urlencoded",
-    contentType: "application/json; charset=utf-8",
-    data: JSON.stringify(data),
-    //data: data,
+    cache: false,
+    url: config.server + "/chat/joinroom/",
+    method: "POST",
+    contentType: "application/x-www-form-urlencoded",
+    data: {
+      userid: user.id,
+      roomid: $$(this).attr("event-id"),
+    },
     xhrFields: { withCredentials: true },
-    //header: {"Get-Cookie" : storedUser.session},
     success: function(data, status, xhr) {
       if (status == 200 || status == 0 ){
-        app.hidePreloader();
-        app.alert("Event Update Successful!");
-        returnEvent = JSON.parse(data);
-        if (returnEvent && returnEvent.id) {
-          selectedEventLocal = returnEvent;
-          mainView.router.back({
-            url: redirect,
-            context: selectedEventLocal,
-            force: true,
-          });
-        }
+        var result = JSON.parse(data);
+        chatService.openChat(result.event.id, result.event.name, true);
       }
     },
     error: function (xhr, status){
-      app.hidePreloader();
-      app.alert("Event Update Failed!");
+      app.alert(language.SYSTEM.GENERAL_SERVER_ERROR);
     },
   });
-};
+});
+
+
 app.onPageAfterAnimation('event-main', function(page) {
   if (page.context.previous) {
     $$('#right-panel-menu').html(Menus.previousEvent);
@@ -42,220 +32,196 @@ app.onPageAfterAnimation('event-main', function(page) {
     $$('#right-panel-menu').html(Menus.event);
   }
 
+  $$('.chatroom').on('click', function() {
+    app.popup(Template7.templates.joinRoomTemplate({eventid: page.context.id}));
+  });
+
   $$('.create-new-event').on('click',  function () {
-    mainView.router.load({
+    eventsView.router.load({
       url: 'views/events/create-event.html',
     });
   });
 
   $$('.back-events').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/myevents.html',
       context: allUserEvents,
       force: true,
     });
   });
+
+  var updatingInterested = false;
+  $$('.interested').on('click', function() {
+    if (updatingInterested) return;
+    if (!user) {
+      afterLoginLink = $$(this);
+      app.loginScreen();
+      return;
+    }
+    updatingInterested = true;
+    var remove = 0;
+    if ($$('.icon-favorites').hasClass('active') ){
+      remove = 1;
+    }
+    $$.ajax({
+      async: true,
+      cache: false,
+      url: config.server + "/api/attending/" + user.id +"/"+ selectedEventLocal.id +"/2/"+ remove,
+      method: "GET",
+      timeout: 20 * 1000,
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          selectedEventLocal = JSON.parse(data);
+          if (remove == 1) {
+            $$('.icon-favorites').removeClass("active");
+          } else {
+            $$('.icon-favorites').addClass("active");
+          }
+          $$('.favorite-count').html(selectedEventLocal.interested.length);
+          updatingInterested = false;
+          //eventsService.downloadFavorites();
+        }
+      },
+      error: function (xhr, status){
+
+      },
+    });
+  });
 });
 
 //===============Show All Events Functions==============
-app.onPageAfterAnimation('all-user-events', function (page) {
-  var selectedEventId;
-  var myEvents = page.context;
-  var autoOpen = page.query.area;
-  if (autoOpen) {
-    if (autoOpen == 'committee') {
-      app.accordionOpen('.committee-events');
-    } else if (autoOpen == 'access') {
-      app.accordionOpen('.access-events');
-    }
-  } else {
-    if (myEvents.managedEventList.length > 0) {
-      app.accordionOpen('.managed-events');
-    } else if (myEvents.commiteeEventList && myEvents.commiteeEventList.length > 0) {
-      app.accordionOpen('.committee-events');
-    } else if (myEvents.scanningEventList && myEvents.scanningEventList.length > 0) {
-      app.accordionOpen('.access-events');
-    }
+
+app.onPageInit('all-user-events', function (page) {
+
+  var reloadEvents = function() {
+    app.showIndicator();
+    $$.ajax({
+      async: true,
+      cache: false,
+      timeout: 1000 * 30,
+      url: config.server + "/api/getprofileevents/" + user.id,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          allUserEvents = JSON.parse(data);
+          //console.log(data);
+
+          allUserEvents.hasManageEvents = allUserEvents.managedEventList.length + allUserEvents.scanningEventList.length > 0;
+          storage.setItem('myEvents', data);
+          eventsView.router.load({
+              url: 'views/events/myevents.html',
+              context: allUserEvents,
+              reload: true,
+          });
+          app.hideIndicator();
+        }
+      },
+      error: function(status, xhr) {
+        app.hideIndicator();
+      }
+    });
+  };
+
+  if (page.query.local == "1" && navigator.onLine && user && user.id) {
+    setTimeout(reloadEvents, 1000);
   }
 
-  $$('.managed-events').on('click', function() {
-    app.accordionClose('.committee-events');
-    app.accordionClose('.access-events');
-    app.accordionClose('.previous-events');
-  });
-  $$('.committee-events').on('click', function() {
-    app.accordionClose('.managed-events');
-    app.accordionClose('.access-events');
-    app.accordionClose('.previous-events');
-  });
-  $$('.access-events').on('click', function() {
-    app.accordionClose('.committee-events');
-    app.accordionClose('.managed-events');
-    app.accordionClose('.previous-events');
-  });
-  $$('.previous-events').on('click', function() {
-    app.accordionClose('.committee-events');
-    app.accordionClose('.managed-events');
-    app.accordionClose('.access-events');
-  });
-
-  $$('.my-event-link').on('click', function () {
-    var eventId = $$(this).attr('event-id');
-    var nocache = "?t="+moment().unix();
-    var result;
-    app.showPreloader(language.SYSTEM.LOADING);
-    $$.ajax({
-      async: true,
-      timeout: 20 * 1000,
-      url: config.server + "/api/event/" + eventId + nocache,
-      method: "GET",
-      success: function(data, status, xhr) {
-        app.hidePreloader();
-        if (status == 200 || status == 0 ){
-          result = JSON.parse(data);
-          if (result && result.id>0) {
-            selectedEventLocal = result;
-            selectedEventLocal.previous = false;
-            mainView.router.load({
-              url: 'views/events/event.html',
-              context: selectedEventLocal,
-            });
-          }
-        }
-      },
-      error: function (xhr, status) {
-        app.hidePreloader();
-        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
-      },
-
-    });
-  });
-
-  $$('.previous-event-link').on('click', function () {
-    var eventId = $$(this).attr('event-id');
-    var nocache = "?t="+moment().unix();
-    var result;
-    app.showPreloader(language.SYSTEM.LOADING);
-    $$.ajax({
-      async: true,
-      timeout: 20 * 1000,
-      url: config.server + "/api/event/" + eventId + nocache,
-      method: "GET",
-      success: function(data, status, xhr) {
-        app.hidePreloader();
-        if (status == 200 || status == 0 ){
-          result = JSON.parse(data);
-          if (result && result.id>0) {
-            selectedEventLocal = result;
-            selectedEventLocal.previous = true;
-            mainView.router.load({
-              url: 'views/events/event.html',
-              context: selectedEventLocal,
-            });
-          }
-        }
-      },
-      error: function (xhr, status) {
-        app.hidePreloader();
-        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
-      },
-
-    });
-  });
-
-  $$('.committee-event-link').on('click', function () {
-    selectedEventId = $$(this).attr('event-id');
-    var nocache = "?t="+moment().unix();
-    var result;
-    app.showPreloader(language.SYSTEM.LOADING);
-    $$.ajax({
-      async: true,
-      timeout: 20 * 1000,
-      url: config.server + "/api/event/" + selectedEventId + nocache,
-      method: "GET",
-      success: function(data, status, xhr) {
-        if (status == 200 || status == 0 ){
-          result = JSON.parse(data);
-          if (result && result.id>0) {
-            selectedEventLocal = result;
-            $$.ajax({
-              async: true,
-              timeout: 20 * 1000,
-              url: config.server + "/api/getusertickets/"+ selectedEventId+ "/"+user.id + nocache,
-              method: "GET",
-              xhrFields: { withCredentials: true },
-              success: function(data, status, xhr) {
-                app.hidePreloader();
-                if (status == 200){
-                  var sellerTickets = JSON.parse(data);
-                  mainView.router.load({
-                    url: 'views/selltickets/committee-home.html',
-                    context: {
-                      tickets: sellerTickets,
-                      event: selectedEventLocal,
-                    }
-                  });
-                }
-              },
-              error: function (xhr, status) {
-                app.hidePreloader();
-                alert(language.SYSTEM.GENERAL_SERVER_ERROR);
-              },
-            });
-          }
-        }
-      },
-      error: function (xhr, status) {
-        app.hidePreloader();
-        alert(language.SYSTEM.GENERAL_SERVER_ERROR);
-      },
-    });
-
-  });
-
-  $$('.create-event').on('click',  function () {
-    mainView.router.load({
+  var getEvent = function(eventId, previous) {
+    if (!previous) previous = 0;
+    var thisEvent
+    if (previous == 1) {
+      thisEvent = SEARCHJS.matchArray(allUserEvents.managedEventList, {id: Number(eventId)});
+    } else {
+      thisEvent = SEARCHJS.matchArray(allUserEvents.managedEventList, {id: Number(eventId)});
+    }
+    return thisEvent[0];
+  }
+  $$(document).on('click', '.create-new-event', function() {
+    eventsView.router.load({
       url: 'views/events/create-event.html',
     });
   });
 
-  $$('.home').on('click', function () {
-    app.removeFromCache('home.html');
-    mainView.router.back ({
-      url: 'home.html',
-      force: true,
-      ignoreCache: true,
+
+
+
+
+  $$(document).on('click', '.edit-event', function () {
+    var eventId = $$(this).attr('event-id');
+    selectedEventLocal = getEvent(eventId);
+    eventsView.router.load({
+      url: 'views/events/event.html',
+      context: selectedEventLocal,
     });
   });
 
-  $$('.scanning-event-link').on('click', function () {
+  $$(document).on('click', '.favorite-event-link', function () {
     var eventId = $$(this).attr('event-id');
-    var nocache = "?t="+moment().unix();
-    var result;
-    app.showPreloader(language.SYSTEM.LOADING);
+    selectedEventLocal = _.find(page.context.favoriteEventList, function(item) {
+      return item.id == eventId;
+    })
+    eventsView.router.load({
+      url: 'event.html',
+      context: selectedEventLocal,
+    });
+  });
+
+  $$(document).on('click', '.previous-event-link', function () {
+    var eventId = $$(this).attr('event-id');
+    selectedEventLocal = getEvent(eventId, 1);
+    selectedEventLocal.previous = true;
+    eventsView.router.load({
+      url: 'views/events/event.html',
+      context: selectedEventLocal,
+    });
+  });
+
+  $$(document).on('click', '.sell-event', function () {
+    selectedEventId = $$(this).attr('event-id');
+    selectedEventLocal = getEvent(selectedEventId);
     $$.ajax({
       async: true,
       timeout: 20 * 1000,
-      url: config.server + "/api/event/" + eventId + nocache,
+      cache:false,
+      url: config.server + "/api/getusertickets/"+ selectedEventId+ "/"+user.id,
       method: "GET",
+      xhrFields: { withCredentials: true },
       success: function(data, status, xhr) {
-        app.hidePreloader();
-        if (status == 200 || status == 0 ){
-          result = JSON.parse(data);
-          if (result && result.id>0) {
-            selectedEventLocal = result;
-            mainView.router.load({
-              url: 'views/access/assigned-access-home.html',
-              context: selectedEventLocal,
-            });
-          }
+        if (status == 200){
+          var sellerTickets = JSON.parse(data);
+          returnFromStoreTab = "#events-view";
+          storeView.router.load({
+            url: 'views/selltickets/committee-home.html',
+            context: {
+              tickets: sellerTickets,
+              event: selectedEventLocal,
+            },
+            reload: true,
+          });
+          app.showTab("#store-view");
         }
       },
       error: function (xhr, status) {
-        app.hidePreloader();
         alert(language.SYSTEM.GENERAL_SERVER_ERROR);
       },
     });
+
+  });
+
+  $$(document).on('click', '.create-event',  function () {
+    eventsView.router.load({
+      url: 'views/events/create-event.html',
+    });
+  });
+
+  $$(document).on('click', '.scan-event', function () {
+    var eventId = $$(this).attr('event-id');
+    selectedEventLocal = getEvent(eventId);
+    eventsView.router.load({
+      url: 'views/access/scan.html',
+      context: selectedEventLocal,
+    });
+
   });
 });
 
@@ -332,7 +298,7 @@ app.onPageInit('event-details', function(page) {
     thisEvent.user.isOrg = $$(this).attr('profile') === "1";
     //thisProfile.isOrg = isOrg;\
     alert(thisEvent.user.isOrg);
-    mainView.router.load({
+    eventsView.router.load({
       url: 'views/user/user-profile.html',
       context: thisEvent.user,
     });*/
@@ -343,6 +309,7 @@ app.onPageInit('event-details', function(page) {
   $$('#eventPromoterTab').on('show', function() {
     //thisEvent.user.notMe = true;
     //if (user && thisEvent.user.id == user.id) {
+    $$('.floating-button').hide();
       thisEvent.user.notMe = true;
       if (user && thisEvent.user.id == user.id) {
         thisEvent.user.noMessage = true;
@@ -357,24 +324,20 @@ app.onPageInit('event-details', function(page) {
 
       $$('.message-user').on('click', function() {
         if (!user) {
+          afterLoginLink = $$(this);
           app.loginScreen();
           return;
         }
         //var eventId = $$(this).attr('event-id');
         chatService.openChat(thisEvent.user.id, thisEvent.user.name2+" "+thisEvent.user.name4, false);
-        /*mainView.router.load({
+        /*eventsView.router.load({
           url: 'views/user/chat.html',
           context : {receiver: thisEvent.user.id},
         });*/
       });
   });
 
-  $$('.page-content').on('scroll', function() {
-    $$('.floating-button').hide();
-    setTimeout(function() {
-      $$('.floating-button').show();
-    }, 2000);
-  });
+
 
   if (user && SEARCHJS.matchObject(thisEvent.attending, {id: Number(user.id)})) {
     $$('.attending').removeClass("color-gray");
@@ -385,6 +348,7 @@ app.onPageInit('event-details', function(page) {
   $$('.attending').on('click', function() {
     if (updatingAttending) return;
     if (!user) {
+      afterLoginLink = $$(this);
       app.loginScreen();
       return;
     }
@@ -393,11 +357,11 @@ app.onPageInit('event-details', function(page) {
     if ($$(this).attr("attending")  == "true") {
       remove = 1;
     }
-    var nocache = "?t="+moment().unix();
     $$.ajax({
       async: true,
-      url: config.server + "/api/attending/" + user.id +"/"+ thisEvent.id +"/1/"+ remove + nocache,
+      url: config.server + "/api/attending/" + user.id +"/"+ thisEvent.id +"/1/"+ remove,
       method: "GET",
+      cache:false,
       timeout: 20 * 1000,
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
@@ -415,6 +379,7 @@ app.onPageInit('event-details', function(page) {
           $$('.interested-count').html(thisEvent.interested.length);
           updatingAttending = false;
         }
+        eventsService.downloadFavorites();
       },
       error: function (xhr, status){
 
@@ -422,18 +387,46 @@ app.onPageInit('event-details', function(page) {
     });
   });
 
-  $$('.chatroom').on('click', function() {
+  $$(document).on('click', '.sale-reports',  function() {
+    var eventId = $$(this).attr('event-id');
+    selectedEventLocal = _.find(allUserEvents.committeeEventList, function(item) {
+      return item.id == eventId;
+    });
+    $$.ajax({
+      async: true,
+      timeout: 30 * 1000,
+      cache: false,
+      url: config.server + "/api/usersalesreports/" + eventId + "/" + user.id,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          var salesReports = JSON.parse(data);
+          console.log(salesReports);
+          ticketsView.router.load ({
+            url: 'views/selltickets/sales-reports.html',
+            context: {
+              event: selectedEventLocal,
+              reports: salesReports
+            }
+          });
+        }
+      },
+      error: function(status, xhr) {
+
+      },
+    });
+  });
+
+  /*$$('.chatroom').on('click', function() {
     if (!user) {
+      afterLoginLink = $$(this);
       app.loginScreen();
       return;
     }
-    chatService.openChat(thisEvent.id, thisEvent.name, true, thisEvent.name);
-    //var eventId = $$(this).attr('event-id');
-    //mainView.router.load({
-    //  url: 'views/user/chat.html',
-    //  context : {eventId: thisEvent.id},
-    //});
-  });
+    app.popup(Template7.templates.joinRoomTemplate({eventid: thisEvent.id}));
+  });*/
+
+
 
   if(user && SEARCHJS.matchObject(thisEvent.interested, {id: Number(user.id)})) {
     $$('.interested').removeClass("color-gray");
@@ -441,34 +434,34 @@ app.onPageInit('event-details', function(page) {
   }
   var updatingInterested = false;
   $$('.interested').on('click', function() {
-    if (updatingInterested || $$('.attending').attr("attending") == "true") return;
+    if (updatingInterested) return;
     if (!user) {
+      afterLoginLink = $$(this);
       app.loginScreen();
       return;
     }
     updatingInterested = true;
     var remove = 0;
-    if ($$(this).attr("interested")  == "true") {
+    if ($$('.icon-favorites').hasClass('active') ){
       remove = 1;
     }
-    var nocache = "?t="+moment().unix();
     $$.ajax({
       async: true,
-      url: config.server + "/api/attending/" + user.id +"/"+ thisEvent.id +"/2/"+ remove + nocache,
+      cache: false,
+      url: config.server + "/api/attending/" + user.id +"/"+ thisEvent.id +"/2/"+ remove,
       method: "GET",
       timeout: 20 * 1000,
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           thisEvent = JSON.parse(data);
           if (remove == 1) {
-            $$('.interested').addClass("color-gray");
-            $$('.interested').attr("interested", "false");
+            $$('.icon-favorites').removeClass("active");
           } else {
-            $$('.interested').removeClass("color-gray");
-            $$('.interested').attr("interested", "true");
+            $$('.icon-favorites').addClass("active");
           }
-          $$('.interested-count').html(thisEvent.interested.length);
+          $$('.favorite-count').html(thisEvent.interested.length);
           updatingInterested = false;
+          //eventsService.downloadFavorites();
         }
       },
       error: function (xhr, status){
@@ -476,18 +469,12 @@ app.onPageInit('event-details', function(page) {
       },
     });
   });
-  //get quantity of persons in chat room
-  if (socket) {
-    socket.emit('room-count', {
-      room: 'room-'+thisEvent.id
-    });
-  }
+
 
 
 
   $$('#eventDetailsTab').on('show', function() {
     //app.showTab('#eventDetailsTab');
-    $$('.center').text(language.OTHER.DETAILS);
     $$('.floating-button').show();
 
 
@@ -496,18 +483,19 @@ app.onPageInit('event-details', function(page) {
 
   $$('#eventSellersTab').on('show', function() {
     //app.showTab('#eventSellersTab');
-    $$('.center').text(language.EVENTS.SELLERS);
+    //$$('.center').text(language.EVENTS.SELLERS);
     $$('#eventSellersTab').html(Template7.templates.eventSellersTemplate(thisEvent));
     $$('.floating-button').hide();
 
     $$('.message-seller').on('click', function() {
       if (!user) {
+        afterLoginLink = $$(this);
         app.loginScreen();
         return;
       }
       var sellerId = $$(this).attr('user-id');
       var sellerName = $$(this).attr("user-name");
-      chatService.openChat(sellerId, sellerName);
+      chatService.openChat(sellerId, sellerName, false);
     });
 
     $$('.show-seller-profile').on('click', function() {
@@ -521,7 +509,7 @@ app.onPageInit('event-details', function(page) {
         success: function(data, status, xhr) {
           if (status == 200 || status == 0 ){
             var thisProfile = JSON.parse(data);
-            mainView.router.load({
+            eventsView.router.load({
               url: 'views/user/user-profile.html',
               context: thisProfile,
             });
@@ -556,20 +544,17 @@ app.onPageInit('event-details', function(page) {
 
   $$('.purchase-event-tickets').on('click', function () {
     if (!user) {
-     app.loginScreen();
+      afterLoginLink = $$(this);
+      app.loginScreen();
       return;
     }
 
-    storeView = app.addView('.view-store', {
-      allowDuplicateUrls: true
-    });
-    storeView.router.load({
+    eventsView.router.load({
       url: 'views/purchase/select-quantity.html',
       context: thisEvent,
       //ignoreCache:true,
-      reload:true,
+    //  reload:true,
     });
-    app.showTab('#store-tab');
 
   });
 });
@@ -605,8 +590,16 @@ app.onPageInit('create-new-event', function(page) {
     eventHost.open();
   });
 
+  $$('.back-events').on('click', function () {
+    eventsView.router.back ({
+      url: 'views/events/myevents.html',
+      context: allUserEvents,
+      force: true,
+    });
+  });
+
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,
@@ -625,19 +618,19 @@ app.onPageInit('create-new-event', function(page) {
     var host = eventHost.displayValue;
     if (!host || host[0] == "personal") { eventDetails.hostedby = 0; }
     else { eventDetails.hostedby = 1; }
-    var nocache = "?t="+moment().unix();
     var result;
     $$.ajax({
       async: true,
       timeout: 20 * 1000,
-      url: config.server + "/api/venuelist/" + nocache,
+      cache:false,
+      url: config.server + "/api/venuelist/",
       method: "GET",
       contentType: "application/x-www-form-urlencoded",
       xhrFields: { withCredentials: true },
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var venueList = JSON.parse(data);
-          mainView.router.load({
+          eventsView.router.load({
             url: 'views/events/add-venue.html',
             context: {
               newEvent: eventDetails,
@@ -918,14 +911,14 @@ app.onPageInit('add-venue', function (page) {
                   //allUserEvents = result;
                   allUserEvents.scanningEventList = eventsService.addScanCondition(allUserEvents.scanningEventList);
                   app.hideIndicator();
-                  mainView.router.load({
+                  eventsView.router.load({
                     url: 'views/events/myevents.html',
                     context: allUserEvents,
                   });
                 }
               }, error: function (xhr, status){
                 app.hideIndicator();
-                mainView.router.loadPage('home.html');
+                eventsView.router.loadPage('home.html');
               },
             });
           }
@@ -983,7 +976,7 @@ app.onPageInit('add-venue', function (page) {
 //=============================Event Tickets===========================================
 app.onPageInit('event-tickets', function(page) {
   //var pageData = page.context;
-  $$(document).find('.ticket-image').each(function () {
+  /*$$(document).find('.ticket-image').each(function () {
     var imageSrc = $$(this).prop('src');
     var http = new XMLHttpRequest();
     http.open('HEAD', imageSrc, false);
@@ -991,10 +984,10 @@ app.onPageInit('event-tickets', function(page) {
       if (http.status == 404) {
         $$(this).prop('src', config.server +'/thumbnails/tickets/0/portrait.png');
       }
-  });
+  });*/
 
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,
@@ -1002,7 +995,7 @@ app.onPageInit('event-tickets', function(page) {
   });
 
   $$('.add-ticket').on('click', function () {
-    mainView.router.load ({
+    eventsView.router.load ({
       url: "views/events/add-ticket.html",
     });
     //$$('.view-popup').html(addTicket({id:eventId}));
@@ -1014,7 +1007,7 @@ app.onPageInit('event-tickets', function(page) {
 
     var selectedTicket = SEARCHJS.matchArray(selectedEventLocal.tickets, {id: Number(ticketId)});
     selectedTicket = selectedTicket[0];
-    mainView.router.load({
+    eventsView.router.load({
       url: "views/events/edit-ticket.html",
       context: selectedTicket,
     });
@@ -1084,7 +1077,7 @@ app.onPageInit('event-tickets', function(page) {
             returnEvent = JSON.parse(data);
             if (returnEvent && returnEvent.id) {
               selectedEventLocal = returnEvent;
-              mainView.router.load({
+              eventsView.router.load({
                 url: 'views/events/event-tickets.html',
                 //ignoreCache: true,
                 context: selectedEventLocal,
@@ -1235,7 +1228,7 @@ app.onPageInit('edit-ticket', function(page) {
     var updatedTicket = app.formToJSON('#edit-ticket-form');
     updatedTicket.eventid = selectedEventLocal.id;
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating Ticket");
+    app.showIndicator();
     var returnEvent = {};
     $$.ajax({
       async: true,
@@ -1250,7 +1243,7 @@ app.onPageInit('edit-ticket', function(page) {
       //header: {"Get-Cookie" : storedUser.session},
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
-          app.hidePreloader();
+          app.hideIndicator();
           if (cropper) {
             cropper.destroy();
           }
@@ -1260,7 +1253,7 @@ app.onPageInit('edit-ticket', function(page) {
             selectedEventLocal = returnEvent;
 
           //  alert(JSON.stringify(selectedEventLocal));
-            mainView.router.back({
+            eventsView.router.back({
               url: 'views/events/event-tickets.html',
               force: true,
               context: selectedEventLocal,
@@ -1271,7 +1264,7 @@ app.onPageInit('edit-ticket', function(page) {
         }
       },
       error: function (xhr, status){
-        app.hidePreloader();
+        app.hideIndicator();
         app.alert("Oops! Something went wrong");
       },
     });
@@ -1404,7 +1397,7 @@ app.onPageInit('add-tickets', function(page) {
             result = data;
             //alert(JSON.stringify(data));
           }
-          //app.hidePreloader();
+          //app.hideIndicator();
         },
         error: function(status, xhr) {
           app.hideProgressbar();
@@ -1436,7 +1429,7 @@ app.onPageInit('add-tickets', function(page) {
     newTicket.eventId = selectedEventLocal.id;
     //alert(JSON.stringify(data));
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Adding Ticket");
+    app.showIndicator();
     var returnEvent = {};
     $$.ajax({
       async: true,
@@ -1449,12 +1442,12 @@ app.onPageInit('add-tickets', function(page) {
       //header: {"Get-Cookie" : storedUser.session},
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
-          app.hidePreloader();
+          app.hideIndicator();
           app.alert("Ticket Added Successfully!");
           returnEvent = JSON.parse(data);
           if (returnEvent && returnEvent.id) {
             selectedEventLocal = returnEvent;
-            mainView.router.back({
+            eventsView.router.back({
               url: 'views/events/event-tickets.html',
               context: selectedEventLocal,
               force: true,
@@ -1463,7 +1456,7 @@ app.onPageInit('add-tickets', function(page) {
         }
       },
       error: function (xhr, status){
-        app.hidePreloader();
+        app.hideIndicator();
         app.alert("Oops! Something went wrong");
       },
     });
@@ -1477,7 +1470,7 @@ app.onPageInit('add-tickets', function(page) {
 app.onPageAfterAnimation('update-venue-details', function(page) {
 
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,
@@ -1583,8 +1576,8 @@ app.onPageAfterAnimation('update-venue-details', function(page) {
       area: "venue",
       data: newDetails,
     };
-    var data = eventsService.generateUpdateEventRequest(selectedEventLocal, options);
-    updateEvent(data, 'views/events/event.html' );
+    var data = eventsService.generateeventService.updateEventRequest(selectedEventLocal, options);
+    eventService.updateEvent(data, 'views/events/event.html' );
   });
 
 });
@@ -1593,7 +1586,7 @@ app.onPageAfterAnimation('update-venue-details', function(page) {
 app.onPageInit('update-event-details', function(page) {
 
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,
@@ -1788,7 +1781,7 @@ app.onPageInit('update-event-details', function(page) {
     };
     var data = eventsService.generateUpdateEventRequest(selectedEventLocal, options);
     //alert(JSON.stringify(data));
-    updateEvent(data, 'views/events/event.html');
+    eventService.updateEvent(data, 'views/events/event.html');
   });
 
 });
@@ -1829,7 +1822,7 @@ app.onPageInit('update-pos-list', function(page) {
       data: posFormData,
     };
     var data = eventsService.generateUpdateEventRequest(selectedEventLocal, options);
-    updateEvent(data);
+    eventService.updateEvent(data);
     //alert(JSON.stringify(result));
   });
 });
@@ -1838,11 +1831,19 @@ app.onPageInit('update-pos-list', function(page) {
 
 
 app.onPageInit('purchase-committee-plan', function(page) {
+
+  $$(page.container).on('keydown', function (e) {
+    //$$(document).keypress(function (e) {
+    if(e.which == 13) {
+      $$('.add-committee-plan').click();
+    }
+    //});
+  });
   $$('.add-committee-plan').on('click', function() {
     var planId = $$(this).attr('plan-id');
-    var nocache = "?t="+moment().unix();
     var request = {
       planid: planId,
+      couponcode: $$('.couponcode').val() ? $$('.couponcode').val() : null,
       eventid: selectedEventLocal.id,
       userid: user.id,
     };
@@ -1851,7 +1852,8 @@ app.onPageInit('purchase-committee-plan', function(page) {
     $$.ajax({
       timeout: 20 * 1000,
       async: true,
-      url: config.server + "/api/addcommitteeplan/"+nocache,
+      cache: false,
+      url: config.server + "/api/addcommitteeplan/",
       method: "PUT",
       contentType: "application/x-www-form-urlencoded",
       data: request,
@@ -1866,7 +1868,7 @@ app.onPageInit('purchase-committee-plan', function(page) {
             if (selectedEventLocal.tickets) {
               commTickets = SEARCHJS.matchArray(selectedEventLocal.tickets, {origin: 2});
             }
-            mainView.router.load({
+            eventsView.router.load({
               url: 'views/events/committee-tickets.html',
               context: {
                 event: selectedEventLocal,
@@ -1874,9 +1876,6 @@ app.onPageInit('purchase-committee-plan', function(page) {
               }
             });
           }
-        } else {
-          app.hideIndicator();
-          app.alert("Oops! Something went wrong");
         }
       },
       statusCode: {
@@ -1885,10 +1884,10 @@ app.onPageInit('purchase-committee-plan', function(page) {
           app.alert("This Plan is no longer available.  You may need to upgrade this app. For further information, please contact Suntixx Caribbean Limited");
         }
       },
-      error: function(status, xhr) {
-        app.hidePreloader();
+    /*  error: function(status, xhr) {
+        app.hideIndicator();
         app.alert("Oops! Something went wrong");
-      }
+      }*/
     });
   });
 });
@@ -1899,7 +1898,7 @@ app.onPageInit('committee-tickets-list', function(page) {
     var tickets = selectedEventLocal.tickets;
     var ticket = SEARCHJS.matchArray(tickets, {id: Number(ticketId)});
     ticket = ticket[0];
-    mainView.router.load({
+    eventsView.router.load({
       url: "views/events/edit-committee-ticket.html",
       context: ticket,
     })
@@ -1908,7 +1907,7 @@ app.onPageInit('committee-tickets-list', function(page) {
   });
 
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,
@@ -1916,7 +1915,7 @@ app.onPageInit('committee-tickets-list', function(page) {
   });
 
   $$('.add-committee-tickets').on('click', function () {
-    mainView.router.load ({
+    eventsView.router.load ({
       url: 'views/events/add-committee-ticket.html',
     });
   });
@@ -2010,7 +2009,7 @@ app.onPageInit('edit-committee-ticket', function (page) {
           if (returnEvent  && returnEvent.id) {
             selectedEventLocal = returnEvent;
             var commTickets = SEARCHJS.matchArray(selectedEventLocal.tickets, {origin: 2});
-            mainView.router.back({
+            eventsView.router.back({
               url: 'views/events/committee-tickets.html',
               force: true,
               context: {
@@ -2041,7 +2040,7 @@ app.onPageInit('committee-settings', function(page) {
     }
     var unassignedTickets = SEARCHJS.matchArray(committeeTickets,  {id: assignedUserTicketIds, _not:true});
 
-    mainView.router.load({
+    eventsView.router.load({
       url: 'views/events/assign-committee-tickets.html?user='+userId,
       context: unassignedTickets,
     });
@@ -2051,7 +2050,7 @@ app.onPageInit('committee-settings', function(page) {
   $$('.delete').on('click', function () {
     var userTicketId = $$(this).attr("userTicketId");
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Deleting Ticket");
+    app.showIndicator();
     $$.ajax({
       async: true,
       timeout: 20 * 1000,
@@ -2060,8 +2059,8 @@ app.onPageInit('committee-settings', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var updatedUserTickets = JSON.parse(data);
-          app.hidePreloader();
-          /*mainView.router.load({
+          app.hideIndicator();
+          /*eventsView.router.load({
             url: 'views/events/committee-settings.html',
             reload: true,
             context: {
@@ -2075,7 +2074,7 @@ app.onPageInit('committee-settings', function(page) {
   });
 
   $$('.back-committee-list').on('click', function () {
-    mainView.router.back({
+    eventsView.router.back({
       url: 'views/events/update-committee.html',
       context: selectedEventLocal,
       force: true,
@@ -2095,7 +2094,7 @@ app.onPageInit('committee-settings', function(page) {
     }
     //alert(JSON.stringify(request));
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating Ticket");
+    app.showIndicator();
     $$.ajax({
       async: true,
       timeout: 20 * 1000,
@@ -2107,8 +2106,8 @@ app.onPageInit('committee-settings', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var updatedUserTickets = JSON.parse(data);
-          app.hidePreloader();
-          mainView.router.load({
+          app.hideIndicator();
+          eventsView.router.load({
             url: 'views/events/committee-settings.html',
             reload: true,
             context: {
@@ -2132,7 +2131,7 @@ app.onPageInit('committee-settings', function(page) {
       userticketid: userTicketId,
     };
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Updating Ticket");
+    app.showIndicator();
     $$.ajax({
       async: true,
       timeout: 20 * 1000,
@@ -2144,8 +2143,8 @@ app.onPageInit('committee-settings', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var updatedUserTickets = JSON.parse(data);
-          app.hidePreloader();
-          mainView.router.load({
+          app.hideIndicator();
+          eventsView.router.load({
             url: 'views/events/committee-settings.html',
             reload: true,
             context: {
@@ -2156,7 +2155,7 @@ app.onPageInit('committee-settings', function(page) {
         }
       },
       error: function (xhr, status) {
-        app.hidePreloader();
+        app.hideIndicator();
         app.alert("Oops! Something went wrong");
       }
     });
@@ -2181,7 +2180,7 @@ app.onPageInit('committee-tickets-assignment', function(page) {
       ticketIds: ticketIds,
     };
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Assigning Tickets");
+    app.showIndicator();
     var result;
     $$.ajax({
       async: true,
@@ -2194,7 +2193,7 @@ app.onPageInit('committee-tickets-assignment', function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           result = JSON.parse(data);
-          mainView.router.back({
+          eventsView.router.back({
             url: 'views/events/committee-settings.html',
             context: {
               tickets: result,
@@ -2204,14 +2203,14 @@ app.onPageInit('committee-tickets-assignment', function(page) {
           });
         } else {
           app.alert("Oops! Something went wrong.");
-          app.hidePreloader();
+          app.hideIndicator();
           return;
         }
-        app.hidePreloader();
+        app.hideIndicator();
       },
       error: function(status, xhr) {
         app.alert("Oops! Something went wrong.");
-        app.hidePreloader();
+        app.hideIndicator();
         return;
       }
     });
@@ -2229,7 +2228,7 @@ app.onPageInit('committee-menu', function(page) {
 
   $$('.committee-terms-cancel').on('click', function () {
     app.closeModal('.enable-committee');
-    mainView.router.back();
+    eventsView.router.back();
   });
 
 });
@@ -2238,7 +2237,7 @@ app.onPageInit('add-committee-tickets', function(page) {
   var request;
   var saveTicket = function () {
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Adding Ticket");
+    app.showIndicator();
     var result;
     $$.ajax({
       async: true,
@@ -2250,7 +2249,7 @@ app.onPageInit('add-committee-tickets', function(page) {
       data: request,
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
-          app.hidePreloader();
+          app.hideIndicator();
           result = JSON.parse(data);
           if (result && result.id) {
             selectedEventLocal = result;
@@ -2258,7 +2257,7 @@ app.onPageInit('add-committee-tickets', function(page) {
             if (selectedEventLocal.tickets) {
               commTickets = SEARCHJS.matchArray(selectedEventLocal.tickets, {origin: 2});
             }
-            mainView.router.back({
+            eventsView.router.back({
               url: 'views/events/committee-tickets.html',
               force: true,
               context: {
@@ -2270,13 +2269,13 @@ app.onPageInit('add-committee-tickets', function(page) {
 
 
         } else {
-          app.hidePreloader();
+          app.hideIndicator();
           app.alert("Oops! Something went wrong.");
           return;
         }
       },
       error: function(status, xhr) {
-        app.hidePreloader();
+        app.hideIndicator();
         app.alert("Oops! Something went wrong.");
         return;
       }
@@ -2298,7 +2297,7 @@ app.onPageInit('add-committee-tickets', function(page) {
 
   /*$$('.committee-terms-cancel').on('click', function() {
     request = null;
-    mainView.router.back({
+    eventsView.router.back({
       url: 'views/events/event.html',
       force: true,
       content: selectedEventLocal,
@@ -2310,13 +2309,13 @@ app.onPageInit('add-committee-tickets', function(page) {
 
 app.onPageInit('update-committee',  function(page) {
   $$('.add-member').on('click', function() {
-    mainView.router.load({
+    eventsView.router.load({
       url: 'views/events/add-committee.html'
     });
   });
 
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,
@@ -2355,7 +2354,7 @@ app.onPageInit('update-committee',  function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           var userTickets = JSON.parse(data);
-          mainView.router.load({
+          eventsView.router.load({
             url: 'views/events/committee-settings.html',
             context: {
               tickets: userTickets,
@@ -2375,7 +2374,7 @@ app.onPageInit('update-committee',  function(page) {
   $$('.add-another').on('click', function () {
     numberOfEntries++;
     $$('#commuser-info').append(addNew(numberOfEntries));
-    mainView.router.reloadPage();
+    eventsView.router.reloadPage();
   });
 
   function addNew (offset) {
@@ -2444,7 +2443,7 @@ app.onPageInit('update-committee',  function(page) {
     //alert(JSON.stringify(request.committeeList));
     //return;
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Adding Committee Members");
+    app.showIndicator();
     var returnEvent;
     $$.ajax({
       async: true,
@@ -2457,11 +2456,11 @@ app.onPageInit('update-committee',  function(page) {
       success: function(data, status, xhr) {
         if (status == 200 || status == 0 ){
           returnEvent = JSON.parse(data);
-          app.hidePreloader();
+          app.hideIndicator();
           if (returnEvent && returnEvent.id) {
             //app.closeModal();
             selectedEventLocal = returnEvent;
-            mainView.router.back({
+            eventsView.router.back({
               url: 'views/events/update-committee.html',
               ignoreCache: true,
               context: selectedEventLocal,
@@ -2471,7 +2470,7 @@ app.onPageInit('update-committee',  function(page) {
         }
       },
       error: function(status, xhr) {
-        app.hidePreloader();
+        app.hideIndicator();
         app.alert("There was a problem adding Sellers");
       }
     });
@@ -2482,13 +2481,13 @@ app.onPageInit('update-committee',  function(page) {
 //===============Access Control Actions=====================================
 app.onPageInit('update-access-list', function(page) {
   $$('.add-scanners').on('click', function() {
-    mainView.router.load({
+    eventsView.router.load({
       url: 'views/events/add-scanners.html'
     });
   });
 
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,
@@ -2529,7 +2528,7 @@ app.onPageInit('add-scanners', function(page) {
   $$('.add-another').on('click', function () {
     numberOfEntries++;
     $$('#scanuser-info').append(addNew(numberOfEntries));
-    mainView.router.reloadPage();
+    eventsView.router.reloadPage();
   });
 
   function addNew (offset) {
@@ -2597,7 +2596,7 @@ app.onPageInit('add-scanners', function(page) {
       request.scannerList.push(item);
     }
     var nocache = "?t="+moment().unix();
-    app.showPreloader("Adding Scanners");
+    app.showIndicator();
     var returnEvent;
     $$.ajax({
       async: true,
@@ -2611,12 +2610,12 @@ app.onPageInit('add-scanners', function(page) {
       //data: JSON.stringify(request),
       data: request,
       success: function(data, status, xhr) {
-        app.hidePreloader();
+        app.hideIndicator();
         if (status == 200){
           returnEvent = JSON.parse(data);
           if (returnEvent && returnEvent.id) {
             selectedEventLocal = returnEvent;
-            mainView.router.back({
+            eventsView.router.back({
               url: 'views/events/update-access.html',
               context: selectedEventLocal,
               force: true,
@@ -2625,7 +2624,7 @@ app.onPageInit('add-scanners', function(page) {
         }
       },
       error: function(status, xhr) {
-        app.hidePreloader();
+        app.hideIndicator();
         app.alert("There was a problem saving the Access Control Devices")
       },
     });
@@ -2642,7 +2641,7 @@ app.onPageInit('report', function (page) {
     var color2 = '#3f51b5';
     var thisTicket = SEARCHJS.matchArray(page.context.tickets, {id: Number(ticketTypeId)});
     thisTicket = thisTicket[0];
-    console.log(thisTicket);
+    //console.log(thisTicket);
     var createPieChart = function(type, field1, value1, value2) {
       var data = [
       	{
@@ -2650,26 +2649,65 @@ app.onPageInit('report', function (page) {
           value: value1,
           color: color1
         },
-      	{
+        {
           name: language.REPORTS.BALANCE,
           value: value2,
           color: color2
         },
     	];
 
-			new iChart.Pie2D({
+			new iChart.Donut2D({
 				render : type + '-' + ticketTypeId,
 				data: data,
-        border: false,
-				//title : 'Top 5 Browsers from 1 to 29 Feb 2012',
-				//showpercent:true,
-				//decimalsnum:1,
+        center:{
+					text:field1,
+					//shadow:true,
+					//shadow_offsetx:0,
+					//shadow_offsety:2,
+					//shadow_blur:2,
+					//shadow_color:'#b7b7b7',
+					color:'#6f6f6f',
+          fontsize:0.8,
+          fontunit: 'em'
+				},
+				offsetx:-1 * (window.innerWidth/3),
+				shadow:true,
+				//background_color:'#f4f4f4',
+				separate_angle:10,
+				tip:{
+					enable:true,
+					showType:'fixed'
+				},
+				legend : {
+          offsetx: -1 * (window.innerWidth/2),
+					enable : true,
+          sign: 'round',
+					shadow:true,
+					background_color:null,
+					border:true,
+					legend_space:12,
+					line_height:12,
+					sign_space:5,
+					//sign_size:30,
+					color:'#6f6f6f',
+					fontsize:10
+				},
+				sub_option:{
+					label:false,
+					color_factor : 0.3
+				},
+				showpercent:true,
+				decimalsnum:2,
 				width : window.innerWidth,
-				//height : 400,
-				radius: '60%',
+				height : window.innerWidth/2,
+        border: false,
+				radius:"65%"
 			}).draw();
     };
-    createPieChart ('sold-graph', language.REPORTS.SOLD, thisTicket.soldquantity, thisTicket.quantity - thisTicket.soldquantity);
+    if (thisTicket.origin != 1) {
+      createPieChart ('sold-graph', language.REPORTS.SOLD, thisTicket.soldquantity, thisTicket.quantity - thisTicket.soldquantity);
+    }
+    createPieChart ('scanned-graph', language.REPORTS.SCANNED, thisTicket.scannedquantity, thisTicket.soldquantity - thisTicket.scannedquantity);
   });
 
 
@@ -2732,8 +2770,37 @@ app.onPageInit('report', function (page) {
     }, 2000 );
   });
 
+  $$('.show-full-boxoffice-report').on('click', function() {
+    var eventId = $$(this).attr('event-id');
+    selectedEventLocal = _.find(allUserEvents.committeeEventList, function(item) {
+      return item.id == eventId;
+    });
+    $$.ajax({
+      async: true,
+      timeout: 30 * 1000,
+      cache: false,
+      url: config.server + "/api/totalusersalesreports/" + eventId,
+      method: "GET",
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          var salesReports = JSON.parse(data);
+          eventsView.router.load ({
+            url: 'views/selltickets/full-sales-reports.html',
+            context: {
+              event: selectedEventLocal,
+              reports: salesReports
+            }
+          });
+        }
+      },
+      error: function(status, xhr) {
+
+      },
+    });
+  });
+
   $$('.back-event').on('click', function () {
-    mainView.router.back ({
+    eventsView.router.back ({
       url: 'views/events/event.html',
       context: selectedEventLocal,
       force:true,

@@ -1,6 +1,6 @@
 {
     "Accelerate.framework": 2,
-    "AudioToolbox.framework": 2,
+    "AudioToolbox.framework": 1,
     "AVFoundation.framework": 2,
     "CoreMedia.framework": 2,
     "CoreVideo.framework": 3,
@@ -22,5 +22,8 @@
     "Social.framework": 1,
     "AddressBook.framework": 1,
     "libsqlite3.tbd": 1,
-    "libz.tbd": 1
+    "libz.tbd": 1,
+    "StoreKit.framework": 1,
+    "EventKit.framework": 2,
+    "EventKitUI.framework": 2
 }

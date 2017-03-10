@@ -1,16 +1,18 @@
 {
-  "server": "https://dev.suntixx.com",
+  "server": "https://www.suntixx.com",
   "version": "2.0.0",
-  "Developer": "Jason Cox",
+  "developers": ["Jason Cox"],
+  "email": "info@suntixx.com",
+  "phone": "868 288 TIXX(8499)",
   "appName": "Sun Tixx",
   "secret": "SunT1xxPhon#AppAPISecret",
-  "owner": "Sun Tixx Caribbean",
-  "settings": "",
+  "owner": "Sun Tixx Caribbean Limited",
   "paypalIds": {
       "PayPalEnvironmentProduction": "AU-GcnX5MceriwMVmOI9hudsFykuCNuzlRw0tGT05UOsF3Skrfn7J9RwVqLCvDjorC-08QMViv84L99k",
       "PayPalEnvironmentSandbox" :"AZQmKH1mbfEEf2c4VF-muRBS7cmU11L8y59L83uzmpf1HaUcQvjlCXmswxGQokKoueCVDMM_BUW2wdrz"
   },
   "mobileAppLinks": {
+    "iosAppId" : "id1128174731",
     "ios" :"itms-apps://itunes.apple.com/app/id1128174731",
     "android": "market://details?id=com.suntixx.application",
     "universal": "/api/downloadapp",
@@ -18,5 +20,9 @@
   },
   "push" : {
     "androidId" : "326258679945"
+  },
+  "settings": {
+    "emailMessages": true,
+    "autoScan": false
   }
 }

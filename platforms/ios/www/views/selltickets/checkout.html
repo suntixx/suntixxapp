@@ -7,14 +7,18 @@
         <div class="center sliding">{{@global.language.STORE.CHECKOUT}}</div>
       </div>
     </div>
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <div>&nbsp;</div>
+        <div>{{event.name}}</div>
+        <div>&nbsp;</div>
+      </div>
+    </div>
     <a href="#" class="floating-button color-orange add-new-purchaser" event-id="{{id}}" >
       <i class="icon icon-next"></i>
     </a>
     <div class="page-content">
       <div class="card event-details">
-        <div class="header">
-          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{event.id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border"></div>
-        </div>
         <div class="card-content">
           <div class="list-block media-list">
             <ul class="purchaser-user-info"></ul>

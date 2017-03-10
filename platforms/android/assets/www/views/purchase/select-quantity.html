@@ -1,11 +1,18 @@
 
 <div class="pages ">
-  <div data-page="purchase-quantity" class="page navbar-fixed">
+  <div data-page="purchase-quantity" class="page navbar-fixed toolbar-fixed">
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back-main link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center sliding">Ticket Quantity</div>
+        <div class="center sliding">{{@global.language.STORE.TICKET_QUANTITY}}</div>
         <!--<div class="right"><a href="#" class="link save-ticket-quantity"></i><span>Continue</span></a></div>-->
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <div>&nbsp;</div>
+        <div>{{name}}</div>
+        <div>&nbsp;</div>
       </div>
     </div>
     <a href="#" class="floating-button color-orange save-ticket-quantity">
@@ -27,9 +34,9 @@
                   <div class="item-inner row">
                     <!--<div class="item-text">-->
                     <div class="row">{{tickettype}} - ${{js "this.price.toFixed(2)"}}</div>
-                      <div class="item-title label">Quantity</div>
+                      <div class="item-title label">{{@global.language.STORE.QUANTITY}}</div>
                       <div class="item-input">
-                        <input type="number" name="quantity-{{id}}-{{@index}}" class="ticket-limit" ticketLimit="{{limit}}" quantity='{{js "this.quantity - this.soldquantity"}}' value="{{#if requestedqty}}{{requestedqty}}{{else}}0{{/if}}" id="quantity{{id}}">
+                        <input type="number" name="quantity-{{id}}-{{@index}}" class="ticket-limit" ticketLimit="{{limit}}" readonly quantity='{{js "this.quantity - this.soldquantity"}}' value="{{#if requestedqty}}{{requestedqty}}{{else}}0{{/if}}" id="quantity{{id}}">
                       </div>
                     <!--</div>-->
                   </div>

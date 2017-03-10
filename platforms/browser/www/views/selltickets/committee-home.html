@@ -4,8 +4,7 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back-events back-button link icon-only"> <i class="icon icon-back"></i></a></div>
-        <div class="center">Tickets</div>
-        <div class="right"><a href="#" class="link reports icon-only"><i class="icon icon-reports"></i></a></div>
+        <div class="center">{{@global.language.TICKETS.TICKETS}}</div>
       </div>
     </div>
     <a href="#" class="floating-button color-orange start-selling">
@@ -16,7 +15,7 @@
      {{> "eventPartial"}}
    {{/with}}
       <div class="card ticket-details" id="select-tickets-form">
-        <div class="card-header user-announcement">Please note that this is a cash payment feature!  You must collect payment directly from the purchaser.</div>
+        <div class="card-header user-announcement">{{@global.language.TICKETS.CASH_PAYMENT_ANNOUNCMENT}}</div>
         <div class="card-content">
           {{#js_compare "this.tickets.length > 0"}}
           <div class="list-block media-list">
@@ -30,9 +29,9 @@
                     <i class="icon icon-form-checkbox"></i>
                   </div>
                   <div class="item-inner">
-                    <div class="item-title">{{ticket.tickettype}} - ${{js "this.ticket.price.toFixed(2)"}} {{@root.event.currency}}</div>
-                    <div class="item-subtitle">{{soldquantity}}/{{quantity}} Tickets Sold</div>
-                    {{#if enable}}{{else}}<div class="item-text color-red">Disabled by Event Administrator</div>{{/if}}
+                    <div class="item-title">{{ticket.tickettype}}&nbsp;-&nbsp;${{js "this.ticket.price.toFixed(2)"}}&nbsp;{{@root.event.currency}}</div>
+                    <div class="item-subtitle">{{soldquantity}}/{{quantity}}&nbsp;{{@global.language.TICKETS.TICKETS_SOLD}}</div>
+                    {{#if enable}}{{else}}<div class="item-text color-red">{{@global.language.TICKETS.YOUR_TICKETS_DISABLED}}</div>{{/if}}
                   </div>
 
 
@@ -41,7 +40,7 @@
               {{/each}}
             </ul>
             {{else}}
-            No tickets have been assigned to you.  Please contact the Event Administrator
+            {{@global.language.TICKETS.NO_TICKETS_ASSIGNED_TO_YOU}}
           {{/js_compare}}
           </div>
         </div>
