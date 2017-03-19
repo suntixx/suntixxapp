@@ -1,0 +1,53 @@
+
+<div class="pages">
+  <div data-page="update-committee" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Sellers</div>
+        <div class="right">
+        </div>
+      </div>
+    </div>
+    <div class="toolbar premium">
+      <div class="toolbar-inner">
+        <div class="premium-service">Premium Service</div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange add-member">
+      <i class="icon icon-new"></i>
+    </a>
+    <div class="page-content">
+      {{#js_compare "this.commuser.length > 0"}}
+      <div class="list-block media-list" id="committee-list-form">
+        <ul>
+
+          {{#each commuser}}
+            <li class="swipeout" commId="{{id}}">
+
+              <div class="swipeout-content">
+                <a href="#" class="item-content item-link committee-settings" user-id="{{id}}">
+                  <div class="item-inner">
+                    <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                    <div class="item-subtitle">{{email}}</div>
+                    <input type="hidden" name="user-id" value={{id}}>
+                  </div>
+                </a>
+              </div>
+              <div class="swipeout-actions-right">
+                <!--<a href="#" class="swipeout-delete" data-confirm="Are you sure want to delete this committee member?" data-confirm-title="Delete?">Delete</a>-->
+              </div>
+
+            </li>
+
+          {{/each}}
+
+        </ul>
+      </div>
+      {{else}}
+      <div class="oops-image-load"></div>
+      <div class="oops-message-load">You have not added any committee members yet. Click the button below to begin.</div>
+      {{/js_compare}}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+
+<div class="pages ">
+  <div data-page="purchase-quantity" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-main link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.STORE.TICKET_QUANTITY}}</div>
+        <!--<div class="right"><a href="#" class="link save-ticket-quantity"></i><span>Continue</span></a></div>-->
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <div>&nbsp;</div>
+        <div>{{name}}</div>
+        <div>&nbsp;</div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-ticket-quantity">
+      <i class="icon icon-next"></i>
+    </a>
+   <div class="page-content">
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <form  id="ticket-quantity-form">
+            <ul>
+
+              {{#each tickets}}
+              {{#js_compare "this.origin == 0"}}
+              <li>
+                <!--<a href="#" class="item-link item-content edit-ticket-link" ticket-id="{{id}}">-->
+                <div class="item-content">
+
+                  <div class="item-inner row">
+                    <!--<div class="item-text">-->
+                    <div class="row">{{tickettype}} - ${{js "this.price.toFixed(2)"}}</div>
+                      <div class="item-title label">{{@global.language.STORE.QUANTITY}}</div>
+                      <div class="item-input">
+                        <input type="number" name="quantity-{{id}}-{{@index}}" class="ticket-limit" ticketLimit="{{limit}}" readonly quantity='{{js "this.quantity - this.soldquantity"}}' value="{{#if requestedqty}}{{requestedqty}}{{else}}0{{/if}}" id="quantity{{id}}">
+                      </div>
+                    <!--</div>-->
+                  </div>
+                </div>
+                <!--</a>-->
+              </li>
+              {{/js_compare}}
+              {{/each}}
+            </ul>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

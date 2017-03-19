@@ -15,10 +15,13 @@
           <ul>
             <li>
               <div class="row">
-                <div class="col-100">
+                <div class="col-85">
                   <div class="item-input">
                     <input type="text" placeholder="{{@global.language.ACCESS.ENTER_BARCODE}}" class="barcode">
                   </div>
+                </div>
+                <div class="col-15">
+                  <div class="icon-online"><i class="icon icon-internet"></i></div>
                 </div>
               </div>
             </li>
@@ -27,7 +30,7 @@
                 <div class="col-100">
                     <div class="accordion-item choose-tickets" id="select-gates-form">
                         <div class="scan-quantities accordion-item-toggle button button-round">
-                            <span class="small"><span class="scanned-quantity">0</span>/<span class="total-quantity">0</span>&nbsp;{{@global.language.ACCESS.TICKETS_SCANNED}}</span>
+                            <span class="small"><span class="scanned-quantity">0</span>&frasl;<span class="total-quantity">0</span>&nbsp;{{@global.language.ACCESS.TICKETS_SCANNED}}</span>
                         </div>
                         <div class="accordion-item-content">
                             {{#js_compare "this.tickets.length == 0"}}

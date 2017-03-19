@@ -1,0 +1,46 @@
+<div class="pages">
+  <div data-page="update-access-list" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event link icon-only back-button"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Scanner List</div>
+        <div class="right">
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange add-scanners">
+      <i class="icon icon-new"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      {{#js_compare "this.scanuser.length >0"}}
+
+      <div class="list-block media-list" id="scanner-list-form">
+        <ul>
+          {{#each scanuser}}
+
+            <li class="swipeout" scannerId="{{id}}">
+              <div class="swipeout-content item-content">
+                <div class="item-inner">
+                  <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                  <div class="item-subtitle">{{email}}</div>
+                  <input type="hidden" name="user-id" value={{id}}>
+                </div>
+              </div>
+              <div class="swipeout-actions-right">
+                <a href="#" class="swipeout-delete" data-confirm="Are you sure want to delete this scanner?" data-confirm-title="Delete?">Delete</a>
+              </div>
+            </li>
+
+          {{/each}}
+
+
+        </ul>
+      </div>
+      {{else}}
+      <div class="oops-image-load"></div>
+      <div class="oops-message-load">You have not authorized any scanners. Click the button below to begin.</div>
+      {{/js_compare}}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,170 @@
+<div class="pages">
+  <div data-page="create-new-user" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-home link icon-only back-button" > <i class="icon icon-back"></i></div>
+        <div class="center">
+          Create Profile
+        </div>
+        <div class="right">
+          <!--<a href="#" class="link create-user"><span>Save</span></a>
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-bars"></i></a>-->
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange link create-user">
+      <i class="icon icon-save"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div class="new-user-image-container"><img class="link edit-image new-user-image" id="user-image-id" src="{{@global.config.server}}/thumbnails/users/0/portrait.png"></div>
+      <form class="list-block" id="create-new-user-form">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>E-mail</div>
+                <div class="item-subtitle color-red form-error email"></div>
+                <div class="item-input">
+                  <input type="email" name="email" required placeholder="user@domain.com"/>
+                  <input type="hidden" name="imagepath" id="user-imagePath"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Password</div>
+                <div class="item-subtitle color-red form-error password"></div>
+                <div class="item-input">
+                  <input type="password" placeholder="Password" name="password" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Confirm Password</div>
+                <div class="item-subtitle color-red form-error password2"></div>
+                <div class="item-input">
+                  <input type="password" placeholder="Password" name="password2" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Title</div>
+                <div class="item-subtitle color-red form-error name1"></div>
+                <div class="item-input">
+                  <input type="text"  placeholder="Select One" name="name1" id="title-field" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Firstname</div>
+                <div class="item-subtitle color-red form-error name2"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="First Name" name="name2" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Middlename</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Middle Name" name="name3"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Lastname</div>
+                <div class="item-subtitle color-red form-error name4"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Last Name" name="name4" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Birth date</div>
+                <div class="item-subtitle color-red form-error birth"></div>
+                <div class="item-input">
+                  <input type="date" placeholder="Birth Date" name="birth" required id="new-birth-date" value="{{birthdate}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Phone</div>
+                <div class="item-subtitle color-red form-error mobilephone"></div>
+                <div class="item-input">
+                  <input type="tel" placeholder="Mobile Phone Number" name="mobilephone" required/>
+                </div>
+                <div class="item-text">{{@global.language.USER_AREA.INCLUDE_COUNTRY_CODE}}</div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Street</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Street" name="addressstreet"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>City</div>
+                <div class="item-subtitle color-red form-error addresscity"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="City" name="addresscity" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Country</div>
+                <div class="item-subtitle color-red form-error addresscountry"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Select One" name="addresscountry" id="new-user-country" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Postal Code</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Postal Code" name="postcode"/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

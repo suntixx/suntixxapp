@@ -1,0 +1,129 @@
+
+<div class="pages">
+  <div data-page="report" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left sliding"><a href="#" class="back link icon-only back-button"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.REPORTS.EVENT_REPORTS}}</div>
+        <div class="right">
+        </div>
+      </div>
+    </div>
+    <div class="page-content  pull-to-refresh-content">
+    <div class="pull-to-refresh-layer">
+      <div class="preloader"></div>
+      <div class="pull-to-refresh-arrow"></div>
+    </div>
+    {{#with this}}
+     {{> "eventPartial"}}
+   {{/with}}
+    {{#js_compare "this.boxOfficeTickets.length > 0"}}
+      <div class="card">
+        <div class="card-header">{{@global.language.REPORTS.BOXOFFICE_TICKETS}}</div>
+        <div class="card-content">
+          <div class="list-block media-list accordion-list">
+            <ul>
+              {{#each boxOfficeTickets}}
+              <li class="accordion-item" ticket-type-id="{{id}}">
+                <a href="#" class="item-link item-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{tickettype}}&nbsp;-&nbsp;{{js "this.price.toFixed(2)"}}{{../currency}}</div>
+                    </div>
+                    <div class="item-subtitle">
+                        <div class="row">
+                            <div class="col-50"><span class="graphs-label">{{@global.language.REPORTS.SOLD}}:</span>&nbsp;{{soldquantity}}/{{quantity}}</div>
+                            <div class="col-50"><span class="graphs-label">{{@global.language.REPORTS.SCANNED}}:</span>&nbsp;{{scannedquantity}}/{{soldquantity}}</div>
+                        </div>
+                    </div>
+                  </div>
+                </a>
+                <div class="accordion-item-content">
+                  <div class="row graphs">
+                    <div class="col-50 sold-report-details" ticket-type-id="{{id}}" id="sold-graph-{{id}}"></div>
+                    <div class="col-50 scanned-report-details" ticket-type-id="{{id}}" id="scanned-graph-{{id}}"></div>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+        <div class="card-footer">
+            <a href="#">&nbsp;</a>
+            <a href="#">&nbsp;</a>
+            <a href="#" class="show-full-boxoffice-report icon-only" event-id="{{@root.id}}"><i class="icon icon-reports orange"></i></a>
+        </div>
+      </div>
+      {{/js_compare}}
+      {{#js_compare "this.onlineTickets.length > 0"}}
+      <div class="card">
+        <div class="card-header">{{@global.language.REPORTS.ONLINE_TICKETS}}</div>
+        <div class="card-content">
+          <div class="list-block media-list accordion-list">
+            <ul>
+              {{#each onlineTickets}}
+              <li class="accordion-item" ticket-type-id="{{id}}">
+                <a href="#" class="item-link item-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{tickettype}}&nbsp;-&nbsp;{{js "this.price.toFixed(2)"}}{{../currency}}</div>
+                    </div>
+                    <div class="item-subtitle">
+                        <div class="row">
+                            <div class="col-50"><span class="graphs-label">{{@global.language.REPORTS.SOLD}}:</span>&nbsp;{{soldquantity}}/{{quantity}}</div>
+                            <div class="col-50"><span class="graphs-label">{{@global.language.REPORTS.SCANNED}}:</span>&nbsp;{{scannedquantity}}/{{soldquantity}}</div>
+                        </div>
+                    </div>
+                  </div>
+                </a>
+                <div class="accordion-item-content">
+                  <div class="row graphs">
+                    <div class="col-50 sold-report-details" ticket-type-id="{{id}}" id="sold-graph-{{id}}"></div>
+                    <div class="col-50 scanned-report-details" ticket-type-id="{{id}}" id="scanned-graph-{{id}}"></div>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{/js_compare}}
+      {{#js_compare "this.prePrintedTickets.length > 0"}}
+      <div class="card">
+        <div class="card-header">{{@global.language.REPORTS.PREPRINTED_TICKETS}}</div>
+        <div class="card-content">
+          <div class="list-block media-list accordion-list">
+            <ul>
+              {{#each prePrintedTickets}}
+              <li class="accordion-item" ticket-type-id="{{id}}">
+                <a href="#" class="item-link item-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{tickettype}}&nbsp;-&nbsp;{{js "this.price.toFixed(2)"}}{{../currency}}</div>
+                    </div>
+                    <div class="item-subtitle">
+                        <div class="row">
+                            <div class="col-50"><span class="graphs-label">{{@global.language.REPORTS.SOLD}}:</span>&nbsp;{{soldquantity}}/{{quantity}}</div>
+                            <div class="col-50"><span class="graphs-label">{{@global.language.REPORTS.SCANNED}}:</span>&nbsp;{{scannedquantity}}/{{soldquantity}}</div>
+                        </div>
+                    </div>
+                  </div>
+                </a>
+                <div class="accordion-item-content">
+                  <div class="row graphs">
+                    <div class="col-50 sold-report-details" ticket-type-id="{{id}}" id="sold-graph-{{id}}"></div>
+                    <div class="col-50 scanned-report-details" ticket-type-id="{{id}}" id="scanned-graph-{{id}}"></div>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{/js_compare}}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="pages ">
+  <div data-page="sales-reports" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">{{@global.language.STORE.SALES_REPORTS}}</div>
+      </div>
+    </div>
+    <div class="page-content" id="allSalesTab">
+      {{#js_compare "this.reports.sales.length > 0"}}
+      <div class="card event-details">
+        <div class="header">
+          <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{event.id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border"></div>
+        </div>
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul>
+              {{#each reports.sales}}
+              <li>
+                <a href="#" class="item-link item-content purchase-details" purchase="{{id}}">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{fullName}}</div>
+                      <div class="item-after">{{ticketsquantity}}</div>
+                    </div>
+                    <div class="item-subtitle color-gray">{{email}}</div>
+                    <div class="item-text">{{purchasedate}}</div>
+                  </div>
+                </a>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <div style="text-align:center;width:75vw;margin:40% auto 10% auto; font-size:18px">{{@global.language.REPORTS.NO_SALE_REPORTS}}</div>
+      {{/js_compare}}
+    </div>
+ </div>
+</div>

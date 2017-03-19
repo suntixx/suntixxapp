@@ -1536,7 +1536,7 @@ app.onPageAfterAnimation('update-venue-details', function(page) {
       }
     });
   }, function (err) {
-  alert('geolocation error '+err);
+  console.log('geolocation error '+err);
 }, { enableHighAccuracy: true, timeout: 30000 });
 
 
@@ -1576,8 +1576,8 @@ app.onPageAfterAnimation('update-venue-details', function(page) {
       area: "venue",
       data: newDetails,
     };
-    var data = eventsService.generateeventService.updateEventRequest(selectedEventLocal, options);
-    eventService.updateEvent(data, 'views/events/event.html' );
+    var data = eventsService.generateUpdateEventRequest(selectedEventLocal, options);
+    eventsService.updateEvent(data, 'views/events/event.html' );
   });
 
 });
@@ -1781,7 +1781,7 @@ app.onPageInit('update-event-details', function(page) {
     };
     var data = eventsService.generateUpdateEventRequest(selectedEventLocal, options);
     //alert(JSON.stringify(data));
-    eventService.updateEvent(data, 'views/events/event.html');
+    eventsService.updateEvent(data, 'views/events/event.html');
   });
 
 });
@@ -1822,7 +1822,7 @@ app.onPageInit('update-pos-list', function(page) {
       data: posFormData,
     };
     var data = eventsService.generateUpdateEventRequest(selectedEventLocal, options);
-    eventService.updateEvent(data);
+    eventsService.updateEvent(data);
     //alert(JSON.stringify(result));
   });
 });

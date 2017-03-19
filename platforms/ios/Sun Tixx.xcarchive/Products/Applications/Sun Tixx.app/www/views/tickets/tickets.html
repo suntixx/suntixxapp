@@ -1,0 +1,38 @@
+
+<div class="pages">
+  <div data-page="tickets-list" class="page  navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-purchases back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">Tickets</div>
+      </div>
+    </div>
+
+   <div class="page-content">
+   {{#with event}}
+     {{> "eventPartial"}}
+   {{/with}}
+      <div class="card ticket-details">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul>
+              {{#each tickets}}
+              <li>
+                <a href="#" class="item-link item-content ticket-link" code="{{code}}" ticket-index="{{@index}}">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{tickettype}} - ${{js "this.price.toFixed(2)"}} {{@root.event.currency}}</div>
+                    </div>
+                    <div class="item-subtitle">{{nameonticket}}</div>
+                    <div class="item-text"><span>Tickets Id: {{id}}</span></div>
+                  </div>
+                </a>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

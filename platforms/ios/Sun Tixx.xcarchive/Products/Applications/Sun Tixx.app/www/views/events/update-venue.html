@@ -1,0 +1,94 @@
+
+<div class="pages">
+  <div data-page="update-venue-details" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Venue Details</div>
+        <div class="right">
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-event">
+      <i class="icon icon-save"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div id="venue-map"></div>
+      <form class="list-block" id="update-venue-details-form">
+        <ul>
+          <li>
+            <a href="#" class="item-link smart-select" data-searchbar="true" data-searchbar-placeholder="Approved Venues" data-back-on-select="true">
+              <select name="venue-select" id="venue-select">
+                <option value="0">Custom</option>
+                {{#each venues.Venue_Names}}
+                  <option value={{value}}>{{label}}</option>
+                {{/each}}
+              </select>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">Approved Venues</div>
+                  <div class="item-after smart-select-value"></div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Venue (Name or Address)</div>
+                <div class="item-subtitle color-red form-error venue"></div>
+                <div class="item-input">
+                  <input type="text" name="venue" id="venue-address" value="{{venue}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>City</div>
+                <div class="item-subtitle color-red form-error city"></div>
+                <div class="item-input">
+                  <input type="text" name="city" id="venue-city" value="{{city}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Country</div>
+                <div class="item-subtitle color-red form-error country"></div>
+                <div class="item-input">
+                  <input type="text"  name="country" id="venue-country" value="{{country}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Venue Type</div>
+                <div class="item-subtitle color-red form-error venuetype"></div>
+                <div class="item-input">
+                  <input type="text" name="venuetype" id="venue-type" value="{{VenueTypeName}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>Map Link</div>
+                <div class="item-input">
+                  <input type="text" readonly name="maplink" id="venue-maplink" value="{{maplink}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

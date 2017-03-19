@@ -262,7 +262,7 @@ app.onPageInit('purchases', function (page) {
     $$(document).on('accordion:open', '.wallet-item',  function () {
       var eventId = $$(this).attr('event-id');
       $$(this).find('.add-event-id').attr('event-id', eventId);
-      $$(document).find('.wallet-item').each(function(item) {
+      $$(document).find('.wallet-item').each(function() {
         if ($$(this).attr('event-id') != eventId)
           app.accordionClose($$(this));
       });
@@ -331,7 +331,15 @@ app.onPageInit('purchases', function (page) {
 
 
 
-    var toolbarHtml = null;;
+    var toolbarHtml = null;
+    var closeEditToolbar = function () {
+      $$(document).find('.ticket-selected').removeClass('ticket-selected');
+      $$(document).find('.event-selected').removeClass('event-selected');
+      ticketsService.hideTools(toolbarHtml, function() {
+        toolbarHtml = null;
+      });
+    };
+
     $$(document).on('taphold', '.wallet-ticket-link', function() {
       var ticketId = $$(this).attr('ticket-id');
       var eventId = $$(this).attr('event-id');
@@ -352,8 +360,9 @@ app.onPageInit('purchases', function (page) {
     $$(document).on('taphold', '.wallet-open', function() {
       var eventId = $$(this).attr('event-id');
       $$(document).find('.ticket-selected').removeClass('ticket-selected');
-      app.accordionClose('.wallet-event-'+eventId);
+      app.accordionClose('.wallet-item');
       $$(document).find('.wallet-event-'+eventId+' .card-content-inner').toggleClass('event-selected');
+      //$$(document).find('.wallet-event-'+eventId+' .wallet-item-content .wallet-ticket').toggleClass('ticket-selected');
       var selectedQuantity = $$(document).find('.event-selected').length;
       if ( selectedQuantity > 0) {
         if (toolbarHtml == null) {
@@ -367,17 +376,15 @@ app.onPageInit('purchases', function (page) {
       }
     });
 
-
-
-
-
-    $$(document).on('click', '.close-edit-toolbar', function() {
-      $$(document).find('.ticket-selected').removeClass('ticket-selected');
-      $$(document).find('.event-selected').removeClass('event-selected');
-      ticketsService.hideTools(toolbarHtml, function() {
-        toolbarHtml = null;
-      });
+    $$(document).on('click', '.wallet-open', function() {
+      if ($$(document).find('.event-selected').length > 0) {
+        app.accordionClose('.wallet-item');
+      } else if ($$(document).find('.ticket-selected').length > 0) {
+        closeEditToolbar();
+      }
     });
+
+    $$(document).on('click', '.close-edit-toolbar', closeEditToolbar);
 
     $$(document).on('click', '.delete-item', function() {
 
@@ -407,36 +414,49 @@ app.onPageInit('purchases', function (page) {
             });
             $$(document).find('.ticket-quantity-'+eventItem.id).html(eventItem.wallet.length);
             thisItem.remove();
+
           }
         });
+        if (callback) callback();
       };
 
-      var removeEvent = function(thisItem) {
-        myWallet = _.filter(myWallet, function(item) {
-          return item.id != thisItem.id;
-        });
-        $$(document).find('.wallet-event-'+thisItem.id).remove();
-      };
-
-      if ($$(document).find('.event-selected').length > 0) {
+      var removeEvents = function(callback) {
+        var thisItem;
         $$(document).find('.event-selected').each(function() {
-          var eventItem = getWalletEvent($$(this).attr('event-id'));
-          removeTickets(eventItem, function() {
-            removeEvent(eventItem);
+          thisItem = getWalletEvent($$(this).attr('event-id'));
+          async.eachSeries(thisItem.wallet, function(item, seriesCallback) {
+            if (item.image) {
+              window.resolveLocalFileSystemURL(item.image, function(file) {
+                file.remove(function() {
+                  console.log(item.image + " deleted");
+                },onError);
+              }, onError);
+            }
+            seriesCallback();
+          }, function(err) {
+            myWallet = _.filter(myWallet, function(item) {
+              return item.id != thisItem.id;
+            });
+            $$(document).find('.wallet-event-'+thisItem.id).remove();
           });
         });
+        if (callback) callback();
+      };
+
+      var hideToolBar = function() {
         ticketsService.hideTools(toolbarHtml, function() {
           toolbarHtml = null;
           storage.setItem('myWallet', JSON.stringify(myWallet));
         });
+      };
 
+      if ($$(document).find('.event-selected').length > 0) {
+        //$$(document).find('.event-selected').each(function() {
+          //var eventItem = getWalletEvent($$(this).attr('event-id'));
+        removeEvents(hideToolBar);
+        //});
       } else {
-        removeTickets(getWalletEvent($$(this).attr('event-id')), function() {
-          tticketsService.hideTools(toolbarHtml, function() {
-            toolbarHtml = null;
-            storage.setItem('myWallet', JSON.stringify(myWallet));
-          });
-        });
+        removeTickets(getWalletEvent($$(this).attr('event-id')), hideToolBar);
       }
 
 
@@ -577,7 +597,7 @@ app.onPageInit('purchases', function (page) {
           navbarTemplate: '<div class="navbar">'+
                             '<div class="navbar-inner">'+
                               '<div class="left sliding">'+
-                                '<a href="#" class="link close-popup icon-only">'+
+                                '<a href="#" class="link icon-only cancel-select-event">'+
                                   '<i class="icon icon-back"></i>'+
                                 '</a>'+
                               '</div>'+
@@ -627,9 +647,14 @@ app.onPageInit('purchases', function (page) {
                 thisEvent.wallet = [];
               }
               autocomplete.close();
-
+              findEventPopup.destroy();
               app.popup('.wallet-enter-barcode-popup');
 
+            });
+
+            autocomplete.page.on('click', '.cancel-select-event', function() {
+              autocomplete.close();
+              findEventPopup.destroy();
             });
           },
         });

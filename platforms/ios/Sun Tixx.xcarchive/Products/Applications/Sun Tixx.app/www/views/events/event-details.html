@@ -1,0 +1,155 @@
+<div class="pages">
+  <div data-page="update-event-details" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.EVENTS.EVENT_DETAILS}}</div>
+        <div class="right">
+          <!--<a href="#" class="link save-event" event-id="{{id}}"></i><span>Save</span></a>-->
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-event" event-id="{{id}}">
+      <i class="icon icon-save"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div class="event-details">
+        <img class="link edit-image event-image" src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" id="edit-event-image"/>
+      </div>
+      <form class="list-block" id="update-event-details-form">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.NAME}}</div>
+                <div class="item-subtitle color-red form-error name"></div>
+                <div class="item-input">
+                  <input type="text" name="name" value="{{name}}" required/>
+                  <input type="hidden" name="imageLandscapePath" value=" " id="edit-event-image-path"/>
+                  <input type="hidden" name="id" value="{{id}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">{{@global.language.EVENTS.HEADLINE}}</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Headline" name="headline" value="{{headline}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">{{@global.language.EVENTS.CATEGORY}}</div>
+                <div class="item-input">
+                  <input type="text" name="category" id="event-category" value="{{category.name}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">{{@global.language.EVENTS.PRIVATE}}</div>
+                <div class="item-input">
+                  <label class="label-switch">
+                    <input type="checkbox" name="private" {{#js_compare "this.status_id == 19"}}checked="checked"{{/js_compare}}>
+                    <div class="checkbox"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.DESCRIPTION}}</div>
+                <div class="item-subtitle color-red form-error description"></div>
+                  <div class="item-input">
+                   <textarea type="text" name="description"  required>{{description}}</textarea>
+                 </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.CURRENCY}}</div>
+                <div class="item-input">
+                  <input type="text" name="currency" value="{{currency}}" id="currency">
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.START_DATE}}</div>
+                <div class="item-subtitle color-red form-error start"></div>
+                <div class="item-input">
+                  <input type="datetime-local" name="start" value="{{js "this.starttime.substring(0,19)"}}" id="start" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.END_DATE}}</div>
+                <div class="item-subtitle color-red form-error end"></div>
+                <div class="item-input">
+                  <input type="datetime-local" name="end" value="{{js "this.endtime.substring(0,19)"}}"  required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">{{@global.language.EVENTS.RESTRICTIONS}}</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Please Select" name="restriction" id="event-restriction" value="{{restrictions.name}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">{{@global.language.EVENTS.DRESS_CODE}}</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Please Select" name="dresscode" id="event-dresscode" value="{{dresscode.name}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Facebook</div>
+                <div class="item-input">
+                  <input type="text" placeholder="https://" name="facebook" value="{{facebook}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Twitter</div>
+                <div class="item-input">
+                  <input type="text" placeholder="https://" name="twitter" value="{{twitter}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

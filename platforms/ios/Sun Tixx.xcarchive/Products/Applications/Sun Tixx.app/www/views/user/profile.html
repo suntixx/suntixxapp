@@ -1,0 +1,43 @@
+<div class="pages">
+  <div data-page="profile" class="page navbar-fixed  tabbar-labels-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+        </div>
+        <div class="center profile-page-title">
+          {{@global.language.USER_AREA.PROFILE}}
+        </div>
+        <div class="right">
+          <a href="#" class="link open-settings icon-only"> <i class="icon icon-settings"></i></a>
+          <a href="#" data-panel="right" class="link open-panel icon-only"> <i class="icon icon-submenu"></i></a>
+        </div>
+      </div>
+    </div>
+    {{> 'profileNavBarPartial'}}
+    <div class="toolbar tabbar tabbar-labels">
+      <div class="toolbar-inner">
+        <a href="#userDetailsTab" class="tab-link active show-details"><i class="icon icon-profile"></i><span class="tabbar-label">{{@global.language.USER_AREA.DETAILS}}</span></a>
+        <a href="#userFriendsTab" class="tab-link show-friends"><i class="icon icon-friends"></i><span class="tabbar-label">{{@global.language.USER_AREA.FRIENDS}}</span></a>
+        <!--<a href="#userActivityTab" class="tab-link show-activity"><i class="icon icon-events"></i><span class="tabbar-label">{{@global.language.USER_AREA.ACTIVITY}}</span></a>
+        <a href="#userSettingsTab" class="tab-link show-settings"><i class="icon icon-settings"></i><span class="tabbar-label">{{@global.language.USER_AREA.SETTINGS}}</span></a>-->
+      </div>
+    </div>
+    <div class="tabs-swipeable-wrap">
+      <div class="tabs">
+        <div class="page-content tab active" id="userDetailsTab">
+          <div class="progressbar-overlay"></div>
+          <div class="card profile">
+          </div>
+        </div>
+        <div class="page-content tab" id="userFriendsTab">
+
+        </div>
+        <!--<div class="page-content tab" id="userActivityTab">
+        </div>
+        <div class="page-content tab" id="userSettingsTab">
+
+        </div>-->
+      </div>
+    </div>
+  </div>
+</div>

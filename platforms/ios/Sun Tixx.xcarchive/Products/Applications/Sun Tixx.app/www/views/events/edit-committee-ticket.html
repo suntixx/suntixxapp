@@ -1,0 +1,66 @@
+
+<div class="pages">
+  <div data-page="edit-committee-ticket" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-button back icon-only link"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Edit Ticket</div>
+      <!--  <div class="right"><a href="#" class="link save-ticket" ticket-id="{{id}}"></i><span>Save</span></a></div>-->
+      </div>
+    </div>
+    <div class="toolbar premium">
+      <div class="toolbar-inner">
+        <div class="premium-service">Premium Service</div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange update-committee-ticket" ticket-id="{{id}}">
+      <i class="icon icon-save"></i>
+    </a>
+   <div class="page-content">
+
+     <form class="list-block" id="edit-commticket-form">
+       <ul>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Category</div>
+               <div class="item-input">
+                 <input type="text" value="Paid" readonly name="category" id="ticket-category"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li class="align-top">
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Ticket Type</div>
+               <div class="item-input">
+                 <input type="text" value="{{tickettype}}" name="tickettype" id="tickettype"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Price</div>
+               <div class="item-input">
+                 <input type="number" value="{{price}}" name="price" id="ticketprice"/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Quantity</div>
+               <div class="item-text ">Quantities are added per committee member</div>
+             </div>
+           </div>
+         </li>
+       </ul>
+     </form>
+
+   </div>
+ </div>
+</div>

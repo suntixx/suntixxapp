@@ -1,0 +1,50 @@
+
+<div class="pages">
+  <div data-page="sell-tickets-list" class="page  navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-events back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center">{{@global.language.TICKETS.TICKETS}}</div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange start-selling">
+      <i class="icon icon-sell"></i>
+    </a>
+   <div class="page-content">
+   {{#with event}}
+     {{> "eventPartial"}}
+   {{/with}}
+      <div class="card ticket-details" id="select-tickets-form">
+        <div class="card-header user-announcement">{{@global.language.TICKETS.CASH_PAYMENT_ANNOUNCMENT}}</div>
+        <div class="card-content">
+          {{#js_compare "this.tickets.length > 0"}}
+          <div class="list-block media-list">
+            <ul>
+              {{#each tickets}}
+              <li>
+                <label class="label-checkbox item-content">
+                  <!-- Checked by default -->
+                  <input type="checkbox" name="commticket-{{id}}" value="{{id}}" {{#if enable}}{{else}}disabled{{/if}} {{#js_compare "this.soldquantity >= this.quantity"}}disabled{{/js_compare}} {{#if chosen}}checked="checked"{{/if}}>
+                  <div class="item-media">
+                    <i class="icon icon-form-checkbox"></i>
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title">{{ticket.tickettype}}&nbsp;-&nbsp;${{js "this.ticket.price.toFixed(2)"}}&nbsp;{{@root.event.currency}}</div>
+                    <div class="item-subtitle">{{soldquantity}}/{{quantity}}&nbsp;{{@global.language.TICKETS.TICKETS_SOLD}}</div>
+                    {{#if enable}}{{else}}<div class="item-text color-red">{{@global.language.TICKETS.YOUR_TICKETS_DISABLED}}</div>{{/if}}
+                  </div>
+
+
+                </label>
+              </li>
+              {{/each}}
+            </ul>
+            {{else}}
+            {{@global.language.TICKETS.NO_TICKETS_ASSIGNED_TO_YOU}}
+          {{/js_compare}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

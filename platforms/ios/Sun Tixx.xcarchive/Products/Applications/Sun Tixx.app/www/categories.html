@@ -1,0 +1,34 @@
+<div class="pages">
+  <div data-page="categories" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" data-popover=".event-categories" class="link open-popover icon-only"><i class="icon icon-suntixx"></i><i class="icon icon-down"></i></a>
+        </div>
+        <div class="right">
+          {{#unless @global.user}}<a href="#" class="link icon-only login"> <i class="icon icon-login"></i></a>{{/unless}}
+          <a href="#" class="link icon-only open-search"> <i class="icon icon-search"></i></a>
+        </div>
+      </div>
+    </div>
+    {{> "homeNavBarPartial"}}
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <div>&nbsp;</div>
+        <div>{{categoryName}}</div>
+        <div>&nbsp;</div>
+      </div>
+    </div>
+    <div class="page-content pull-to-refresh-content infinite-scroll category-scroll hide-navbar-on-scroll" data-distance="100">
+      <div class="pull-to-refresh-layer">
+        <div class="preloader"></div>
+        <div class="pull-to-refresh-arrow"></div>
+      </div>
+      <div id="category">
+        <div>
+          <div id="page-loading"><span style="width:42px; height:42px" class="preloader"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+
+<div class="pages navbar-fixed">
+  <!-- Page, data-page contains page name-->
+  <div data-page="update-pos-list" class="page">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-event link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">POS List</div>
+        <div class="right">
+          <!--<a href="#" class="link save-pos" event-id="{{id}}"></i><span>Save</span></a>-->
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-pos">
+      <i class="icon icon-save"></i>
+    </a>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div class="content-block-title">Update POS List</div>
+      <div class="list-block" id="pos-list-form">
+        <ul>
+          <li>
+            <a href="#" class="item-link smart-select" data-searchbar="true" data-searchbar-placeholder="Search POS" data-back-text="Select">
+              <select name="posList" id="pos-select" multiple>
+                {{#each posFullList}}
+                  <option value={{id}} {{#if selected}}selected{{/if}}>{{name2}}&nbsp;{{name4}}</option>
+                {{/each}}
+              </select>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">POS</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li class="item-divider">Selected POS Locations</li>
+          <div id="pos-list">
+          {{#each posUser}}
+
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">{{name2}}&nbsp;{{name4}}</div>
+                </div>
+              </div>
+            </li>
+
+          {{/each}}
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

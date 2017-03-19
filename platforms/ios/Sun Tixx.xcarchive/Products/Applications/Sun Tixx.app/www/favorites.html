@@ -1,0 +1,146 @@
+<div class="pages">
+  <div data-page="favorites" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="link back-home back-button icon-only"> <i class="icon icon-back"></i></a>
+        </div>
+        <div class="center">{{@global.language.HOMEPAGE.FAVORITES}}</div>
+        <div class="right">
+          {{#unless @global.user}}<a href="#" class="link icon-only login"> <i class="icon icon-login"></i></a>{{/unless}}
+          <a href="#" class="link icon-only open-favorites"> <i class="icon icon-favorites"></i></a>
+          <a href="#" class="link icon-only open-search"> <i class="icon icon-search"></i></a>
+        </div>
+      </div>
+      <div class="toolbar tabbar">
+        <div class="toolbar-inner">
+          <a href="#interestedEventsTab" class="button active tab-link">{{@global.language.EVENTS.INTERESTED}}</a>
+          <a href="#attendingEventsTab" class="button tab-link">{{@global.language.EVENTS.ATTENDING}}</a>
+        </div>
+      </div>
+    </div>
+    {{> "homeNavBarPartial"}}
+    <div class="tabs-swipeable-wrap">
+      <div class="tabs">
+        <div class="page-content tab pull-to-refresh-content infinite-scroll favorite-scroll" id="interestedEventsTab">
+          <div class="pull-to-refresh-layer">
+            <div class="preloader"></div>
+            <div class="pull-to-refresh-arrow"></div>
+          </div>
+          <div id="interested">
+            {{#js_compare "this.interested.length > 0"}}
+              {{#each interested}}
+                <div class="card event-details">
+                  <a href="#" class="link interesetd-event-link" event-id="{{id}}">
+                  <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+                  <div class="card-header">
+                    <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border cache-image"><div class="category">{{category.name}}</div></div>
+                  </div>
+                    <div class="card-content">
+
+
+                    <div class="card-content-inner">
+                      <div class="event-name">{{name}}</div>
+                      <div class="color-gray hosted-by"><span class="small">by</span>
+
+                          {{#js_compare "this.hostedby == 0"}}
+                            {{user.fullname}}
+                          {{else}}
+                              {{#js_compare "this.hostedby == 1"}}
+                                {{user.organization.name}}
+                              {{else}}
+                                {{hostedby}}
+                              {{/js_compare}}
+                          {{/js_compare}}
+
+                      </div>
+                      <span class="color-black">{{englishtime starttime}}</span><br>
+                      <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+                    </div>
+                  </div>
+                  </a>
+                  <div class="card-footer">
+                    <div class="prices">
+                      {{#js_compare "this.LowestPrice > 0"}}
+                        {{#js_compare "this.LowestPrice == this.HighestPrice"}}
+                        {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                        {{else}}
+                          {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}} - {{js "this.HighestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                        {{/js_compare}}
+                      {{/js_compare}}
+                    </div>
+                      <a href="#" class="link share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
+                      {{#if hasOnlineTickets}}<a href="#" class="link purchase-online-tickets icon-only"  event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/if}}
+                    <!--</div>-->
+                  </div>
+                </div>
+              {{/each}}
+            {{else}}
+              <div class="oops-image"></div>
+              <div class="oops-message">{{@global.language.HOMEPAGE.NO_FAVORIRES}}</div>
+            {{/js_compare}}
+          </div>
+        </div>
+        <div class="page-content tab pull-to-refresh-content infinite-scroll favorite-scroll" id="attendingEventsTab">
+          <div class="pull-to-refresh-layer">
+            <div class="preloader"></div>
+            <div class="pull-to-refresh-arrow"></div>
+          </div>
+          <div id="attending">
+            {{#js_compare "this.attending.length > 0"}}
+              {{#each attending}}
+                <div class="card event-details">
+                  <a href="#" class="link attending-event-link" event-id="{{id}}">
+                  <!--<img src="{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png" valign="bottom" class="lazy color-white no-border" width="100%"/>-->
+                  <div class="card-header">
+                    <div style="background-image:url('{{@global.config.server}}/thumbnails/events/{{id}}/landscape.png')" valign="bottom" class="lazy event-image color-white no-border cache-image"><div class="category">{{category.name}}</div></div>
+                  </div>
+                    <div class="card-content">
+
+
+                    <div class="card-content-inner">
+                      <div class="event-name">{{name}}</div>
+                      <div class="color-gray hosted-by"><span class="small">by</span>
+
+                          {{#js_compare "this.hostedby == 0"}}
+                            {{user.fullname}}
+                          {{else}}
+                              {{#js_compare "this.hostedby == 1"}}
+                                {{user.organization.name}}
+                              {{else}}
+                                {{hostedby}}
+                              {{/js_compare}}
+                          {{/js_compare}}
+
+                      </div>
+                      <span class="color-black">{{englishtime starttime}}</span><br>
+                      <span class="color-gray capitalize">{{venue}}</span><br><span class="color-gray capitalize">{{city}}, {{country}}</span>
+                    </div>
+                  </div>
+                  </a>
+                  <div class="card-footer">
+                    <div class="prices">
+                      {{#js_compare "this.LowestPrice > 0"}}
+                        {{#js_compare "this.LowestPrice == this.HighestPrice"}}
+                        {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                        {{else}}
+                          {{js "this.LowestPrice.toFixed(2)"}}&nbsp;{{currency}} - {{js "this.HighestPrice.toFixed(2)"}}&nbsp;{{currency}}
+                        {{/js_compare}}
+                      {{/js_compare}}
+                    </div>
+                      <a href="#" class="link share-event icon-only" event-id="{{id}}"><i class="icon icon-share-orange"></i></a>
+                      {{#if hasOnlineTickets}}<a href="#" class="link purchase-online-tickets icon-only"  event-id="{{id}}"><i class="icon icon-purchase-orange"></i></a>{{/if}}
+                    <!--</div>-->
+                  </div>
+                </div>
+              {{/each}}
+            {{else}}
+              <div class="oops-image"></div>
+              <div class="oops-message">{{@global.language.HOMEPAGE.NO_FAVORIRES}}</div>
+            {{/js_compare}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

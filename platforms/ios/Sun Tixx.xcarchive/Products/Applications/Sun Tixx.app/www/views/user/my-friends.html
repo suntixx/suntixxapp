@@ -1,0 +1,38 @@
+<div class="pages">
+  <div data-page="my-friends" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="back-profile link icon-only back-button" > <i class="icon icon-back"></i>
+        </div>
+        <div class="center">
+          {{@global.language.USER_AREA.MY_FRIENDS}}
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="card">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul>
+              {{#each friends}}
+              <li class="item-content link start-chat" friend-id="{{id}}">
+                <div class="item-media">
+                  <img src="..." width="44">
+                </div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">{{fullname}}</div>
+                    <div class="item-subtitle">{{#if online}}{{@global.language.USER_AREA.ONLINE}}{{else}}{{@global.language.USER_AREA.OFFLINE}}{{/if}}{{/if}}</div>
+                    <div class="item-after"><span class="badge">{{unread}}</span></div>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

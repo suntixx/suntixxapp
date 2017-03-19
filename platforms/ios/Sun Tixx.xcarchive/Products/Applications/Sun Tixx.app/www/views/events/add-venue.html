@@ -1,0 +1,108 @@
+
+<div class="pages ">
+  <div data-page="add-venue" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Venue Details</div>
+        <!--<div class="right"><a href="#" class="link save-new-event"></i><span>Save</span></a></div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-new-event">
+      <i class="icon icon-save"></i>
+    </a>
+   <div class="page-content">
+     <div id="venue-map"></div>
+     <form class="list-block" id="add-venue-form">
+       <ul>
+         <li>
+           <a href="#" class="item-link smart-select" data-searchbar="true" data-searchbar-placeholder="Search Venues" data-back-on-select="true">
+             <select name="venue-select" id="venue-select">
+               <option value="0">Custom</option>
+               {{#each venues.Venue_Names}}
+                 <option value={{value}}>{{label}}</option>
+               {{/each}}
+             </select>
+             <div class="item-content">
+               <div class="item-inner">
+                 <div class="item-title">Search Available Venues</div>
+               </div>
+             </div>
+           </a>
+         </li>
+         <li>
+           <div class="item-content" id="map-canvas">
+             <div class="item-inner"></div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.NAME}}</div>
+               <div class="item-subtitle color-red form-error name"></div>
+               <div class="item-input">
+                 <input type="text" placeholder="Venue Name" name="name" id="venue-name" required/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li class="align-top">
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.STREET}}</div>
+               <div class="item-subtitle color-red form-error address"></div>
+               <div class="item-input">
+                 <input type="text" placeholder="Street Address" name="address" id="venue-address" value="{{address}}" required/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.CITY_FIELD}}</div>
+               <div class="item-subtitle color-red form-error city"></div>
+               <div class="item-input">
+                 <input type="text" placeholder="" name="city" id="venue-city" value="{{city}}" required/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.COUNTRY_FIELD}}</div>
+               <div class="item-subtitle color-red form-error country"></div>
+               <div class="item-input">
+                 <input type="text" placeholder="" name="country" id="venue-country" value="{{country}}" required/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label"><i class="icon icon-required"></i>Venue Type</div>
+               <div class="item-subtitle color-red form-error venuetype"></div>
+               <div class="item-input">
+                 <input type="text" placeholder="" name="venuetype" id="venue-type" value="{{#if venuetype}}{{venuetype.name}}{{/if}}" required/>
+               </div>
+             </div>
+           </div>
+         </li>
+         <li>
+           <div class="item-content">
+             <div class="item-inner">
+               <div class="item-title label">Maplink</div>
+               <div class="item-input">
+                 <input type="text" placeholder="https://" name="maplink" id="venue-maplink"/>
+               </div>
+             </div>
+           </div>
+         </li>
+       </ul>
+     </form>
+
+   </div>
+ </div>
+</div>

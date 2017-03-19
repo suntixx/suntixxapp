@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: cdvfile: gap:   https://*.suntixx.com:3000  https://*.suntixx.com  https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; connect-src 'self' https://*.suntixx.com ws://*.suntixx.com wss://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000; script-src https://api.instagram.com https://maps.googleapis.com/ https://maps.google.com/ https://*.suntixx.com 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' cdvfile: data: gap: android-webview-video-poster: android-webview: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.google.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: cdvfile: gap:   https://*.suntixx.com:3000  https://*.suntixx.com  https://*.googleapis.com/ https://*.google.com/ https://*.instagram.com/ https://*.facebook.com https://*.twitter.com; connect-src 'self' https://*.suntixx.com ws://*.suntixx.com wss://*.suntixx.com ws://181.188.62.63:3000 http://181.188.62.63:3000; script-src https://api.instagram.com https://maps.googleapis.com/ https://maps.google.com/ https://*.suntixx.com 'self' 'unsafe-inline' 'unsafe-eval';img-src 'self' filesystem: cdvfile: data: gap: android-webview-video-poster: android-webview: https://*.suntixx.com https://*.cdninstagram.com https://*.googleapis.com/ https://*.google.com/ https://*.gstatic.com/; media-src 'self' gap: https://*.cdninstagram.com; font-src 'self' https://*.googleapis.com/ https://*.gstatic.com">
 
     <title>Sun Tixx</title>
     <!-- Path to Framework7 Library CSS-->
@@ -1038,7 +1038,7 @@
                   <i class="icon icon-success"></i>
                 </div>
                 <p class="buttons-row">
-                  <a href="#" class="button buttons home close-popup">{{@global.language.STORE.HOME}}</a>
+                  <a href="#" class="button buttons return-home close-popup">{{@global.language.STORE.HOME}}</a>
                   <a href="#" class="button buttons sell-more close-popup">{{@global.language.STORE.SELL_MORE}}</a>
                 </p>
               </div>
@@ -1065,7 +1065,7 @@
                   <i class="icon icon-error"></i>
                 </div>
                 <p class="buttons-row">
-                  <a href="#" class="button buttons home close-popup">{{@global.language.OTHER.CANCEL}}</a>
+                  <a href="#" class="button buttons return-home close-popup">{{@global.language.OTHER.CANCEL}}</a>
                   <a href="#" class="button buttons retry close-popup">{{@global.language.STORE.RETRY}}</a>
                 </p>
               </div>
@@ -1092,7 +1092,7 @@
                   <i class="icon icon-success"></i>
                 </div>
                 <p class="buttons-row">
-                  <a href="#" class="button buttons home close-popup">{{@global.language.OTHER.CANCEL}}</a>
+                  <a href="#" class="button buttons return-home close-popup">{{@global.language.OTHER.CANCEL}}</a>
                   <a href="#" class="button buttons force-sale close-popup">{{@global.language.OTHER.CONTINUE}}</a>
                 </p>
               </div>

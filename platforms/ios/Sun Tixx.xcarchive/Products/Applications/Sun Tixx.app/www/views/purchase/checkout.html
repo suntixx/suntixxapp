@@ -1,0 +1,68 @@
+
+<div class="pages">
+  <div data-page="purchase-checkout" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link back-button icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.STORE.CHECKOUT}}</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <div>&nbsp;</div>
+        <div>{{event.name}}</div>
+        <div>&nbsp;</div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange confirm-sale" id="paypal-pay-button">
+      <i class="icon icon-pay"></i>
+    </a>
+    <div class="page-content">
+
+      <div class="card">
+        <div class="card-content">
+          <div class=" card-content-inner list-block media-list">
+            <ul>
+              <li>
+                {{#each cart}}
+                <div class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{tickettype}}</div>
+                      <div class="item-after">{{js "(this.requestedqty * this.price).toFixed(2)"}}</div>
+                    </div>
+                    <div class="item-subtitle">{{requestedqty}} x {{js "this.price.toFixed(2)"}}</div>
+                    <div class="item-text color-gray shopping-cart">
+                      {{#each names}}
+                        {{this}}{{#unless @last}},{{/unless}}
+                      {{/each}}
+                    </div>
+                  </div>
+                </div>
+                {{/each}}
+              </li>
+            </ul>
+            <div class="row ">
+              <div class="col-60"style="text-align:right">{{@global.language.STORE.SUB_TOTAL}}</div>
+              <div class="col-40" style="text-align:right">${{js "this.subTotal.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+            </div>
+            <div class="row ">
+              <div class="col-60" style="text-align:right">{{@global.language.STORE.SERVICE_FEE}}</div>
+              <div class="col-40" style="text-align:right">${{js "this.serviceFee.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+            </div>
+            <div class="row ">
+              <div class="col-60"style="text-align:right">{{@global.language.STORE.TOTAL}}</div>
+              <div class="col-40" style="text-align:right">${{js "this.total.toFixed(2)"}}&nbsp;{{event.currency}}</div>
+            </div>
+            <div class="row ">
+              <div class="col-30">{{@global.language.STORE.RATE}}:&nbsp;{{exchangeRate}}</div>
+              <div class="col-30" style="text-align:right">{{@global.language.STORE.TOTAL}}&nbsp;{{@global.language.STORE.CURR_USD}}</div>
+              <div class="col-40" style="text-align:right">${{totalUSD}}&nbsp;{{@global.language.STORE.CURR_USD}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+     </div>
+    </div>
+  </div>
+</div>

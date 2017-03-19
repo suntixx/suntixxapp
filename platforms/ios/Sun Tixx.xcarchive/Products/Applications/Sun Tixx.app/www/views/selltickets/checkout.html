@@ -1,0 +1,63 @@
+
+<div class="pages">
+  <div data-page="sell-checkout" class="page navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="step-two back-button link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.STORE.CHECKOUT}}</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <div>&nbsp;</div>
+        <div>{{event.name}}</div>
+        <div>&nbsp;</div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange add-new-purchaser" event-id="{{id}}" >
+      <i class="icon icon-next"></i>
+    </a>
+    <div class="page-content">
+      <div class="card event-details">
+        <div class="card-content">
+          <div class="list-block media-list">
+            <ul class="purchaser-user-info"></ul>
+          </div>
+        </div>
+        <div class="card-footer edit-purchaser add-new-purchaser">{{@global.language.STORE.NO_PURCHASER}}</div>
+      </div>
+      <div class="card full-width">
+        <div class="card-content">
+          <div class="card-content-inner">
+            <div class="list-block media-list">
+              <ul>
+                <li>
+                  {{#each userTicketsList}}
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">{{ticket.ticketType}}</div>
+                        <div class="item-after">{{js "(this.requestedqty * this.ticket.price).toFixed(2)"}}</div>
+                      </div>
+                      <div class="item-subtitle">{{requestedqty}} x {{js "this.ticket.price.toFixed(2)"}}</div>
+                      <div class="item-text color-gray shopping-cart">
+                        {{#each names}}
+                          {{this}}{{#unless @last}},{{/unless}}
+                        {{/each}}
+                      </div>
+                    </div>
+                  </div>
+                  {{/each}}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div>&nbsp;</div><div>&nbsp;</div>
+          <div class="">${{js "this.total.toFixed(2)"}} ({{event.currency}})</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

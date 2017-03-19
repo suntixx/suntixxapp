@@ -1,0 +1,61 @@
+
+<div class="pages">
+  <div data-page="add-committee" class="page navbar-fixed toolbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back-button back link icon-only"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">Add Sellers</div>
+        <!--<div class="right"><a href="#" class="link save-committee"><span>Save</span></a></div>-->
+      </div>
+      <div class="toolbar premium">
+        <div class="toolbar-inner">
+          <div class="premium-service">Premium Service</div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange save-committee">
+      <i class="icon icon-save"></i>
+    </a>
+    <div class="page-content">
+      <form class="list-block" id="add-committee-form">
+        <ul id="commuser-info">
+            <li class="row">
+              <div class="item-content  col-50">
+                <div class="item-inner">
+                  <i class="icon icon-required"></i>
+                  <div class="item-subtitle color-red form-error fname1"></div>
+                  <div class="item-input">
+                    <input type="text" name="fname1" placeholder="First Name" required/>
+                  </div>
+                </div>
+              </div>
+              <div class="item-content col-50">
+                <div class="item-inner">
+                  <i class="icon icon-required"></i>
+                  <div class="item-subtitle color-red form-error lname1"></div>
+                  <div class="item-input">
+                    <input type="text" placeholder="Last Name" name="lname1" required/>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <i class="icon icon-required"></i>
+                  <div class="item-subtitle color-red form-error email1"></div>
+                  <div class="item-input">
+                    <input type="email" placeholder="Email Address" name="email1" required/>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <div class="divider"></div>
+        </ul>
+      </form>
+      <div class="list-block-label">
+        <a href="#" class="add-another button link">{{@global.language.EVENTS.ADD_ANOTHER_SELLER}}</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -414,34 +414,12 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/phonegap-plugin-push/www/push.js",
-        "id": "phonegap-plugin-push.PushNotification",
-        "pluginId": "phonegap-plugin-push",
-        "clobbers": [
-            "PushNotification"
-        ]
-    },
-    {
         "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
         "id": "cordova-sqlite-storage.SQLitePlugin",
         "pluginId": "cordova-sqlite-storage",
         "clobbers": [
             "SQLitePlugin"
         ]
-    },
-    {
-        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-        "id": "cordova-plugin-statusbar.statusbar",
-        "pluginId": "cordova-plugin-statusbar",
-        "clobbers": [
-            "window.StatusBar"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-statusbar/src/browser/StatusBarProxy.js",
-        "id": "cordova-plugin-statusbar.StatusBarProxy",
-        "pluginId": "cordova-plugin-statusbar",
-        "runs": true
     },
     {
         "file": "plugins/suntixx-plugin-scannerdevice/www/scanner.js",
@@ -460,12 +438,72 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-plugin-apprate/www/AppRate.js",
+        "id": "cordova-plugin-apprate.AppRate",
+        "pluginId": "cordova-plugin-apprate",
+        "clobbers": [
+            "AppRate"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-apprate/www/locales.js",
+        "id": "cordova-plugin-apprate.locales",
+        "pluginId": "cordova-plugin-apprate",
+        "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+        "id": "cordova-plugin-dialogs.notification",
+        "pluginId": "cordova-plugin-dialogs",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/browser/notification.js",
+        "id": "cordova-plugin-dialogs.notification_browser",
+        "pluginId": "cordova-plugin-dialogs",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-calendar/www/Calendar.js",
         "id": "cordova-plugin-calendar.Calendar",
         "pluginId": "cordova-plugin-calendar",
         "clobbers": [
             "Calendar"
         ]
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/push.js",
+        "id": "phonegap-plugin-push.PushNotification",
+        "pluginId": "phonegap-plugin-push",
+        "clobbers": [
+            "PushNotification"
+        ]
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/browser/push.js",
+        "id": "phonegap-plugin-push.BrowserPush",
+        "pluginId": "phonegap-plugin-push",
+        "clobbers": [
+            "PushNotification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+        "id": "cordova-plugin-statusbar.statusbar",
+        "pluginId": "cordova-plugin-statusbar",
+        "clobbers": [
+            "window.StatusBar"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-statusbar/src/browser/StatusBarProxy.js",
+        "id": "cordova-plugin-statusbar.StatusBarProxy",
+        "pluginId": "cordova-plugin-statusbar",
+        "runs": true
     }
 ];
 module.exports.metadata = 
@@ -491,12 +529,14 @@ module.exports.metadata =
     "cordova-plugin-facebook4": "1.7.1",
     "cordova-plugin-app-event": "1.2.0",
     "de.appplant.cordova.plugin.local-notification": "0.8.4",
-    "phonegap-plugin-push": "1.7.4",
     "cordova-sqlite-storage": "1.4.6",
-    "cordova-plugin-statusbar": "2.2.0",
     "suntixx-plugin-scannerdevice": "0.1.0",
     "cordova-plugin-keyboard": "1.1.4",
-    "cordova-plugin-calendar": "4.5.5"
+    "cordova-plugin-apprate": "1.2",
+    "cordova-plugin-dialogs": "1.3.1",
+    "cordova-plugin-calendar": "4.5.5",
+    "phonegap-plugin-push": "1.10.0",
+    "cordova-plugin-statusbar": "2.2.2"
 }
 // BOTTOM OF METADATA
 });

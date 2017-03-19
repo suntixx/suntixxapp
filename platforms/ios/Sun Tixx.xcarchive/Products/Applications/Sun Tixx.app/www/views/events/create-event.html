@@ -1,0 +1,171 @@
+
+<div class="pages">
+  <div data-page="create-new-event" class="page  navbar-fixed">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left"><a href="#" class="back link icon-only back-button"> <i class="icon icon-back"></i></a></div>
+        <div class="center sliding">{{@global.language.EVENTS.NEW_EVENT}}</div>
+        <!--<div class="right">
+          <a href="#" class="link add-venue"><span>Continue</span></a>
+        </div>-->
+      </div>
+    </div>
+    <a href="#" class="floating-button color-orange add-venue">
+      <i class="icon icon-next"></i>
+    </a>
+    <div class="page-content">
+      <div class="event-details">
+        <img class="link edit-image event-image" src="{{@global.config.server}}/thumbnails/events/{{#if cloneEvent}}{{id}}{{else}}0{{/if}}/landscape.png" valign="bottom" id="add-event-image"/>
+        <div class="item-subtitle color-red form-error imageLandscapePath"></div>
+      </div>
+      <form class="list-block" id="create-event-details-form">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.PROMOTER}}</div>
+                <div class="item-subtitle color-red form-error hostedby"></div>
+                <div class="item-input">
+                  <input type="text" name="hostedby" id="event-host" value="{{HostedBy}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.OTHER.NAME}}</div>
+                <div class="item-subtitle color-red form-error name"></div>
+                <div class="item-input">
+                  <input type="text" name="name" value="{{name}}" required/>
+                  <input type="hidden" name="imageLandscapePath" value="/thumbnails/events/{{id}}/landscape.png" id="add-event-image-landscapepath" required/>
+                  <input type="hidden" name="imagePath" value="/thumbnails/events/{{id}}/landscape.png" id="add-event-image-path"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">{{@global.language.EVENTS.HEADLINE}}</div>
+                <div class="item-input">
+                  <input type="text" placeholder="Headline" name="headline" value="{{headline}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.CATEGORY}}</div>
+                <div class="item-subtitle color-red form-error category"></div>
+                <div class="item-input">
+                  <input type="text" name="category" id="event-category" placeholder="Please Select"  value="{{#if cloneEvent}}{{category.name}}{{/if}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">{{@global.language.EVENTS.PRIVATE}}</div>
+                <div class="item-input">
+                  <label class="label-switch">
+                    <input type="checkbox" name="private">
+                    <div class="checkbox"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.DESCRIPTION}}</div>
+                <div class="item-subtitle color-red form-error description"></div>
+                <div class="item-input">
+                  <textarea name="description" required>{{description}}</textarea>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.CURRENCY}}</div>
+                <div class="item-subtitle color-red form-error currency"></div>
+                <div class="item-input">
+                  <input type="text" name="currency" id="currency" placeholder="Please Select" value="{{currency}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.START_DATE}}</div>
+                <div class="item-subtitle color-red form-error start"></div>
+                <div class="item-input">
+                  <input type="datetime-local" name="start" required value="{{now}}" id="start"/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.END_DATE}}</div>
+                <div class="item-subtitle color-red form-error end"></div>
+                <div class="item-input">
+                  <input type="datetime-local" name="end" required value=""/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.RESTRICTIONS}}</div>
+                <div class="item-subtitle color-red form-error restriction"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Please Select" name="restriction" id="event-restriction" value="{{#if cloneEvent}}{{restrictions.name}}{{/if}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label"><i class="icon icon-required"></i>{{@global.language.EVENTS.DRESS_CODE}}</div>
+                <div class="item-subtitle color-red form-error dresscode"></div>
+                <div class="item-input">
+                  <input type="text" placeholder="Please Select" name="dresscode" id="event-dresscode" value="{{#if cloneEvent}}{{dresscode.name}}{{/if}}" required/>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title label">Facebook</div>
+                <div class="item-input">
+                    <input type="text" placeholder="https://www.facebook.com/" name="facebook" value="{{facebook}}"/>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-title label">Twitter</div>
+                  <div class="item-input">
+                    <input type="text" placeholder="https://www.twitter.com/" name="twitter" value="{{twitter}}"/>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>

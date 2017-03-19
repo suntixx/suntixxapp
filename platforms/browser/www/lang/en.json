@@ -203,7 +203,7 @@
     "SOLD": "Sold",
     "SELECT_ALL": "Select All",
     "SELECT_TICKETS": "Select Tickets",
-    "SERVER_ERROR": "Could not verify barcode, Please Try Again!",
+    "SERVER_ERROR": "Could not contact server. Checking locally!",
 		"TICKET_SCANNER": "Ticket Scanner",
     "TICKETS_SCANNED": "Tickets Scanned",
 		"WRONG_GATE": "Wrong Gate",

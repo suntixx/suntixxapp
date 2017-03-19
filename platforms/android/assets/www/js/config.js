@@ -56,11 +56,11 @@ var config;
 var utcOffset;
 storage.setItem('servertimezone', '-07:00');
 
-var onlineScan = storage.getItem('onlinescan');
+/*var onlineScan = storage.getItem('onlinescan');
 if (!onlineScan) {
   storage.setItem('onlinescan', false);
   onlineScan = true;
-}
+}*/
 
 
 $$.ajax ({
@@ -149,19 +149,29 @@ app = new Framework7({
         //$$.each($$(document).find('.cache-image'), function(key, item) {
         //  console.log(item);
         //  if (item.attr('src') != "") {
-
-            ImgCache.isCached($$('.cache-image src'), function(path, success) {
-              if (success) {
-                // already cached
-                console.log('cached');
-                ImgCache.useCachedFile($$('.cache-image'));
-              } else {
-                // not there, need to cache the image
-                ImgCache.cacheFile($$('.cache-image src'), function () {
-                  ImgCache.useCachedFile(item);
-                });
-              }
+          if (ImgCache.ready) {
+            $$(page.container).find('.cache-image').each(function() {
+              var imageElement = this;
+              ImgCache.isBackgroundCached( imageElement , function(path, success) {
+                if (success) {
+                  // already cached
+                  //var backgroundImageProperty = imageElement.css('background-image');
+                //  if (backgroundImageProperty !== "none") {
+                  //    ImgCache.useCachedBackground(imageElement);
+                  //}
+                  ImgCache.useCachedBackground(imageElement);
+                } else {
+                  // not there, need to cache the image
+                  ImgCache.cacheBackground(imageElement, function () {
+                    //var backgroundImageProperty = imageElement.css('background-image');
+                    //if (backgroundImageProperty !== "none") {
+                        ImgCache.useCachedBackground(imageElement);
+                    //}
+                  });
+                }
+              });
             });
+          }
           //}
         //});
       }
@@ -331,13 +341,17 @@ function onDeviceReady() {
   document.addEventListener("pause", onPauseApp, false);
   document.addEventListener("resume", onResumeApp, false);
   document.addEventListener('backbutton', onBackKey, false);
+  document.addEventListener("online", onOnline, false);
+  document.addEventListener("offline", onOnline, false);
   StatusBar.backgroundColorByHexString("#3f51b5");
   StatusBar.styleBlackTranslucent();
   initializePushMessaging();
 
-  ImgCache.options.debug = true;
+  ImgCache.options.debug = false;
   ImgCache.options.chromeQuota = 50*1024*1024;
   ImgCache.options.cordovaFilesystemRoot = cordova.file.cacheDirectory;
+  ImgCache.options.headers = { 'Connection': 'close' };
+  ImgCache.options.withCredentials = true;
   ImgCache.init(function () {
     console.log('ImgCache init: success!');
   }, function () {
@@ -389,13 +403,13 @@ function onDeviceReady() {
   //document.addEventListener('online', , false);
 }
 
-var init = function() {
+var init = function(background) {
   if (navigator.onLine && user && user.id) {
-    eventsService.downloadEvents();
+    eventsService.downloadEvents(background);
     //eventsService.downloadFavorites();
-    ticketsService.downloadTickets();
+    ticketsService.downloadTickets(background);
     chatService.downloadMessages();
-  } else if (user && user.id) {
+  } else if (user && user.id && !background) {
     eventsView.router.load({
         url: 'views/events/myevents.html?local=1',
         context: allUserEvents
@@ -442,7 +456,7 @@ var getDatePatternFail = function(err) {
 var onResumeApp = function() {
   appActive = true;
   checkLogin(function() {
-    init();
+    init(true);
   });
 };
 
@@ -450,6 +464,25 @@ var onPauseApp = function () {
   appActive = false;
   //initializePushMessaging();
 };
+
+updateOnlineScan = function(onlineScan) {
+  config.settings.onlineScan = onlineScan;
+  if (onlineScan) {
+    $$('.icon-internet').addClass('active');
+  } else {
+    $$('.icon-internet').removeClass('active');
+  }
+  $$('.online-scan').prop('checked', config.settings.onlineScan);
+  storage.setItem('settings', JSON.stringify(config.settings));
+}
+
+var onOnline = function () {
+  updateOnlineScan(true);
+};
+
+var onOffline = function() {
+  updateOnlineScan(false);
+}
 
 var getLanguageSuccess = function(lang) {
   if(lang.value == "en-US"  || lang.value == "en-UK" || lang.value =="en" || lang.value == "UK" || lang.value == "US") {

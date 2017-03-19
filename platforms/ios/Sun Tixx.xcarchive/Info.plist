@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ApplicationProperties</key>
+	<dict>
+		<key>ApplicationPath</key>
+		<string>Applications/Sun Tixx.app</string>
+		<key>CFBundleIdentifier</key>
+		<string>com.suntixx.application</string>
+		<key>CFBundleShortVersionString</key>
+		<string>2.0.3</string>
+		<key>CFBundleVersion</key>
+		<string>2.0.3</string>
+		<key>SigningIdentity</key>
+		<string>iPhone Developer: Jason Cox (3FT7W5U5A8)</string>
+	</dict>
+	<key>ArchiveVersion</key>
+	<integer>2</integer>
+	<key>CreationDate</key>
+	<date>2017-03-19T04:17:30Z</date>
+	<key>Name</key>
+	<string>Sun Tixx</string>
+	<key>SchemeName</key>
+	<string>Sun Tixx</string>
+</dict>
+</plist>
