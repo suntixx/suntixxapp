@@ -334,14 +334,6 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-statusbar.statusbar",
-        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-        "pluginId": "cordova-plugin-statusbar",
-        "clobbers": [
-            "window.StatusBar"
-        ]
-    },
-    {
         "id": "cordova-plugin-whitelist.whitelist",
         "file": "plugins/cordova-plugin-whitelist/whitelist.js",
         "pluginId": "cordova-plugin-whitelist",
@@ -406,6 +398,14 @@ module.exports = [
         "clobbers": [
             "PushNotification"
         ]
+    },
+    {
+        "id": "cordova-plugin-statusbar.statusbar",
+        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+        "pluginId": "cordova-plugin-statusbar",
+        "clobbers": [
+            "window.StatusBar"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -427,13 +427,13 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "1.4.0",
     "cordova-plugin-network-information": "1.2.1",
     "cordova-plugin-splashscreen": "3.1.0",
-    "cordova-plugin-statusbar": "2.2.0",
     "cordova-plugin-whitelist": "1.2.1",
     "cordova-plugin-x-socialsharing": "5.0.12",
     "cordova-sqlite-storage": "1.4.6",
     "de.appplant.cordova.plugin.local-notification": "0.8.4",
     "ionic-plugin-keyboard": "2.2.1",
-    "phonegap-plugin-push": "1.7.4"
+    "phonegap-plugin-push": "1.10.0",
+    "cordova-plugin-statusbar": "2.2.2"
 };
 // BOTTOM OF METADATA
 });

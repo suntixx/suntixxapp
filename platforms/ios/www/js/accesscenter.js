@@ -94,8 +94,8 @@ app.onPageInit('scanner-result', function (page) {
       var code = $$('.barcode').val().trim().toUpperCase();
       var scannedTime = moment(new Date()).toISOString();
         if (code == "") {
-            accessService.autoScan();
-        } else if (storage.getItem('onlinescan') == "true") {
+            accessService.autoScan(ticketList);
+        } else if (config.settings.onlineScan) {
             accessService.serverScan(code, scannedTime, ticketList);
         } else {
               accessService.localScan(code, scannedTime, ticketList);
@@ -117,7 +117,7 @@ app.onPageInit('scanner-result', function (page) {
                     $$('.barcode').focus();
                 }
             });
-        } else if (storage.getItem('onlinescan') == "true") {
+        } else if (config.settings.onlineScan) {
             accessService.serverScan(code, scannedTime, ticketList);
         } else {
             accessService.localScan(code, scannedTime, ticketList);
@@ -126,27 +126,38 @@ app.onPageInit('scanner-result', function (page) {
   });
 
 
- /*$$(document).find('.online-scan').prop('checked', storage.getItem('onlinescan') == "true" ? true: false);
+  $$('.online-scan').prop('checked', config.settings.onlineScan);
+  if (config.settings.onlineScan) {
+    $$('.icon-internet').addClass('active');
+  }
+
   $$('.online-scan').on('change', function () {
     if ($$(this).prop('checked') == true) {
-      //config.settings.accessService.autoScan = true;
-      storage.setItem('onlinescan', true);
-      //accessService.autoScan();
+      if (navigator.onLine) {
+        config.settings.onlineScan = true;
+        $$('.icon-internet').addClass('active');
+      } else {
+        app.addNotification({
+          message: language.SYSTEM.INTERNET_ERROR,
+          hold: 2000
+        });
+        config.settings.onlineScan = false;
+        $$('.online-scan').prop('checked', config.settings.onlineScan);
+      }
     } else {
-      //config.settings.accessService.autoScan = false;
-      storage.setItem('onlinescan', false);
+      config.settings.onlineScan = false;
+      $$('.icon-internet').removeClass('active');
     }
+    storage.setItem('settings', JSON.stringify(config.settings));
+  });
 
-  });*/
 
   $$('.auto-scan').prop('checked', config.settings.autoScan);
-    if ($$('.auto-scan').prop('checked') == true) {
-  }
 
   $$('.auto-scan').on('change', function () {
     if ($$(this).prop('checked') == true) {
       config.settings.autoScan = true;
-      accessService.autoScan();
+      accessService.autoScan(ticketList);
     } else {
       config.settings.autoScan = false;
     }
@@ -154,7 +165,7 @@ app.onPageInit('scanner-result', function (page) {
   });
 
   if ($$('.auto-scan').attr('checked') == 'checked') {
-      accessService.autoScan();
+      accessService.autoScan(ticketList);
   }
 
   $$('.scan-history').on('opened', function () {

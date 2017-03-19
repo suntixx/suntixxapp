@@ -42,9 +42,6 @@
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.suntixx.application"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
@@ -60,11 +57,14 @@
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.suntixx.application"
         },
+        "cordova-plugin-calendar": {
+            "PACKAGE_NAME": "com.suntixx.application"
+        },
         "phonegap-plugin-push": {
             "SENDER_ID": "326258679945",
             "PACKAGE_NAME": "com.suntixx.application"
         },
-        "cordova-plugin-calendar": {
+        "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.suntixx.application"
         }
     },

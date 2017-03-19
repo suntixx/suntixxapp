@@ -1,4 +1,7 @@
 var initializePushMessaging = function() {
+  if (!PushNotification) {
+    return;
+  }
   push = PushNotification.init({
     android: {
         senderID: config.push.androidId,

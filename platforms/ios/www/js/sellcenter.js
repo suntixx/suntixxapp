@@ -2,6 +2,8 @@
 //=================Committee Members Actions==================================
 app.onPageInit('sell-tickets-list', function(page) {
   var sellerTickets = page.context.tickets;
+  selectedEventLocal = page.context.event;
+
   $$('.start-selling').on('click', function () {
     var selectedTickets = app.formToJSON('#select-tickets-form');
     var selected = 0;
@@ -274,6 +276,7 @@ app.onPageInit('sell-checkout', function (page) {
    };
 
    var paymentTypeSelected = function (radio) {
+     return true;
      if  (radio == 1 || radio == 2) {
        return true;
      } else {
@@ -336,15 +339,15 @@ app.onPageInit('sell-checkout', function (page) {
       return;
     }
     app.closeModal();
-    $$('.purchaser-info').val(' ');
+    $$('.purchaser-info').empty();
     var capitalize = function(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
     purchaser.firstname = capitalize(purchaser.fname);
     purchaser.lastname = capitalize(purchaser.lname);
-    var paymentType = language.STORE.PAYPAL;
-    if (purchaser.paymentoption == 1) {
-      paymentType = language.STORE.CASH;
+    var paymentType = language.STORE.CASH;
+    if (purchaser.paymentoption == 2) {
+      paymentType = language.STORE.PAYPAL;
     }
     app.showIndicator();
     var result;
@@ -407,95 +410,101 @@ app.onPageInit('sell-checkout', function (page) {
     });
   });
 
+  var saleRequest;
+  var completeSale = function () {
+    processing = true;
+    saleRequest = {
+      user_id: 0,
+      event_id: selectedEventLocal.id,
+      pos_user_id: user.id,
+      cardtype: "Committee-Mobile",
+      nameoncard: purchaser.firstname +" "+ purchaser.lastname,
+      email: purchaser.email,
+      fname: purchaser.firstname,
+      lname: purchaser.lastname,
+      ticketsquantity: checkoutCart.tickets.length,
+      totalprice: checkoutCart.total,
+      currency: selectedEventLocal.currency,
+      tickets: checkoutCart.tickets,
+      order: checkoutCart.cart,
+    };
+    app.showIndicator();
+    $$.ajax({
+      async: true,
+      timeout: 30 * 1000,
+      cache: false,
+      url: config.server + "/api/savecommpayment",
+      method: "POST",
+      contentType: "application/x-www-form-urlencoded",
+      data: saleRequest,
+      xhrFields: { withCredentials: true },
+      success: function(data, status, xhr) {
+        if (status == 200 || status == 0 ){
+          var result = JSON.parse(data);
+          if (result.err) {
+            app.hideIndicator();
+            processing = false;
+            app.popup(Template7.templates.saleForceTemplate());
+          } else {
+            app.hideIndicator();
+            processing = false;
+            app.popup(Template7.templates.saleCompleteTemplate());
+          }
+        }
+      },
+      error: function(status, xhr) {
+        processing = false;
+        app.hideIndicator();
+        app.popup(Template7.templates.saleErrorTemplate());
+      },
+    });
+  };
+
   $$(document).on('click', '.complete-sale', function() {
     if (processing) {
       return;
     }
-    var completeSale = function () {
-      processing = true;
-      saleRequest = {
-        user_id: 0,
-        event_id: selectedEventLocal.id,
-  		  pos_user_id: user.id,
-  		  cardtype: "Committee-Mobile",
-  		  nameoncard: purchaser.firstname +" "+ purchaser.lastname,
-        email: purchaser.email,
-    		fname: purchaser.firstname,
-    		lname: purchaser.lastname,
-    		ticketsquantity: checkoutCart.tickets.length,
-    		totalprice: checkoutCart.total,
-        currency: selectedEventLocal.currency,
-        tickets: checkoutCart.tickets,
-        order: checkoutCart.cart,
-      };
-      app.showIndicator();
-      $$.ajax({
-        async: true,
-        timeout: 30 * 1000,
-        cache: false,
-        url: config.server + "/api/savecommpayment",
-        method: "POST",
-        contentType: "application/x-www-form-urlencoded",
-        data: saleRequest,
-        xhrFields: { withCredentials: true },
-        success: function(data, status, xhr) {
-          if (status == 200 || status == 0 ){
-            var result = JSON.parse(data);
-            if (result.err) {
-              app.hideIndicator();
-              processing = false;
-              app.popup(Template7.templates.saleForceTemplate());
-            } else {
-              app.hideIndicator();
-              processing = false;
-              app.popup(Template7.templates.saleCompleteTemplate());
-            }
-          }
-        },
-        error: function(status, xhr) {
-          processing = false;
-          app.hideIndicator();
-          app.popup(Template7.templates.saleErrorTemplate());
-        },
-      });
-    };
-
     app.confirm(language.STORE.CONFIRM_SALE, completeSale , function () {
       return;
     });
   });
 
-
-  $$(document).on('click', '.force-sale', function () {
-    saleRequest.force = true;
-    completeSale();
-  });
-
-  $$(document).on('click','.retry', function() {
-    completeSale();
-  });
-
-  $$(document).on('click', '.home', function () {
-    mainView.router.load({
-      url: home.html,
-      reload:true,
-      ignoreCache: true
-    });
-    app.showTab('#homepage-tab');
-  });
-
   $$(document).on('click', '.sell-more', function() {
-
     storeView.router.back({
       url: 'views/selltickets/committee-home.html',
       context: {
         tickets: page.context.sellerTickets,
         event: selectedEventLocal,
       },
+      force:true,
       reload: true,
     });
   });
+
+
+  $$(document).on('click', '.return-home', function() {
+    app.showTab('#homepage-tab');
+    mainView.router.load({
+      url: "home.html",
+      reload:true,
+      ignoreCache: true
+    });
+  });
+
+  $$(document).on('click','.retry', function() {
+    completeSale();
+  });
+
+  $$(document).on('click', '.force-sale', function () {
+    saleRequest.force = true;
+    completeSale();
+  });
+
+
+
 });
+
+
 
 app.onPageInit('sales-reports', function(page) {
   $$('.purchase-details').on('click', function () {

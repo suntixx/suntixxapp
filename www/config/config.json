@@ -1,6 +1,6 @@
 {
   "server": "https://www.suntixx.com",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "developers": ["Jason Cox"],
   "email": "info@suntixx.com",
   "phone": "868 288 TIXX(8499)",
@@ -23,6 +23,7 @@
   },
   "settings": {
     "emailMessages": true,
-    "autoScan": false
+    "autoScan": false,
+    "onlineScan": true
   }
 }
